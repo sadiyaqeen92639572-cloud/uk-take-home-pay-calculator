@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const SITE_URL = 'https://mynetsalary.co.uk';
-const GSC_TAG = '76BtuPWapEs7YKz4n_-PAXK_31eyF1SGsayZYBetFMg';
+const GSC_TAG = 'F0g9xdQ9RU5cTssBiWtkj41-7q2_kIwcKbJc_sMTthQ';
 
 const CSS = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

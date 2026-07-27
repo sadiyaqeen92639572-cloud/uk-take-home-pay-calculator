@@ -64,11 +64,13 @@ rationale):
 
 Rates are **guidance** compiled from HMRC, Revenue Scotland/gov.scot, and DWP
 published 2026/27 figures, applied deterministically — **not** tax or legal
-advice. The Statutory Sick Pay day-1/no-LEL reform (Employment Rights Act
-2025, in force 6 April 2026) was cross-checked directly against
-gov.uk/statutory-sick-pay before publishing. Other figures (redundancy cap,
-statutory parental pay rate) were sourced from payroll-industry secondary
-sites — cross-check against gov.uk before relying on them for a real
-decision. Always confirm your own position via
+advice. All figures (Income Tax, NI, dividend tax, student loan thresholds,
+redundancy pay cap, statutory parental pay rate, SSP day-1/no-LEL reform)
+have been cross-checked directly against gov.uk/gov.scot primary sources as
+of the July 2026 audit — only the dividend tax band rates (10.75%/35.75%/
+39.35%) could not be pulled from a single fetched gov.uk page directly and
+rest on strong secondary-source corroboration; verify at
+[gov.uk/tax-on-dividends](https://www.gov.uk/tax-on-dividends) if in doubt.
+Always confirm your own position via
 [gov.uk/estimate-income-tax](https://www.gov.uk/estimate-income-tax) or a
 qualified adviser.
