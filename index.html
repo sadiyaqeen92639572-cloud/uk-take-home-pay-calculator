@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Take Home Pay Calculator UK 2026/27 — Instant Salary After Tax</title>
+<meta name="description" content="Free UK take-home pay calculator. Enter salary → instant income tax, National Insurance, student loan and pension deductions. England, Scotland, Wales, NI. 2026/27 rates.">
+<meta name="keywords" content="take home pay calculator, uk payroll calculator, salary calculator uk, tax calculator uk, net pay calculator uk, paye calculator, take home pay 2026">
+<link rel="canonical" href="https://mynetsalary.co.uk/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta property="og:title" content="Take Home Pay Calculator UK 2026/27">
+<meta property="og:description" content="Instant salary after tax — income tax, NI, student loan, pension. England, Scotland, Wales. Free, 2026/27 rates.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mynetsalary.co.uk/">
+<meta property="og:image" content="https://mynetsalary.co.uk/og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://mynetsalary.co.uk/og-image.svg">
+<meta name="google-site-verification" content="76BtuPWapEs7YKz4n_-PAXK_31eyF1SGsayZYBetFMg" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Take Home Pay Calculator UK",
+      "url": "https://mynetsalary.co.uk/",
+      "description": "Free calculator for UK take-home pay — income tax, National Insurance, student loan and pension deductions for England, Scotland, Wales and Northern Ireland, 2026/27 rates.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-GB",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
+      "areaServed": { "@type": "Country", "name": "United Kingdom" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "How is UK take-home pay calculated?", "acceptedAnswer": { "@type": "Answer", "text": "Take-home pay = gross salary minus Income Tax, minus employee National Insurance, minus student loan repayments (if applicable), minus pension contributions. Income Tax uses the Personal Allowance (£12,570 for 2026/27) then 20%/40%/45% bands (different bands apply in Scotland). Employee NI is 8% between £12,570 and £50,270, then 2% above." } },
+        { "@type": "Question", "name": "What is the 2026/27 Personal Allowance?", "acceptedAnswer": { "@type": "Answer", "text": "£12,570 — frozen since 2022 and due to stay frozen until 2031. It tapers down by £1 for every £2 earned above £100,000, and is fully withdrawn at £125,140." } },
+        { "@type": "Question", "name": "Why is my Scotland take-home pay different from England?", "acceptedAnswer": { "@type": "Answer", "text": "Scotland sets its own Income Tax rates and bands under devolved powers — six bands (19%/20%/21%/42%/45%/48%) instead of the rest-of-UK's three (20%/40%/45%). National Insurance, student loan and pension rules are the same across the whole UK." } },
+        { "@type": "Question", "name": "Does this calculator include student loan repayments?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — select your Plan (1, 2, 4, 5 or Postgraduate) and the calculator deducts 9% (6% for Postgraduate) of income above the relevant annual threshold." } },
+        { "@type": "Question", "name": "Is pension contribution included in the calculation?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — enter your pension contribution as a percentage of salary. The calculator treats it as reducing your taxable income (net pay arrangement), which is the most common workplace pension setup." } }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mynetsalary.co.uk/" }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "How to calculate UK take-home pay",
+      "description": "Estimate net salary after tax, NI, student loan and pension in 3 steps",
+      "totalTime": "PT1M",
+      "tool": [{ "@type": "HowToTool", "name": "Take Home Pay Calculator UK" }],
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Enter gross salary and region", "text": "Input your annual gross salary and select England/Wales/NI or Scotland." },
+        { "@type": "HowToStep", "position": 2, "name": "Add pension and student loan (optional)", "text": "Enter your pension contribution percentage and select a student loan plan if applicable." },
+        { "@type": "HowToStep", "position": 3, "name": "See your take-home pay", "text": "The calculator instantly shows Income Tax, NI, student loan and pension deductions, and your net pay annually, monthly and weekly." }
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gesmine-Invest Limited",
+      "url": "https://mynetsalary.co.uk/",
+      "identifier": "14120136",
+      "areaServed": "GB"
+    }
+  ]
+}
+</script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --brand: #1e5fae;
+    --brand-dark: #123e73;
+    --brand-light: #e7f0fb;
+    --accent: #b91c1c;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --text: #1a1a2e;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: #f8fafc; line-height: 1.6; }
+  header { background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%); color: white; padding: 48px 20px 80px; text-align: center; }
+  header p { color: rgba(255,255,255,0.88); font-size: 1.05rem; margin-top: 10px; max-width: 640px; margin-left: auto; margin-right: auto; }
+  h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -0.5px; }
+  .flag { font-size: 0.85rem; background: rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 14px; display: inline-block; margin-bottom: 16px; letter-spacing: 1px; }
+
+  .tool-card { background: white; border-radius: var(--radius); box-shadow: 0 4px 32px rgba(0,0,0,0.10); margin: -48px auto 40px; max-width: 720px; padding: 36px 32px; position: relative; z-index: 10; }
+
+  .input-group { margin-bottom: 20px; }
+  .input-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; color: var(--text); }
+  .input-group .hint { font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; }
+  input[type="number"], select { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 1rem; background: white; }
+  input[type="number"]:focus, select:focus { outline: none; border-color: var(--brand); }
+  .seg-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .seg-btn { flex: 1; min-width: 100px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: white; font-size: 0.85rem; font-weight: 600; cursor: pointer; text-align: center; color: var(--text); }
+  .seg-btn.active { background: var(--brand); color: white; border-color: var(--brand); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 500px) { .two-col { grid-template-columns: 1fr; } }
+
+  .results { background: var(--brand-light); border-radius: var(--radius); padding: 24px; margin-top: 24px; display: none; }
+  .results.show { display: block; }
+  .result-hero { text-align: center; padding: 12px 0 20px; }
+  .result-hero .value { font-size: 2.4rem; font-weight: 800; color: var(--brand); }
+  .result-hero .label { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  @media (max-width: 500px) { .results-grid { grid-template-columns: 1fr 1fr; } }
+  .result-box { background: white; border-radius: 8px; padding: 12px 10px; text-align: center; }
+  .result-box .label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+  .result-box .value { font-size: 1.05rem; font-weight: 700; color: var(--brand); }
+  .result-box.accent .value { color: var(--accent); }
+  .band-breakdown { background: white; border-radius: 8px; padding: 14px 16px; margin-top: 12px; font-size: 0.85rem; }
+  .band-breakdown div { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); }
+  .band-breakdown div:last-child { border-bottom: none; font-weight: 700; }
+  .btn { background: var(--brand); color: white; border: none; border-radius: 8px; padding: 14px 28px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 8px; transition: background 0.2s; }
+  .btn:hover { background: var(--brand-dark); }
+
+  .content { max-width: 760px; margin: 0 auto; padding: 0 20px 60px; }
+  h2 { font-size: 1.4rem; font-weight: 700; margin: 40px 0 14px; }
+  h3 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 10px; }
+  p { color: #374151; margin-bottom: 14px; font-size: 0.95rem; }
+  ul { padding-left: 20px; margin-bottom: 14px; }
+  li { color: #374151; font-size: 0.95rem; margin-bottom: 6px; }
+  .table-wrap { overflow-x: auto; margin: 20px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: var(--brand); color: white; padding: 10px 12px; text-align: left; white-space: nowrap; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tr:nth-child(even) td { background: #f8fafc; }
+
+  .sat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0 40px; }
+  @media (max-width: 500px) { .sat-grid { grid-template-columns: 1fr; } }
+  .sat-link { display: block; background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px 18px; text-decoration: none; color: var(--text); transition: border-color .15s; }
+  .sat-link:hover { border-color: var(--brand); }
+  .sat-link .t { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
+  .sat-link .d { font-size: 0.8rem; color: var(--muted); }
+
+  .cta-box { background: #111827; color: white; border-radius: var(--radius); padding: 36px 32px; margin: 40px 0; }
+  .cta-box h2 { color: white; margin-top: 0; font-size: 1.35rem; }
+  .cta-box p { color: rgba(255,255,255,0.88); }
+  .cta-box li { color: rgba(255,255,255,0.82) !important; }
+  .cta-box ul { color: white; }
+  .cta-btn { display: inline-block; background: var(--accent); color: white; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: 700; font-size: 1rem; margin-top: 20px; transition: opacity 0.2s; }
+  .cta-btn:hover { opacity: 0.88; }
+
+  .faq { margin: 40px 0; }
+  .faq-item { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+  .faq-q { padding: 16px 20px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; background: white; }
+  .faq-q:hover { background: var(--brand-light); }
+  .faq-q::after { content: '+'; font-size: 1.2rem; color: var(--brand); flex-shrink: 0; }
+  .faq-q.open::after { content: '−'; }
+  .faq-a { display: none; padding: 0 20px 16px; font-size: 0.9rem; color: #374151; background: white; }
+  .faq-a.show { display: block; }
+
+  footer { background: var(--brand-dark); color: rgba(255,255,255,0.6); text-align: center; padding: 28px 20px; font-size: 0.8rem; }
+  footer p { color: #9ca3af; }
+  footer a { color: rgba(255,255,255,0.7); }
+
+  @media (max-width: 600px) {
+    .tool-card { margin: -32px 12px 32px; padding: 24px 18px; }
+  }
+  .eeat-section { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin: 32px 0; }
+  .eeat-title { font-size: 1.2rem; font-weight: 800; color: var(--text); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid var(--brand-light); padding-bottom: 12px; }
+  .eeat-title svg { color: var(--brand); flex-shrink: 0; }
+  .eeat-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; }
+  @media (max-width: 640px) { .eeat-grid { grid-template-columns: 1fr; gap: 20px; } }
+  .eeat-author-card { display: flex; gap: 14px; align-items: flex-start; }
+  .eeat-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--brand); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1.1rem; flex-shrink: 0; }
+  .eeat-author-info h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .eeat-author-subtitle { font-size: 0.76rem; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  .eeat-author-info p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+  .eeat-compliance { display: flex; flex-direction: column; gap: 14px; }
+  .eeat-compliance-item { display: flex; gap: 10px; align-items: flex-start; }
+  .eeat-compliance-icon { color: var(--brand); flex-shrink: 0; margin-top: 3px; }
+  .eeat-compliance-text h4 { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .eeat-compliance-text p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; margin-bottom: 0; }
+  .eeat-compliance-text a { color: var(--brand); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="flag">🇬🇧 UK Payroll · 2026/27 Rates</div>
+  <h1>Take Home Pay Calculator UK</h1>
+  <p>Enter your salary → instant Income Tax, National Insurance, student loan and pension breakdown. England, Scotland, Wales &amp; NI.</p>
+</header>
+
+<div class="tool-card">
+  <div class="input-group">
+    <label>Annual Gross Salary (£)</label>
+    <input type="number" id="salary" min="0" step="500" value="35000" placeholder="e.g. 35000">
+  </div>
+
+  <div class="input-group">
+    <label>Region</label>
+    <div class="seg-row" id="regionSeg">
+      <div class="seg-btn active" data-val="rest_uk">England / Wales / NI</div>
+      <div class="seg-btn" data-val="scotland">Scotland</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="input-group">
+      <label>Pension Contribution (%)</label>
+      <input type="number" id="pension" min="0" max="100" step="0.5" value="0" placeholder="0">
+    </div>
+    <div class="input-group">
+      <label>Student Loan Plan</label>
+      <select id="loanPlan">
+        <option value="none">None</option>
+        <option value="plan1">Plan 1</option>
+        <option value="plan2">Plan 2</option>
+        <option value="plan4">Plan 4 (Scotland)</option>
+        <option value="plan5">Plan 5</option>
+        <option value="postgrad">Postgraduate Loan</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="btn" onclick="calculate()">Calculate Take-Home Pay →</button>
+
+  <div class="results" id="results">
+    <div class="result-hero">
+      <div class="value" id="r-takehome">—</div>
+      <div class="label">Annual Take-Home Pay</div>
+    </div>
+    <div class="results-grid">
+      <div class="result-box"><div class="label">Monthly</div><div class="value" id="r-monthly">—</div></div>
+      <div class="result-box"><div class="label">Weekly</div><div class="value" id="r-weekly">—</div></div>
+      <div class="result-box"><div class="label">Effective Rate</div><div class="value" id="r-rate">—</div></div>
+    </div>
+    <div class="band-breakdown">
+      <div><span>Income Tax</span><span id="r-it">—</span></div>
+      <div><span>National Insurance</span><span id="r-ni">—</span></div>
+      <div><span>Student Loan</span><span id="r-sl">—</span></div>
+      <div><span>Pension Contribution</span><span id="r-pen">—</span></div>
+      <div><span>Total Take-Home</span><span id="r-total">—</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <h2>Explore More Payroll Calculators</h2>
+  <div class="sat-grid" id="satGrid"></div>
+
+  <h2>Income Tax Bands 2026/27</h2>
+  <div class="table-wrap">
+  <table>
+    <tr><th>Band</th><th>England / Wales / NI</th><th>Scotland</th></tr>
+    <tr><td>£0 – £12,570</td><td>0% (Personal Allowance)</td><td>0% (Personal Allowance)</td></tr>
+    <tr><td>£12,571 – £16,537</td><td>20%</td><td>19% (Starter)</td></tr>
+    <tr><td>£16,538 – £29,526</td><td>20%</td><td>20% (Basic)</td></tr>
+    <tr><td>£29,527 – £43,662</td><td>20%</td><td>21% (Intermediate)</td></tr>
+    <tr><td>£43,663 – £50,270</td><td>20%</td><td>42% (Higher)</td></tr>
+    <tr><td>£50,271 – £75,000</td><td>40%</td><td>42% (Higher)</td></tr>
+    <tr><td>£75,001 – £125,140</td><td>40%</td><td>45% (Advanced)</td></tr>
+    <tr><td>Above £125,140</td><td>45%</td><td>48% (Top)</td></tr>
+  </table>
+  </div>
+  <p style="font-size:0.82rem;color:var(--muted);">Personal Allowance tapers by £1 for every £2 earned above £100,000, fully withdrawn at £125,140 (both nations).</p>
+
+  <div class="cta-box">
+    <h2>Running Payroll for Your Business?</h2>
+    <p>This calculator is built for individuals checking their own take-home pay. If you're running payroll for a team — auto-enrolment, RTI submissions, payslips, year-end — a dedicated payroll platform saves hours every month.</p>
+    <ul>
+      <li><strong>Small business, first hire:</strong> Set up PAYE and auto-enrolment correctly from day one, without a dedicated payroll team.</li>
+      <li><strong>Growing team:</strong> Automate payslips, HMRC submissions and pension contributions as headcount increases.</li>
+      <li><strong>Multiple pay rates or contractors:</strong> Handle mixed PAYE/self-employed workforces in one place.</li>
+      <li><strong>Switching from spreadsheets:</strong> Reduce manual errors on tax code changes and NI category switches.</li>
+    </ul>
+    <p>Cloud payroll platforms like Xero, QuickBooks and BrightPay handle the calculations above automatically for every employee, every pay run.</p>
+    <a href="#" class="cta-btn" target="_blank" rel="noopener">Compare Payroll Software →</a>
+  </div>
+
+  <h2>How This Calculator Works — Formulas &amp; Method</h2>
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:28px 28px 20px;margin:0 0 40px;font-size:0.9rem;line-height:1.8;">
+    <p style="margin-bottom:16px;color:#64748b;font-size:0.82rem;text-transform:uppercase;letter-spacing:.5px;font-weight:600;">Source: HMRC/gov.scot 2026/27 rates · Deterministic calculation — no AI, no estimation</p>
+
+    <h3 style="font-size:1rem;margin:0 0 12px;">Core Constants (2026/27)</h3>
+    <div class="table-wrap">
+    <table style="width:100%;border-collapse:collapse;margin-bottom:24px;font-size:0.88rem;">
+      <tr><th style="background:var(--brand);color:white;padding:8px 12px;text-align:left;white-space:nowrap;">Constant</th><th style="background:var(--brand);color:white;padding:8px 12px;text-align:left;white-space:nowrap;">Value</th></tr>
+      <tr><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;white-space:nowrap;">Personal Allowance</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;white-space:nowrap;">£12,570 (tapered above £100,000)</td></tr>
+      <tr><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;white-space:nowrap;">NI Primary Threshold / UEL</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;white-space:nowrap;">£12,570 / £50,270</td></tr>
+      <tr><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;white-space:nowrap;">Employee NI rate (PT–UEL / above UEL)</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;white-space:nowrap;">8% / 2%</td></tr>
+      <tr><td style="padding:8px 12px;white-space:nowrap;">Student loan rate</td><td style="padding:8px 12px;white-space:nowrap;">9% (6% Postgraduate) above plan threshold</td></tr>
+    </table>
+    </div>
+
+    <h3 style="font-size:1rem;margin:0 0 12px;">Formula</h3>
+    <div style="background:#1e3a5f;color:#e2e8f0;border-radius:8px;padding:18px 20px;font-family:'Courier New',monospace;font-size:0.83rem;line-height:2;margin-bottom:20px;">
+      <span style="color:#86efac;">— Income Tax (marginal bands) —</span><br>
+      <span style="color:#7dd3fc;">taxable</span> = gross_salary − pension_contribution<br>
+      <span style="color:#7dd3fc;">income_tax</span> = Σ over each band: <span style="color:#94a3b8;">min(taxable, band_top) − band_bottom</span> × <span style="color:#94a3b8;">band_rate</span><br>
+      <br>
+      <span style="color:#86efac;">— National Insurance —</span><br>
+      <span style="color:#7dd3fc;">ni</span> = (min(gross,UEL)−PT) × 8% + max(0,gross−UEL) × 2%<br>
+      <br>
+      <span style="color:#86efac;">— Student Loan —</span><br>
+      <span style="color:#7dd3fc;">repayment</span> = max(0, gross − plan_threshold) × plan_rate<br>
+      <br>
+      <span style="color:#86efac;">— Take-Home —</span><br>
+      <span style="color:#7dd3fc;">take_home</span> = gross − income_tax − ni − repayment − pension_contribution
+    </div>
+    <p style="font-size:0.78rem;color:#94a3b8;margin:0;">Pension modelled as a net-pay-arrangement deduction (reduces taxable income, not NI). Not a substitute for a payslip — verify against HMRC's own estimator at <a href="https://www.gov.uk/estimate-income-tax" target="_blank" rel="noopener" style="color:#94a3b8;">gov.uk/estimate-income-tax</a>.</p>
+  </div>
+
+  <div class="eeat-section">
+    <h2 class="eeat-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+      Transparency &amp; Methodology
+    </h2>
+    <div class="eeat-grid">
+      <div class="eeat-author-card">
+        <div class="eeat-avatar">TH</div>
+        <div class="eeat-author-info">
+          <h3>Take Home Pay Calculator</h3>
+          <div class="eeat-author-subtitle">Independent, Open-Source Estimator</div>
+          <p>An independent calculator applying published HMRC/gov.scot rates deterministically — no AI estimate, no connection to HMRC or gov.scot.</p>
+        </div>
+      </div>
+      <div class="eeat-compliance">
+        <div class="eeat-compliance-item">
+          <svg class="eeat-compliance-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+          <div class="eeat-compliance-text">
+            <h4>Methodology &amp; Sources</h4>
+            <p>Figures are public rates published by HMRC and Revenue Scotland (see formula table above). For your exact position, use <a href="https://www.gov.uk/estimate-income-tax" target="_blank" rel="noopener">gov.uk/estimate-income-tax</a>.</p>
+          </div>
+        </div>
+        <div class="eeat-compliance-item">
+          <svg class="eeat-compliance-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <div class="eeat-compliance-text">
+            <h4>Not Tax or Legal Advice</h4>
+            <p>This tool provides information only. For your personal tax position, consult a member of the <a href="https://www.tax.org.uk/" target="_blank" rel="noopener">Chartered Institute of Taxation</a> or an FCA-authorised adviser via the <a href="https://register.fca.org.uk/" target="_blank" rel="noopener">FCA Register</a>.</p>
+          </div>
+        </div>
+        <div class="eeat-compliance-item">
+          <svg class="eeat-compliance-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
+          <div class="eeat-compliance-text">
+            <h4>Open Source</h4>
+            <p>Formulas and calculation code are public. Inspect on <a href="https://github.com/sadiyaqeen92639572-cloud/uk-take-home-pay-calculator" target="_blank" rel="noopener">GitHub</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How is UK take-home pay calculated?</div><div class="faq-a">Take-home pay = gross salary minus Income Tax, minus employee National Insurance, minus student loan repayments (if applicable), minus pension contributions. Income Tax uses the Personal Allowance (£12,570 for 2026/27) then 20%/40%/45% bands (different bands apply in Scotland). Employee NI is 8% between £12,570 and £50,270, then 2% above.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the 2026/27 Personal Allowance?</div><div class="faq-a">£12,570 — frozen since 2022 and due to stay frozen until 2031. It tapers down by £1 for every £2 earned above £100,000, and is fully withdrawn at £125,140.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Why is my Scotland take-home pay different from England?</div><div class="faq-a">Scotland sets its own Income Tax rates and bands under devolved powers — six bands (19%/20%/21%/42%/45%/48%) instead of the rest-of-UK's three (20%/40%/45%). National Insurance, student loan and pension rules are the same across the whole UK.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does this calculator include student loan repayments?</div><div class="faq-a">Yes — select your Plan (1, 2, 4, 5 or Postgraduate) and the calculator deducts 9% (6% for Postgraduate) of income above the relevant annual threshold.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is pension contribution included in the calculation?</div><div class="faq-a">Yes — enter your pension contribution as a percentage of salary. The calculator treats it as reducing your taxable income (net pay arrangement), which is the most common workplace pension setup.</div></div>
+  </div>
+
+</div>
+
+<footer>
+  <p>Information only — not tax or legal advice. Data based on 2026/27 HMRC/gov.scot rates.<br>
+  Always verify at <a href="https://www.gov.uk/estimate-income-tax" target="_blank" rel="noopener">gov.uk/estimate-income-tax</a>.</p>
+</footer>
+
+<script>
+const PT = 12570, UEL = 50270;
+const LOAN_PLANS = {
+  none: null,
+  plan1: { threshold: 26900, rate: 0.09 },
+  plan2: { threshold: 29385, rate: 0.09 },
+  plan4: { threshold: 33795, rate: 0.09 },
+  plan5: { threshold: 25000, rate: 0.09 },
+  postgrad: { threshold: 21000, rate: 0.06 }
+};
+
+function bandedTax(income, bands) {
+  let tax = 0;
+  for (const [lo, hi, rate] of bands) {
+    if (income > lo) tax += (Math.min(income, hi) - lo) * rate;
+  }
+  return tax;
+}
+
+function personalAllowance(income) {
+  if (income <= 100000) return 12570;
+  const reduced = 12570 - (income - 100000) / 2;
+  return Math.max(0, reduced);
+}
+
+function incomeTax(taxable, region) {
+  const pa = personalAllowance(taxable);
+  if (region === 'scotland') {
+    const bands = [[0, pa, 0], [pa, 16537, 0.19], [16537, 29526, 0.20], [29526, 43662, 0.21], [43662, 75000, 0.42], [75000, 125140, 0.45], [125140, Infinity, 0.48]];
+    return bandedTax(taxable, bands);
+  }
+  const bands = [[0, pa, 0], [pa, 50270, 0.20], [50270, 125140, 0.40], [125140, Infinity, 0.45]];
+  return bandedTax(taxable, bands);
+}
+
+function nationalInsurance(gross) {
+  const bands = [[0, PT, 0], [PT, UEL, 0.08], [UEL, Infinity, 0.02]];
+  return bandedTax(gross, bands);
+}
+
+function studentLoan(gross, plan) {
+  const p = LOAN_PLANS[plan];
+  if (!p) return 0;
+  return Math.max(0, gross - p.threshold) * p.rate;
+}
+
+document.querySelectorAll('#regionSeg .seg-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#regionSeg .seg-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+function fmt(n) {
+  return '£' + Math.round(n).toLocaleString('en-GB');
+}
+
+function calculate() {
+  const gross = parseFloat(document.getElementById('salary').value) || 0;
+  const region = document.querySelector('#regionSeg .seg-btn.active').dataset.val === 'scotland' ? 'scotland' : 'rest_uk';
+  const pensionPct = parseFloat(document.getElementById('pension').value) || 0;
+  const plan = document.getElementById('loanPlan').value;
+
+  const pensionAmt = gross * (pensionPct / 100);
+  const taxable = Math.max(0, gross - pensionAmt);
+  const it = incomeTax(taxable, region);
+  const ni = nationalInsurance(gross);
+  const sl = studentLoan(gross, plan);
+  const takeHome = gross - it - ni - sl - pensionAmt;
+
+  document.getElementById('r-takehome').textContent = fmt(takeHome);
+  document.getElementById('r-monthly').textContent = fmt(takeHome / 12);
+  document.getElementById('r-weekly').textContent = fmt(takeHome / 52);
+  document.getElementById('r-rate').textContent = gross > 0 ? Math.round(((it + ni) / gross) * 100) + '%' : '0%';
+  document.getElementById('r-it').textContent = fmt(it);
+  document.getElementById('r-ni').textContent = fmt(ni);
+  document.getElementById('r-sl').textContent = fmt(sl);
+  document.getElementById('r-pen').textContent = fmt(pensionAmt);
+  document.getElementById('r-total').textContent = fmt(takeHome);
+
+  document.getElementById('results').classList.add('show');
+}
+
+function toggleFaq(el) {
+  el.classList.toggle('open');
+  const ans = el.nextElementSibling;
+  ans.classList.toggle('show');
+}
+
+const SATELLITES = [
+  { slug: 'paye-calculator', title: 'PAYE Calculator', desc: 'Breakdown of PAYE deductions' },
+  { slug: 'national-insurance-calculator', title: 'National Insurance Calculator', desc: 'NI contributions explained' },
+  { slug: 'dividend-tax-calculator', title: 'Dividend Tax Calculator', desc: 'Salary + dividend combined' },
+  { slug: 'self-employed-tax-calculator', title: 'Self-Employed Tax Calculator', desc: 'Self Assessment, Class 2/4 NI' },
+  { slug: 'student-loan-repayment-calculator', title: 'Student Loan Repayment Calculator', desc: 'Plan 1/2/4/5/Postgrad' },
+  { slug: 'redundancy-pay-calculator', title: 'Redundancy Pay Calculator', desc: 'Statutory redundancy estimate' },
+  { slug: 'maternity-pay-calculator', title: 'Maternity Pay Calculator', desc: 'SMP week-by-week estimate' },
+  { slug: 'pension-contribution-calculator', title: 'Pension Contribution Calculator', desc: 'Auto-enrolment & salary sacrifice' }
+];
+const satGrid = document.getElementById('satGrid');
+SATELLITES.forEach(s => {
+  const a = document.createElement('a');
+  a.className = 'sat-link';
+  a.href = '/' + s.slug + '/';
+  a.innerHTML = '<div class="t">' + s.title + '</div><div class="d">' + s.desc + '</div>';
+  satGrid.appendChild(a);
+});
+</script>
+
+</body>
+</html>

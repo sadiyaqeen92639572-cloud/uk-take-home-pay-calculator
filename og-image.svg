@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#123e73"/>
+      <stop offset="100%" stop-color="#1e5fae"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <text x="600" y="230" font-family="Arial, sans-serif" font-size="60" font-weight="800" fill="white" text-anchor="middle">Take Home Pay Calculator</text>
+  <text x="600" y="300" font-family="Arial, sans-serif" font-size="30" fill="#dbeafe" text-anchor="middle">Income Tax · NI · Student Loan · Pension — UK 2026/27</text>
+  <rect x="330" y="360" width="540" height="110" rx="16" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+  <text x="600" y="425" font-family="Arial, sans-serif" font-size="40" font-weight="800" fill="white" text-anchor="middle">£2,093/mo</text>
+  <text x="600" y="455" font-family="Arial, sans-serif" font-size="20" fill="#dbeafe" text-anchor="middle">Instant, free, 2026/27 rates</text>
+  <text x="600" y="560" font-family="Arial, sans-serif" font-size="24" fill="rgba(255,255,255,0.7)" text-anchor="middle">mynetsalary.co.uk</text>
+</svg>
