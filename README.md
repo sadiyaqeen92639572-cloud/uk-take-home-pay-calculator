@@ -41,6 +41,12 @@ publishes the repo root. Custom domain via `CNAME` (`mynetsalary.co.uk`) —
 verify domain availability and point DNS (A records to GitHub Pages IPs, or
 CNAME to `<username>.github.io`) before traffic will resolve.
 
+## Free Companion Tools
+
+- [Salary Sacrifice Pension Savings Calculator](https://sadiyaqeen92639572-cloud.github.io/salary-sacrifice-pension-savings-calculator/) —
+  standalone tool showing Income Tax + NI saved by sacrificing salary into a
+  pension. Powered by [mynetsalary.co.uk](https://mynetsalary.co.uk).
+
 ## Monetization
 
 Three CTA snippet families, mapped by topic cluster (see plan for full
