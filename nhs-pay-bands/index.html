@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NHS Pay Bands 2026/27 — Agenda for Change, All Bands | mynetsalary.co.uk</title>
+<meta name="description" content="NHS Agenda for Change pay bands 2026/27 — Band 2 to Band 9. Gross salary and take-home pay after tax for every band and pay point.">
+<link rel="canonical" href="https://mynetsalary.co.uk/nhs-pay-bands/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="google-site-verification" content="F0g9xdQ9RU5cTssBiWtkj41-7q2_kIwcKbJc_sMTthQ" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --brand: #1e5fae; --brand-dark: #123e73; --brand-light: #e7f0fb; --accent: #b91c1c; --text: #1a1a2e; --muted: #64748b; --border: #e2e8f0; --radius: 12px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: #f8fafc; line-height: 1.6; }
+  header { background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%); color: white; padding: 48px 20px 80px; text-align: center; }
+  header p { color: rgba(255,255,255,0.88); font-size: 1.05rem; margin-top: 10px; max-width: 640px; margin-left: auto; margin-right: auto; }
+  h1 { font-size: clamp(1.5rem, 4vw, 2.3rem); font-weight: 800; letter-spacing: -0.5px; }
+  .flag { font-size: 0.85rem; background: rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 14px; display: inline-block; margin-bottom: 16px; letter-spacing: 1px; }
+  .tool-card { background: white; border-radius: var(--radius); box-shadow: 0 4px 32px rgba(0,0,0,0.10); margin: -48px auto 40px; max-width: 720px; padding: 36px 32px; position: relative; z-index: 10; }
+  .input-group { margin-bottom: 20px; }
+  .input-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
+  select, input[type=number] { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 1rem; background: white; }
+  .seg-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .seg-btn { flex: 1; min-width: 100px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: white; font-size: 0.85rem; font-weight: 600; cursor: pointer; text-align: center; }
+  .seg-btn.active { background: var(--brand); color: white; border-color: var(--brand); }
+  .btn { background: var(--brand); color: white; border: none; border-radius: 8px; padding: 14px 28px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 8px; }
+  .btn:hover { background: var(--brand-dark); }
+  .results { background: var(--brand-light); border-radius: var(--radius); padding: 24px; margin-top: 24px; }
+  .result-hero { text-align: center; padding: 12px 0 20px; }
+  .result-hero .value { font-size: 2.2rem; font-weight: 800; color: var(--brand); }
+  .result-hero .label { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .band-breakdown { background: white; border-radius: 8px; padding: 14px 16px; margin-top: 12px; font-size: 0.85rem; }
+  .band-breakdown div { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); }
+  .band-breakdown div:last-child { border-bottom: none; font-weight: 700; }
+  .content { max-width: 760px; margin: 0 auto; padding: 0 20px 60px; }
+  h2 { font-size: 1.4rem; font-weight: 700; margin: 40px 0 14px; }
+  p { color: #374151; margin-bottom: 14px; font-size: 0.95rem; }
+  .table-wrap { overflow-x: auto; margin: 20px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: var(--brand); color: white; padding: 10px 12px; text-align: left; white-space: nowrap; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  .band-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin: 16px 0 40px; }
+  .band-link { display: block; background: white; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.9rem; }
+  .band-link.current { background: var(--brand); color: white; border-color: var(--brand); }
+  .band-link:hover { border-color: var(--brand); }
+  .sat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0 40px; }
+  @media (max-width: 500px) { .sat-grid { grid-template-columns: 1fr; } }
+  .sat-link { display: block; background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px 18px; text-decoration: none; color: var(--text); }
+  .sat-link:hover { border-color: var(--brand); }
+  .sat-link .t { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
+  .sat-link .d { font-size: 0.8rem; color: var(--muted); }
+  .cta-box { background: #111827; color: white; border-radius: var(--radius); padding: 36px 32px; margin: 40px 0; }
+  .cta-box h2 { color: white; margin-top: 0; font-size: 1.35rem; }
+  .cta-box p { color: rgba(255,255,255,0.88); }
+  .cta-btn { display: inline-block; background: var(--accent); color: white; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: 700; font-size: 1rem; margin-top: 20px; }
+  .faq { margin: 40px 0; }
+  .faq-item { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+  .faq-q { padding: 16px 20px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; background: white; }
+  .faq-q:hover { background: var(--brand-light); }
+  .faq-q::after { content: '+'; font-size: 1.2rem; color: var(--brand); flex-shrink: 0; }
+  .faq-q.open::after { content: '−'; }
+  .faq-a { display: none; padding: 0 20px 16px; font-size: 0.9rem; color: #374151; background: white; }
+  .faq-a.show { display: block; }
+  footer { background: var(--brand-dark); color: rgba(255,255,255,0.6); text-align: center; padding: 28px 20px; font-size: 0.8rem; }
+  footer a { color: rgba(255,255,255,0.7); }
+  .eeat-section { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin: 32px 0; font-size: 0.85rem; color: var(--muted); }
+  .eeat-section a { color: var(--brand); }
+</style>
+</head>
+<body>
+<header>
+  <div class="flag">🇬🇧 Agenda for Change · 2026/27</div>
+  <h1>NHS Pay Bands 2026/27</h1>
+  <p>Every Agenda for Change band, Band 2 to Band 9, with gross pay ranges and links to full take-home pay breakdowns.</p>
+</header>
+<div class="content" style="margin-top:40px;">
+  <div class="table-wrap"><table><tr><th>Band</th><th>Gross Range (2026/27)</th><th>Typical Roles</th></tr><tr><td><a href="/nhs-band-2-pay/">Band 2</a></td><td>£25,272</td><td>Healthcare assistants, domestic and catering staff, porters</td></tr>
+<tr><td><a href="/nhs-band-3-pay/">Band 3</a></td><td>£25,760 – £27,476</td><td>Senior healthcare assistants, clinical support workers, administrative officers</td></tr>
+<tr><td><a href="/nhs-band-4-pay/">Band 4</a></td><td>£28,392 – £31,157</td><td>Assistant practitioners, senior administrative staff, associate practitioners</td></tr>
+<tr><td><a href="/nhs-band-5-pay/">Band 5</a></td><td>£32,073 – £39,043</td><td>Newly qualified nurses, physiotherapists, occupational therapists, radiographers</td></tr>
+<tr><td><a href="/nhs-band-6-pay/">Band 6</a></td><td>£39,959 – £48,117</td><td>Senior staff nurses, specialist practitioners, senior therapists</td></tr>
+<tr><td><a href="/nhs-band-7-pay/">Band 7</a></td><td>£49,387 – £56,515</td><td>Advanced nurse practitioners, team leaders, senior specialist staff</td></tr>
+<tr><td><a href="/nhs-band-8a-pay/">Band 8a</a></td><td>£57,528 – £64,750</td><td>Senior managers, consultant-level allied health professionals</td></tr>
+<tr><td><a href="/nhs-band-8b-pay/">Band 8b</a></td><td>£66,582 – £77,368</td><td>Senior operational managers, principal clinical specialists</td></tr>
+<tr><td><a href="/nhs-band-8c-pay/">Band 8c</a></td><td>£79,504 – £91,609</td><td>Heads of service, senior clinical leads</td></tr>
+<tr><td><a href="/nhs-band-8d-pay/">Band 8d</a></td><td>£94,356 – £108,814</td><td>Associate directors, deputy directors</td></tr>
+<tr><td><a href="/nhs-band-9-pay/">Band 9</a></td><td>£112,782 – £129,783</td><td>Directors and the most senior NHS leadership roles</td></tr></table></div>
+  <p style="margin-top:20px;">Figures are basic Agenda for Change pay (3.3% uplift, effective 1 April 2026), sourced from NHS Employers. Excludes unsocial hours enhancements, overtime and High Cost Area Supplements. Doctors, dentists and very senior manager (VSM) roles are on separate contracts, not Agenda for Change.</p>
+</div>
+<footer><p>Information only — not official NHS Employers guidance.</p></footer>
+</body>
+</html>
