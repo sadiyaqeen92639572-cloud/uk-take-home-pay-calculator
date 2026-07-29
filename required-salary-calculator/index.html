@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PAYE Calculator UK 2026/27 — Income Tax & NI Breakdown</title>
-<meta name="description" content="Free PAYE calculator. Enter salary → instant Income Tax and National Insurance breakdown under PAYE. England, Scotland, Wales. 2026/27 rates.">
-<link rel="canonical" href="https://mynetsalary.co.uk/paye-calculator/">
+<title>Required Salary Calculator UK 2026/27 — Gross Needed for Target Take-Home</title>
+<meta name="description" content="Free required salary calculator. Enter the take-home pay you want → instant gross salary needed after tax, NI, student loan and pension. 2026/27 rates.">
+<link rel="canonical" href="https://mynetsalary.co.uk/required-salary-calculator/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" href="/favicon.png">
-<meta property="og:title" content="PAYE Calculator UK 2026/27 — Income Tax & NI Breakdown">
-<meta property="og:description" content="Free PAYE calculator. Enter salary → instant Income Tax and National Insurance breakdown under PAYE. England, Scotland, Wales. 2026/27 rates.">
+<meta property="og:title" content="Required Salary Calculator UK 2026/27 — Gross Needed for Target Take-Home">
+<meta property="og:description" content="Free required salary calculator. Enter the take-home pay you want → instant gross salary needed after tax, NI, student loan and pension. 2026/27 rates.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://mynetsalary.co.uk/paye-calculator/">
+<meta property="og:url" content="https://mynetsalary.co.uk/required-salary-calculator/">
 <meta property="og:image" content="https://mynetsalary.co.uk/og-image.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://mynetsalary.co.uk/og-image.svg">
@@ -23,9 +23,9 @@
   "@graph": [
     {
       "@type": "WebApplication",
-      "name": "PAYE Calculator",
-      "url": "https://mynetsalary.co.uk/paye-calculator/",
-      "description": "Free PAYE calculator. Enter salary → instant Income Tax and National Insurance breakdown under PAYE. England, Scotland, Wales. 2026/27 rates.",
+      "name": "Required Salary Calculator",
+      "url": "https://mynetsalary.co.uk/required-salary-calculator/",
+      "description": "Free required salary calculator. Enter the take-home pay you want → instant gross salary needed after tax, NI, student loan and pension. 2026/27 rates.",
       "applicationCategory": "FinanceApplication",
       "operatingSystem": "Any",
       "inLanguage": "en-GB",
@@ -44,34 +44,34 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "What is PAYE?",
+          "name": "How does a required salary calculator work?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Pay As You Earn is the system HMRC uses to collect Income Tax and National Insurance directly from your salary each pay period, calculated by your employer based on your tax code."
+            "text": "It works backwards from your desired net (take-home) pay to find the gross salary that produces it, accounting for Income Tax, National Insurance, pension and student loan deductions — the reverse of a normal take-home pay calculation."
           }
         },
         {
           "@type": "Question",
-          "name": "What does tax code 1257L mean?",
+          "name": "Why can't required salary be calculated with a simple formula?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "1257L is the standard 2026/27 tax code, giving you the full £12,570 Personal Allowance spread evenly across the tax year."
+            "text": "UK Income Tax and National Insurance are charged in bands at different rates, and the Personal Allowance itself shrinks above £100,000 income — so the relationship between gross and net pay isn't a straight line, and reversing it needs iterative calculation rather than one formula."
           }
         },
         {
           "@type": "Question",
-          "name": "Why did my PAYE deduction change this month?",
+          "name": "Should I use monthly or annual take-home pay to negotiate?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Common causes: a bonus pushed you into a higher tax band temporarily, your tax code changed, or you crossed the National Insurance Upper Earnings Limit."
+            "text": "Either works — this calculator accepts both and converts internally. Many people find it easier to think in monthly take-home pay since that matches how bills and budgets are usually planned."
           }
         },
         {
           "@type": "Question",
-          "name": "Can I check my PAYE deductions are correct?",
+          "name": "Does this account for pension and student loan?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes — compare your payslip figures against this calculator or HMRC's own estimator at gov.uk/estimate-income-tax using your gross pay and tax code."
+            "text": "Yes — both are optional inputs. Pension contributions reduce your taxable income (net pay arrangement) and increase the gross salary needed; student loan repayments come directly off gross pay above your plan's threshold."
           }
         }
       ]
@@ -88,8 +88,8 @@
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "PAYE Calculator",
-          "item": "https://mynetsalary.co.uk/paye-calculator/"
+          "name": "Required Salary Calculator",
+          "item": "https://mynetsalary.co.uk/required-salary-calculator/"
         }
       ]
     }
@@ -202,26 +202,47 @@
 
 <header>
   <div class="flag">🇬🇧 UK Payroll · 2026/27 Rates</div>
-  <h1>PAYE Calculator</h1>
-  <p>See exactly how your PAYE deductions are calculated — Income Tax and National Insurance, England, Scotland, Wales & NI.</p>
+  <h1>Required Salary Calculator</h1>
+  <p>Work backwards from the take-home pay you want to the gross salary you need to ask for.</p>
 </header>
 
 <div class="tool-card">
 
-  <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salary" min="0" step="500" value="35000"></div>
+  <div class="input-group period-seg"><label>Target Take-Home Pay Is</label>
+    <div class="seg-row" id="periodSeg">
+      <div class="seg-btn active" data-val="annual">Per Year</div>
+      <div class="seg-btn" data-val="monthly">Per Month</div>
+    </div>
+  </div>
+  <div class="input-group"><label id="targetLabel">Target Annual Take-Home Pay (£)</label><input type="number" id="target" min="0" step="100" value="30000"></div>
   <div class="input-group"><label>Region</label>
     <div class="seg-row" id="regionSeg">
       <div class="seg-btn active" data-val="rest_uk">England / Wales / NI</div>
       <div class="seg-btn" data-val="scotland">Scotland</div>
     </div>
   </div>
-  <button class="btn" onclick="calculate()">Calculate PAYE →</button>
+  <div class="two-col">
+    <div class="input-group"><label>Pension Contribution (%)</label><input type="number" id="pension" min="0" max="100" step="0.5" value="0"></div>
+    <div class="input-group"><label>Student Loan Plan</label>
+      <select id="loanPlan">
+        <option value="none" selected>None</option>
+        <option value="plan1">Plan 1</option>
+        <option value="plan2">Plan 2</option>
+        <option value="plan4">Plan 4 (Scotland)</option>
+        <option value="plan5">Plan 5</option>
+        <option value="postgrad">Postgraduate Loan</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn" onclick="calculate()">Calculate Required Salary →</button>
   <div class="results" id="results">
-    <div class="result-hero"><div class="value" id="r-takehome">—</div><div class="label">Annual Take-Home Pay</div></div>
+    <div class="result-hero"><div class="value" id="r-gross">—</div><div class="label">Gross Annual Salary Needed</div></div>
     <div class="band-breakdown">
       <div><span>Income Tax</span><span id="r-it">—</span></div>
       <div><span>National Insurance</span><span id="r-ni">—</span></div>
-      <div><span>Take-Home Pay</span><span id="r-total">—</span></div>
+      <div><span>Student Loan</span><span id="r-sl">—</span></div>
+      <div><span>Pension</span><span id="r-pen">—</span></div>
+      <div><span>Take-Home Pay (check)</span><span id="r-check">—</span></div>
     </div>
   </div>
 </div>
@@ -229,6 +250,7 @@
 <div class="content">
   <h2>Explore More Payroll Calculators</h2>
   <div class="sat-grid"><a class="sat-link" href="/"><div class="t">Take-Home Pay Calculator</div><div class="d">Full salary breakdown</div></a>
+<a class="sat-link" href="/paye-calculator/"><div class="t">PAYE Calculator</div><div class="d">Breakdown of PAYE deductions</div></a>
 <a class="sat-link" href="/national-insurance-calculator/"><div class="t">National Insurance Calculator</div><div class="d">NI contributions explained</div></a>
 <a class="sat-link" href="/dividend-tax-calculator/"><div class="t">Dividend Tax Calculator</div><div class="d">Salary + dividend combined</div></a>
 <a class="sat-link" href="/self-employed-tax-calculator/"><div class="t">Self-Employed Tax Calculator</div><div class="d">Self Assessment, Class 4 NI</div></a>
@@ -236,33 +258,27 @@
 <a class="sat-link" href="/redundancy-pay-calculator/"><div class="t">Redundancy Pay Calculator</div><div class="d">Statutory redundancy estimate</div></a>
 <a class="sat-link" href="/maternity-pay-calculator/"><div class="t">Maternity Pay Calculator</div><div class="d">SMP week-by-week estimate</div></a>
 <a class="sat-link" href="/pension-contribution-calculator/"><div class="t">Pension Contribution Calculator</div><div class="d">Auto-enrolment & salary sacrifice</div></a>
-<a class="sat-link" href="/required-salary-calculator/"><div class="t">Required Salary Calculator</div><div class="d">Gross salary needed for a target take-home</div></a>
 <a class="sat-link" href="/compare-two-salaries-calculator/"><div class="t">Compare Two Salaries</div><div class="d">Job offer take-home pay, side by side</div></a></div>
 
   
-  <h2>What Is PAYE?</h2>
-  <p>Pay As You Earn (PAYE) is how HMRC collects Income Tax and National Insurance directly from your salary each pay period, before you receive it. Your employer calculates and deducts both based on your tax code.</p>
-  <h2>Common Tax Codes 2026/27</h2>
-  <div class="table-wrap"><table><tr><th>Tax Code</th><th>Meaning</th></tr>
-  <tr><td>1257L</td><td>Standard code — full £12,570 Personal Allowance</td></tr>
-  <tr><td>BR</td><td>All income taxed at basic rate (20%), no allowance — usually a second job</td></tr>
-  <tr><td>D0</td><td>All income taxed at higher rate (40%)</td></tr>
-  <tr><td>NT</td><td>No tax deducted</td></tr>
-  <tr><td>K-prefix</td><td>Negative allowance — extra income being taxed (e.g. company benefits)</td></tr>
-  </table></div>
+  <h2>Why Work Backwards From Take-Home Pay?</h2>
+  <p>Job adverts and salary negotiations are almost always framed in gross salary, but what actually matters to your budget is what lands in your bank account. This calculator inverts the usual maths — tell it the monthly or annual take-home you need, and it works out the gross salary to ask for, accounting for Income Tax, National Insurance, your region, pension contributions and any student loan.</p>
+  <h2>How the Calculation Works</h2>
+  <p>Because Income Tax and National Insurance are banded (not a single flat rate), there's no simple formula to reverse — this tool searches for the exact gross salary whose take-home pay matches your target, using the same deterministic bands as the main <a href="/">take-home pay calculator</a>.</p>
+  <p>Useful for salary negotiations, evaluating a job offer against your current take-home, or setting a minimum acceptable rate when freelancing or contracting.</p>
 
   
 <div class="cta-box">
-  <h2>Running Payroll for Your Business?</h2>
-  <p>This calculator is built for individuals checking their own numbers. If you're running payroll for a team, a dedicated platform automates this calculation for every employee, every pay run.</p>
+  <h2>Get Independent Financial Advice</h2>
+  <p>The figure above is an estimate of what you're entitled to or what it costs you — deciding what to actually do with it (invest, overpay debt, top up a pension) is a bigger decision worth getting right.</p>
   <ul>
-    <li><strong>Small business, first hire:</strong> set up PAYE and auto-enrolment correctly from day one.</li>
-    <li><strong>Growing team:</strong> automate payslips, RTI submissions and pension contributions.</li>
-    <li><strong>Multiple pay rates or contractors:</strong> handle mixed PAYE/self-employed workforces in one place.</li>
-    <li><strong>Switching from spreadsheets:</strong> reduce manual errors on tax code changes and NI category switches.</li>
+    <li><strong>Received a redundancy payout:</strong> understand tax-free thresholds and how to make a lump sum work for you long-term.</li>
+    <li><strong>Planning parental leave:</strong> budget around the drop from full pay to statutory rate, and check what protections apply.</li>
+    <li><strong>Deciding whether to overpay a student loan:</strong> for many people investing the surplus outperforms early repayment — but it depends on your plan type and income trajectory.</li>
+    <li><strong>Reviewing pension contributions:</strong> small percentage changes compound significantly over a career.</li>
   </ul>
-  <p>Cloud payroll platforms like Xero, QuickBooks and BrightPay handle Income Tax, NI, student loan and pension deductions automatically.</p>
-  <a href="#" class="cta-btn" target="_blank" rel="noopener">Compare Payroll Software →</a>
+  <p>An FCA-regulated independent financial adviser can model your specific numbers — free directories like Unbiased.co.uk match you with a local IFA.</p>
+  <a href="#" class="cta-btn" target="_blank" rel="noopener">Find an Independent Financial Adviser →</a>
 </div>
 
   
@@ -273,9 +289,9 @@
     </h2>
     <div class="eeat-grid">
       <div class="eeat-author-card">
-        <div class="eeat-avatar">PY</div>
+        <div class="eeat-avatar">RS</div>
         <div class="eeat-author-info">
-          <h3>PAYE Calculator</h3>
+          <h3>Required Salary Calculator</h3>
           <div class="eeat-author-subtitle">Independent, Open-Source Estimator</div>
           <p>An independent calculator applying published HMRC/gov.scot/DWP rates deterministically — no AI estimate, no official affiliation.</p>
         </div>
@@ -297,10 +313,10 @@
     </div>
   </div>
 
-  <div class="faq"><h2>Frequently Asked Questions</h2><div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is PAYE?</div><div class="faq-a">Pay As You Earn is the system HMRC uses to collect Income Tax and National Insurance directly from your salary each pay period, calculated by your employer based on your tax code.</div></div>
-<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What does tax code 1257L mean?</div><div class="faq-a">1257L is the standard 2026/27 tax code, giving you the full £12,570 Personal Allowance spread evenly across the tax year.</div></div>
-<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Why did my PAYE deduction change this month?</div><div class="faq-a">Common causes: a bonus pushed you into a higher tax band temporarily, your tax code changed, or you crossed the National Insurance Upper Earnings Limit.</div></div>
-<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I check my PAYE deductions are correct?</div><div class="faq-a">Yes — compare your payslip figures against this calculator or HMRC's own estimator at gov.uk/estimate-income-tax using your gross pay and tax code.</div></div></div>
+  <div class="faq"><h2>Frequently Asked Questions</h2><div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does a required salary calculator work?</div><div class="faq-a">It works backwards from your desired net (take-home) pay to find the gross salary that produces it, accounting for Income Tax, National Insurance, pension and student loan deductions — the reverse of a normal take-home pay calculation.</div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Why can't required salary be calculated with a simple formula?</div><div class="faq-a">UK Income Tax and National Insurance are charged in bands at different rates, and the Personal Allowance itself shrinks above £100,000 income — so the relationship between gross and net pay isn't a straight line, and reversing it needs iterative calculation rather than one formula.</div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Should I use monthly or annual take-home pay to negotiate?</div><div class="faq-a">Either works — this calculator accepts both and converts internally. Many people find it easier to think in monthly take-home pay since that matches how bills and budgets are usually planned.</div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does this account for pension and student loan?</div><div class="faq-a">Yes — both are optional inputs. Pension contributions reduce your taxable income (net pay arrangement) and increase the gross salary needed; student loan repayments come directly off gross pay above your plan's threshold.</div></div></div>
 </div>
 
 <footer>
@@ -318,6 +334,7 @@ function bandedTax(income, bands) {
 function toggleFaq(el) { el.classList.toggle('open'); el.nextElementSibling.classList.toggle('show'); }
 
 const PT=12570, UEL=50270;
+const LOAN_PLANS={none:null,plan1:{t:26900,r:0.09},plan2:{t:29385,r:0.09},plan4:{t:33795,r:0.09},plan5:{t:25000,r:0.09},postgrad:{t:21000,r:0.06}};
 function personalAllowance(income){ if(income<=100000) return 12570; return Math.max(0,12570-(income-100000)/2); }
 function incomeTax(taxable, region){
   const pa = personalAllowance(taxable);
@@ -325,15 +342,40 @@ function incomeTax(taxable, region){
   return bandedTax(taxable,[[0,pa,0],[pa,50270,0.20],[50270,125140,0.40],[125140,Infinity,0.45]]);
 }
 function nationalInsurance(gross){ return bandedTax(gross,[[0,PT,0],[PT,UEL,0.08],[UEL,Infinity,0.02]]); }
+function studentLoan(gross, plan){ const p=LOAN_PLANS[plan]; if(!p) return 0; return Math.max(0,gross-p.t)*p.r; }
+function netFromGross(gross, region, pensionPct, plan){
+  const pensionAmt = gross*(pensionPct/100);
+  const taxable = Math.max(0, gross-pensionAmt);
+  const it = incomeTax(taxable, region);
+  const ni = nationalInsurance(gross);
+  const sl = studentLoan(gross, plan);
+  return { net: gross-it-ni-sl-pensionAmt, it, ni, sl, pensionAmt };
+}
 document.querySelectorAll('#regionSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#regionSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}));
+document.querySelectorAll('#periodSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#periodSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  document.getElementById('targetLabel').textContent = b.dataset.val==='monthly' ? 'Target Monthly Take-Home Pay (£)' : 'Target Annual Take-Home Pay (£)';
+}));
 function calculate(){
-  const gross=parseFloat(document.getElementById('salary').value)||0;
+  const period=document.querySelector('#periodSeg .seg-btn.active').dataset.val;
+  const targetInput=parseFloat(document.getElementById('target').value)||0;
+  const targetAnnual = period==='monthly' ? targetInput*12 : targetInput;
   const region=document.querySelector('#regionSeg .seg-btn.active').dataset.val==='scotland'?'scotland':'rest_uk';
-  const it=incomeTax(gross,region), ni=nationalInsurance(gross), takeHome=gross-it-ni;
-  document.getElementById('r-takehome').textContent=fmt(takeHome);
-  document.getElementById('r-it').textContent=fmt(it);
-  document.getElementById('r-ni').textContent=fmt(ni);
-  document.getElementById('r-total').textContent=fmt(takeHome);
+  const pensionPct=parseFloat(document.getElementById('pension').value)||0;
+  const plan=document.getElementById('loanPlan').value;
+  let lo=targetAnnual, hi=Math.max(targetAnnual*3,50000), mid=targetAnnual;
+  for(let i=0;i<60;i++){
+    mid=(lo+hi)/2;
+    const net=netFromGross(mid,region,pensionPct,plan).net;
+    if (net<targetAnnual) lo=mid; else hi=mid;
+  }
+  const result=netFromGross(mid,region,pensionPct,plan);
+  document.getElementById('r-gross').textContent=fmt(mid);
+  document.getElementById('r-it').textContent=fmt(result.it);
+  document.getElementById('r-ni').textContent=fmt(result.ni);
+  document.getElementById('r-sl').textContent=fmt(result.sl);
+  document.getElementById('r-pen').textContent=fmt(result.pensionAmt);
+  document.getElementById('r-check').textContent=fmt(result.net);
   document.getElementById('results').classList.add('show');
 }
 </script>

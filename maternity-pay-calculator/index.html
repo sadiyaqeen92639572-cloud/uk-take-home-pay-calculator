@@ -188,6 +188,14 @@
   .eeat-compliance-text h4 { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
   .eeat-compliance-text p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; margin-bottom: 0; }
   .eeat-compliance-text a { color: var(--brand); text-decoration: underline; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+  .offer-card { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; }
+  .offer-card h3 { font-size: 0.95rem; color: var(--brand); margin-bottom: 12px; }
+  .compare-result-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+  .compare-result-row:last-child { border-bottom: none; font-weight: 700; }
+  .winner-badge { background: var(--success); color: white; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+  .period-seg { margin-bottom: 16px; }
 </style>
 </head>
 <body>
@@ -221,7 +229,9 @@
 <a class="sat-link" href="/self-employed-tax-calculator/"><div class="t">Self-Employed Tax Calculator</div><div class="d">Self Assessment, Class 4 NI</div></a>
 <a class="sat-link" href="/student-loan-repayment-calculator/"><div class="t">Student Loan Repayment Calculator</div><div class="d">Plan 1/2/4/5/Postgrad</div></a>
 <a class="sat-link" href="/redundancy-pay-calculator/"><div class="t">Redundancy Pay Calculator</div><div class="d">Statutory redundancy estimate</div></a>
-<a class="sat-link" href="/pension-contribution-calculator/"><div class="t">Pension Contribution Calculator</div><div class="d">Auto-enrolment & salary sacrifice</div></a></div>
+<a class="sat-link" href="/pension-contribution-calculator/"><div class="t">Pension Contribution Calculator</div><div class="d">Auto-enrolment & salary sacrifice</div></a>
+<a class="sat-link" href="/required-salary-calculator/"><div class="t">Required Salary Calculator</div><div class="d">Gross salary needed for a target take-home</div></a>
+<a class="sat-link" href="/compare-two-salaries-calculator/"><div class="t">Compare Two Salaries</div><div class="d">Job offer take-home pay, side by side</div></a></div>
 
   
   <h2>Statutory Maternity Pay 2026/27</h2>

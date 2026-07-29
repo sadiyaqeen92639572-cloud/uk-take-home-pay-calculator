@@ -97,6 +97,14 @@ const CSS = `
   .eeat-compliance-text h4 { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
   .eeat-compliance-text p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; margin-bottom: 0; }
   .eeat-compliance-text a { color: var(--brand); text-decoration: underline; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+  .offer-card { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; }
+  .offer-card h3 { font-size: 0.95rem; color: var(--brand); margin-bottom: 12px; }
+  .compare-result-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+  .compare-result-row:last-child { border-bottom: none; font-weight: 700; }
+  .winner-badge { background: var(--success); color: white; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+  .period-seg { margin-bottom: 16px; }
 `;
 
 const SATELLITES_NAV = [
@@ -107,7 +115,9 @@ const SATELLITES_NAV = [
   { slug: 'student-loan-repayment-calculator', title: 'Student Loan Repayment Calculator', desc: 'Plan 1/2/4/5/Postgrad' },
   { slug: 'redundancy-pay-calculator', title: 'Redundancy Pay Calculator', desc: 'Statutory redundancy estimate' },
   { slug: 'maternity-pay-calculator', title: 'Maternity Pay Calculator', desc: 'SMP week-by-week estimate' },
-  { slug: 'pension-contribution-calculator', title: 'Pension Contribution Calculator', desc: 'Auto-enrolment & salary sacrifice' }
+  { slug: 'pension-contribution-calculator', title: 'Pension Contribution Calculator', desc: 'Auto-enrolment & salary sacrifice' },
+  { slug: 'required-salary-calculator', title: 'Required Salary Calculator', desc: 'Gross salary needed for a target take-home' },
+  { slug: 'compare-two-salaries-calculator', title: 'Compare Two Salaries', desc: 'Job offer take-home pay, side by side' }
 ];
 
 function satGridHtml(excludeSlug) {
@@ -763,6 +773,227 @@ function calculate(){
     { q: 'How does pension tax relief work?', a: 'Under a net pay arrangement, your contribution is deducted from salary before Income Tax is calculated, so you automatically get relief at your marginal rate (20%, 40% or 45%) — a £100 contribution costs a higher-rate taxpayer only £60 out of take-home pay.' },
     { q: 'Can I contribute more than the auto-enrolment minimum?', a: 'Yes — many people increase contributions, especially higher earners using salary sacrifice to also reduce National Insurance, or to make use of the higher-rate tax relief before hitting the £60,000 annual allowance.' },
     { q: 'What is salary sacrifice?', a: 'An arrangement where you give up part of your salary in exchange for an equivalent employer pension contribution — this can also reduce your National Insurance bill, not just Income Tax, making it more tax-efficient than a standard net pay contribution.' }
+  ]
+});
+
+// 9. Required salary calculator — reverse: target net take-home → gross needed
+PAGES.push({
+  slug: 'required-salary-calculator',
+  title: 'Required Salary Calculator',
+  metaTitle: 'Required Salary Calculator UK 2026/27 — Gross Needed for Target Take-Home',
+  metaDesc: 'Free required salary calculator. Enter the take-home pay you want → instant gross salary needed after tax, NI, student loan and pension. 2026/27 rates.',
+  h1: 'Required Salary Calculator',
+  intro: 'Work backwards from the take-home pay you want to the gross salary you need to ask for.',
+  avatarInitials: 'RS',
+  ctaSnippet: CTA_FINANCIAL_ADVICE,
+  toolHtml: `
+  <div class="input-group period-seg"><label>Target Take-Home Pay Is</label>
+    <div class="seg-row" id="periodSeg">
+      <div class="seg-btn active" data-val="annual">Per Year</div>
+      <div class="seg-btn" data-val="monthly">Per Month</div>
+    </div>
+  </div>
+  <div class="input-group"><label id="targetLabel">Target Annual Take-Home Pay (£)</label><input type="number" id="target" min="0" step="100" value="30000"></div>
+  <div class="input-group"><label>Region</label>
+    <div class="seg-row" id="regionSeg">
+      <div class="seg-btn active" data-val="rest_uk">England / Wales / NI</div>
+      <div class="seg-btn" data-val="scotland">Scotland</div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="input-group"><label>Pension Contribution (%)</label><input type="number" id="pension" min="0" max="100" step="0.5" value="0"></div>
+    <div class="input-group"><label>Student Loan Plan</label>
+      <select id="loanPlan">
+        <option value="none" selected>None</option>
+        <option value="plan1">Plan 1</option>
+        <option value="plan2">Plan 2</option>
+        <option value="plan4">Plan 4 (Scotland)</option>
+        <option value="plan5">Plan 5</option>
+        <option value="postgrad">Postgraduate Loan</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn" onclick="calculate()">Calculate Required Salary →</button>
+  <div class="results" id="results">
+    <div class="result-hero"><div class="value" id="r-gross">—</div><div class="label">Gross Annual Salary Needed</div></div>
+    <div class="band-breakdown">
+      <div><span>Income Tax</span><span id="r-it">—</span></div>
+      <div><span>National Insurance</span><span id="r-ni">—</span></div>
+      <div><span>Student Loan</span><span id="r-sl">—</span></div>
+      <div><span>Pension</span><span id="r-pen">—</span></div>
+      <div><span>Take-Home Pay (check)</span><span id="r-check">—</span></div>
+    </div>
+  </div>`,
+  toolJs: `
+const PT=12570, UEL=50270;
+const LOAN_PLANS={none:null,plan1:{t:26900,r:0.09},plan2:{t:29385,r:0.09},plan4:{t:33795,r:0.09},plan5:{t:25000,r:0.09},postgrad:{t:21000,r:0.06}};
+function personalAllowance(income){ if(income<=100000) return 12570; return Math.max(0,12570-(income-100000)/2); }
+function incomeTax(taxable, region){
+  const pa = personalAllowance(taxable);
+  if (region==='scotland') return bandedTax(taxable,[[0,pa,0],[pa,16537,0.19],[16537,29526,0.20],[29526,43662,0.21],[43662,75000,0.42],[75000,125140,0.45],[125140,Infinity,0.48]]);
+  return bandedTax(taxable,[[0,pa,0],[pa,50270,0.20],[50270,125140,0.40],[125140,Infinity,0.45]]);
+}
+function nationalInsurance(gross){ return bandedTax(gross,[[0,PT,0],[PT,UEL,0.08],[UEL,Infinity,0.02]]); }
+function studentLoan(gross, plan){ const p=LOAN_PLANS[plan]; if(!p) return 0; return Math.max(0,gross-p.t)*p.r; }
+function netFromGross(gross, region, pensionPct, plan){
+  const pensionAmt = gross*(pensionPct/100);
+  const taxable = Math.max(0, gross-pensionAmt);
+  const it = incomeTax(taxable, region);
+  const ni = nationalInsurance(gross);
+  const sl = studentLoan(gross, plan);
+  return { net: gross-it-ni-sl-pensionAmt, it, ni, sl, pensionAmt };
+}
+document.querySelectorAll('#regionSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#regionSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}));
+document.querySelectorAll('#periodSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#periodSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  document.getElementById('targetLabel').textContent = b.dataset.val==='monthly' ? 'Target Monthly Take-Home Pay (£)' : 'Target Annual Take-Home Pay (£)';
+}));
+function calculate(){
+  const period=document.querySelector('#periodSeg .seg-btn.active').dataset.val;
+  const targetInput=parseFloat(document.getElementById('target').value)||0;
+  const targetAnnual = period==='monthly' ? targetInput*12 : targetInput;
+  const region=document.querySelector('#regionSeg .seg-btn.active').dataset.val==='scotland'?'scotland':'rest_uk';
+  const pensionPct=parseFloat(document.getElementById('pension').value)||0;
+  const plan=document.getElementById('loanPlan').value;
+  let lo=targetAnnual, hi=Math.max(targetAnnual*3,50000), mid=targetAnnual;
+  for(let i=0;i<60;i++){
+    mid=(lo+hi)/2;
+    const net=netFromGross(mid,region,pensionPct,plan).net;
+    if (net<targetAnnual) lo=mid; else hi=mid;
+  }
+  const result=netFromGross(mid,region,pensionPct,plan);
+  document.getElementById('r-gross').textContent=fmt(mid);
+  document.getElementById('r-it').textContent=fmt(result.it);
+  document.getElementById('r-ni').textContent=fmt(result.ni);
+  document.getElementById('r-sl').textContent=fmt(result.sl);
+  document.getElementById('r-pen').textContent=fmt(result.pensionAmt);
+  document.getElementById('r-check').textContent=fmt(result.net);
+  document.getElementById('results').classList.add('show');
+}`,
+  extraContent: `
+  <h2>Why Work Backwards From Take-Home Pay?</h2>
+  <p>Job adverts and salary negotiations are almost always framed in gross salary, but what actually matters to your budget is what lands in your bank account. This calculator inverts the usual maths — tell it the monthly or annual take-home you need, and it works out the gross salary to ask for, accounting for Income Tax, National Insurance, your region, pension contributions and any student loan.</p>
+  <h2>How the Calculation Works</h2>
+  <p>Because Income Tax and National Insurance are banded (not a single flat rate), there's no simple formula to reverse — this tool searches for the exact gross salary whose take-home pay matches your target, using the same deterministic bands as the main <a href="/">take-home pay calculator</a>.</p>
+  <p>Useful for salary negotiations, evaluating a job offer against your current take-home, or setting a minimum acceptable rate when freelancing or contracting.</p>`,
+  faqs: [
+    { q: 'How does a required salary calculator work?', a: 'It works backwards from your desired net (take-home) pay to find the gross salary that produces it, accounting for Income Tax, National Insurance, pension and student loan deductions — the reverse of a normal take-home pay calculation.' },
+    { q: 'Why can\'t required salary be calculated with a simple formula?', a: 'UK Income Tax and National Insurance are charged in bands at different rates, and the Personal Allowance itself shrinks above £100,000 income — so the relationship between gross and net pay isn\'t a straight line, and reversing it needs iterative calculation rather than one formula.' },
+    { q: 'Should I use monthly or annual take-home pay to negotiate?', a: 'Either works — this calculator accepts both and converts internally. Many people find it easier to think in monthly take-home pay since that matches how bills and budgets are usually planned.' },
+    { q: 'Does this account for pension and student loan?', a: 'Yes — both are optional inputs. Pension contributions reduce your taxable income (net pay arrangement) and increase the gross salary needed; student loan repayments come directly off gross pay above your plan\'s threshold.' }
+  ]
+});
+
+// 10. Compare two salaries calculator — side-by-side job offer comparison
+PAGES.push({
+  slug: 'compare-two-salaries-calculator',
+  title: 'Compare Two Salaries Calculator',
+  metaTitle: 'Compare Two Salaries UK 2026/27 — Job Offer Take-Home Pay',
+  metaDesc: 'Free tool to compare two salaries or job offers side by side. Instant take-home pay difference after tax, NI, student loan and pension. 2026/27 rates.',
+  h1: 'Compare Two Salaries',
+  intro: 'Comparing two job offers or a pay rise? See the real take-home pay difference, side by side.',
+  avatarInitials: 'CM',
+  ctaSnippet: CTA_FINANCIAL_ADVICE,
+  toolHtml: `
+  <div class="compare-grid">
+    <div class="offer-card">
+      <h3>Offer A</h3>
+      <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salaryA" min="0" step="500" value="35000"></div>
+      <div class="input-group"><label>Region</label>
+        <select id="regionA"><option value="rest_uk" selected>England / Wales / NI</option><option value="scotland">Scotland</option></select>
+      </div>
+      <div class="input-group"><label>Pension (%)</label><input type="number" id="pensionA" min="0" max="100" step="0.5" value="0"></div>
+      <div class="input-group"><label>Student Loan</label>
+        <select id="loanA"><option value="none" selected>None</option><option value="plan1">Plan 1</option><option value="plan2">Plan 2</option><option value="plan4">Plan 4 (Scotland)</option><option value="plan5">Plan 5</option><option value="postgrad">Postgraduate</option></select>
+      </div>
+    </div>
+    <div class="offer-card">
+      <h3>Offer B</h3>
+      <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salaryB" min="0" step="500" value="40000"></div>
+      <div class="input-group"><label>Region</label>
+        <select id="regionB"><option value="rest_uk" selected>England / Wales / NI</option><option value="scotland">Scotland</option></select>
+      </div>
+      <div class="input-group"><label>Pension (%)</label><input type="number" id="pensionB" min="0" max="100" step="0.5" value="0"></div>
+      <div class="input-group"><label>Student Loan</label>
+        <select id="loanB"><option value="none" selected>None</option><option value="plan1">Plan 1</option><option value="plan2">Plan 2</option><option value="plan4">Plan 4 (Scotland)</option><option value="plan5">Plan 5</option><option value="postgrad">Postgraduate</option></select>
+      </div>
+    </div>
+  </div>
+  <button class="btn" onclick="calculate()">Compare Take-Home Pay →</button>
+  <div class="results" id="results">
+    <div class="result-hero"><div class="value" id="r-diff">—</div><div class="label">Take-Home Pay Difference, Per Year</div></div>
+    <div class="compare-grid">
+      <div class="offer-card">
+        <div class="compare-result-row"><span>Gross</span><span id="a-gross">—</span></div>
+        <div class="compare-result-row"><span>Income Tax</span><span id="a-it">—</span></div>
+        <div class="compare-result-row"><span>National Insurance</span><span id="a-ni">—</span></div>
+        <div class="compare-result-row"><span>Take-Home / Year <span id="a-badge"></span></span><span id="a-net">—</span></div>
+        <div class="compare-result-row"><span>Take-Home / Month</span><span id="a-netmonth">—</span></div>
+      </div>
+      <div class="offer-card">
+        <div class="compare-result-row"><span>Gross</span><span id="b-gross">—</span></div>
+        <div class="compare-result-row"><span>Income Tax</span><span id="b-it">—</span></div>
+        <div class="compare-result-row"><span>National Insurance</span><span id="b-ni">—</span></div>
+        <div class="compare-result-row"><span>Take-Home / Year <span id="b-badge"></span></span><span id="b-net">—</span></div>
+        <div class="compare-result-row"><span>Take-Home / Month</span><span id="b-netmonth">—</span></div>
+      </div>
+    </div>
+  </div>`,
+  toolJs: `
+const PT=12570, UEL=50270;
+const LOAN_PLANS={none:null,plan1:{t:26900,r:0.09},plan2:{t:29385,r:0.09},plan4:{t:33795,r:0.09},plan5:{t:25000,r:0.09},postgrad:{t:21000,r:0.06}};
+function personalAllowance(income){ if(income<=100000) return 12570; return Math.max(0,12570-(income-100000)/2); }
+function incomeTax(taxable, region){
+  const pa = personalAllowance(taxable);
+  if (region==='scotland') return bandedTax(taxable,[[0,pa,0],[pa,16537,0.19],[16537,29526,0.20],[29526,43662,0.21],[43662,75000,0.42],[75000,125140,0.45],[125140,Infinity,0.48]]);
+  return bandedTax(taxable,[[0,pa,0],[pa,50270,0.20],[50270,125140,0.40],[125140,Infinity,0.45]]);
+}
+function studentLoan(gross, plan){ const p=LOAN_PLANS[plan]; if(!p) return 0; return Math.max(0,gross-p.t)*p.r; }
+function offerResult(prefix){
+  const gross=parseFloat(document.getElementById('salary'+prefix).value)||0;
+  const region=document.getElementById('region'+prefix).value;
+  const pensionPct=parseFloat(document.getElementById('pension'+prefix).value)||0;
+  const plan=document.getElementById('loan'+prefix).value;
+  const pensionAmt=gross*(pensionPct/100);
+  const taxable=Math.max(0,gross-pensionAmt);
+  const it=incomeTax(taxable,region);
+  const ni=bandedTax(gross,[[0,PT,0],[PT,UEL,0.08],[UEL,Infinity,0.02]]);
+  const sl=studentLoan(gross,plan);
+  const net=gross-it-ni-sl-pensionAmt;
+  return { gross, it, ni, net };
+}
+function calculate(){
+  const a=offerResult('A'), b=offerResult('B');
+  document.getElementById('a-gross').textContent=fmt(a.gross);
+  document.getElementById('a-it').textContent=fmt(a.it);
+  document.getElementById('a-ni').textContent=fmt(a.ni);
+  document.getElementById('a-net').textContent=fmt(a.net);
+  document.getElementById('a-netmonth').textContent=fmt(a.net/12);
+  document.getElementById('b-gross').textContent=fmt(b.gross);
+  document.getElementById('b-it').textContent=fmt(b.it);
+  document.getElementById('b-ni').textContent=fmt(b.ni);
+  document.getElementById('b-net').textContent=fmt(b.net);
+  document.getElementById('b-netmonth').textContent=fmt(b.net/12);
+  document.getElementById('a-badge').innerHTML = a.net>b.net ? '<span class=\\"winner-badge\\">HIGHER</span>' : '';
+  document.getElementById('b-badge').innerHTML = b.net>a.net ? '<span class=\\"winner-badge\\">HIGHER</span>' : '';
+  const diff=Math.abs(a.net-b.net);
+  document.getElementById('r-diff').textContent=fmt(diff);
+  document.getElementById('results').classList.add('show');
+}`,
+  extraContent: `
+  <h2>Why Compare Take-Home Pay, Not Just Gross Salary</h2>
+  <p>A £5,000 gross pay rise rarely means £5,000 more in your pocket — moving into a higher tax band, losing Personal Allowance above £100,000, or a different region's Income Tax bands (Scotland vs the rest of the UK) can all shrink the real-world gain. Comparing two offers on take-home pay, not headline salary, shows what actually changes for your budget.</p>
+  <h2>What to Check Beyond the Numbers</h2>
+  <ul>
+    <li><strong>Pension match:</strong> a lower salary with a stronger employer pension match can still be worth more overall.</li>
+    <li><strong>Benefits in kind:</strong> private healthcare, company car or bonus schemes aren't captured here — factor them in separately.</li>
+    <li><strong>Location:</strong> if one offer is in Scotland, its Income Tax bands differ from the rest of the UK even at an identical salary.</li>
+  </ul>`,
+  faqs: [
+    { q: 'Why is my pay rise not worth as much as I expected?', a: 'Because Income Tax and National Insurance are banded, part of a pay rise can be taxed at a higher marginal rate than your existing salary — and above £100,000 you also start losing Personal Allowance at 60% effective marginal rate. Comparing take-home pay (not gross) shows the real gain.' },
+    { q: 'How do I compare a Scotland-based job offer to an England-based one?', a: 'Enter each offer with its correct region — Scotland uses six Income Tax bands (19–48%) instead of the rest of the UK\'s three (20/40/45%), so identical gross salaries can produce different take-home pay depending on region.' },
+    { q: 'Does this include pension and student loan in the comparison?', a: 'Yes — both are optional per-offer inputs, since employer pension schemes and student loan status vary between jobs and materially affect the real take-home difference.' },
+    { q: 'What should I check beyond take-home pay when comparing offers?', a: 'Employer pension contribution match, private healthcare or other benefits in kind, bonus structure, and cost of commuting or relocating — none of which are captured by a salary-only comparison.' }
   ]
 });
 

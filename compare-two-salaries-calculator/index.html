@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PAYE Calculator UK 2026/27 — Income Tax & NI Breakdown</title>
-<meta name="description" content="Free PAYE calculator. Enter salary → instant Income Tax and National Insurance breakdown under PAYE. England, Scotland, Wales. 2026/27 rates.">
-<link rel="canonical" href="https://mynetsalary.co.uk/paye-calculator/">
+<title>Compare Two Salaries UK 2026/27 — Job Offer Take-Home Pay</title>
+<meta name="description" content="Free tool to compare two salaries or job offers side by side. Instant take-home pay difference after tax, NI, student loan and pension. 2026/27 rates.">
+<link rel="canonical" href="https://mynetsalary.co.uk/compare-two-salaries-calculator/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" href="/favicon.png">
-<meta property="og:title" content="PAYE Calculator UK 2026/27 — Income Tax & NI Breakdown">
-<meta property="og:description" content="Free PAYE calculator. Enter salary → instant Income Tax and National Insurance breakdown under PAYE. England, Scotland, Wales. 2026/27 rates.">
+<meta property="og:title" content="Compare Two Salaries UK 2026/27 — Job Offer Take-Home Pay">
+<meta property="og:description" content="Free tool to compare two salaries or job offers side by side. Instant take-home pay difference after tax, NI, student loan and pension. 2026/27 rates.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://mynetsalary.co.uk/paye-calculator/">
+<meta property="og:url" content="https://mynetsalary.co.uk/compare-two-salaries-calculator/">
 <meta property="og:image" content="https://mynetsalary.co.uk/og-image.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://mynetsalary.co.uk/og-image.svg">
@@ -23,9 +23,9 @@
   "@graph": [
     {
       "@type": "WebApplication",
-      "name": "PAYE Calculator",
-      "url": "https://mynetsalary.co.uk/paye-calculator/",
-      "description": "Free PAYE calculator. Enter salary → instant Income Tax and National Insurance breakdown under PAYE. England, Scotland, Wales. 2026/27 rates.",
+      "name": "Compare Two Salaries Calculator",
+      "url": "https://mynetsalary.co.uk/compare-two-salaries-calculator/",
+      "description": "Free tool to compare two salaries or job offers side by side. Instant take-home pay difference after tax, NI, student loan and pension. 2026/27 rates.",
       "applicationCategory": "FinanceApplication",
       "operatingSystem": "Any",
       "inLanguage": "en-GB",
@@ -44,34 +44,34 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "What is PAYE?",
+          "name": "Why is my pay rise not worth as much as I expected?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Pay As You Earn is the system HMRC uses to collect Income Tax and National Insurance directly from your salary each pay period, calculated by your employer based on your tax code."
+            "text": "Because Income Tax and National Insurance are banded, part of a pay rise can be taxed at a higher marginal rate than your existing salary — and above £100,000 you also start losing Personal Allowance at 60% effective marginal rate. Comparing take-home pay (not gross) shows the real gain."
           }
         },
         {
           "@type": "Question",
-          "name": "What does tax code 1257L mean?",
+          "name": "How do I compare a Scotland-based job offer to an England-based one?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "1257L is the standard 2026/27 tax code, giving you the full £12,570 Personal Allowance spread evenly across the tax year."
+            "text": "Enter each offer with its correct region — Scotland uses six Income Tax bands (19–48%) instead of the rest of the UK's three (20/40/45%), so identical gross salaries can produce different take-home pay depending on region."
           }
         },
         {
           "@type": "Question",
-          "name": "Why did my PAYE deduction change this month?",
+          "name": "Does this include pension and student loan in the comparison?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Common causes: a bonus pushed you into a higher tax band temporarily, your tax code changed, or you crossed the National Insurance Upper Earnings Limit."
+            "text": "Yes — both are optional per-offer inputs, since employer pension schemes and student loan status vary between jobs and materially affect the real take-home difference."
           }
         },
         {
           "@type": "Question",
-          "name": "Can I check my PAYE deductions are correct?",
+          "name": "What should I check beyond take-home pay when comparing offers?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes — compare your payslip figures against this calculator or HMRC's own estimator at gov.uk/estimate-income-tax using your gross pay and tax code."
+            "text": "Employer pension contribution match, private healthcare or other benefits in kind, bonus structure, and cost of commuting or relocating — none of which are captured by a salary-only comparison."
           }
         }
       ]
@@ -88,8 +88,8 @@
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "PAYE Calculator",
-          "item": "https://mynetsalary.co.uk/paye-calculator/"
+          "name": "Compare Two Salaries Calculator",
+          "item": "https://mynetsalary.co.uk/compare-two-salaries-calculator/"
         }
       ]
     }
@@ -202,26 +202,54 @@
 
 <header>
   <div class="flag">🇬🇧 UK Payroll · 2026/27 Rates</div>
-  <h1>PAYE Calculator</h1>
-  <p>See exactly how your PAYE deductions are calculated — Income Tax and National Insurance, England, Scotland, Wales & NI.</p>
+  <h1>Compare Two Salaries</h1>
+  <p>Comparing two job offers or a pay rise? See the real take-home pay difference, side by side.</p>
 </header>
 
 <div class="tool-card">
 
-  <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salary" min="0" step="500" value="35000"></div>
-  <div class="input-group"><label>Region</label>
-    <div class="seg-row" id="regionSeg">
-      <div class="seg-btn active" data-val="rest_uk">England / Wales / NI</div>
-      <div class="seg-btn" data-val="scotland">Scotland</div>
+  <div class="compare-grid">
+    <div class="offer-card">
+      <h3>Offer A</h3>
+      <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salaryA" min="0" step="500" value="35000"></div>
+      <div class="input-group"><label>Region</label>
+        <select id="regionA"><option value="rest_uk" selected>England / Wales / NI</option><option value="scotland">Scotland</option></select>
+      </div>
+      <div class="input-group"><label>Pension (%)</label><input type="number" id="pensionA" min="0" max="100" step="0.5" value="0"></div>
+      <div class="input-group"><label>Student Loan</label>
+        <select id="loanA"><option value="none" selected>None</option><option value="plan1">Plan 1</option><option value="plan2">Plan 2</option><option value="plan4">Plan 4 (Scotland)</option><option value="plan5">Plan 5</option><option value="postgrad">Postgraduate</option></select>
+      </div>
+    </div>
+    <div class="offer-card">
+      <h3>Offer B</h3>
+      <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salaryB" min="0" step="500" value="40000"></div>
+      <div class="input-group"><label>Region</label>
+        <select id="regionB"><option value="rest_uk" selected>England / Wales / NI</option><option value="scotland">Scotland</option></select>
+      </div>
+      <div class="input-group"><label>Pension (%)</label><input type="number" id="pensionB" min="0" max="100" step="0.5" value="0"></div>
+      <div class="input-group"><label>Student Loan</label>
+        <select id="loanB"><option value="none" selected>None</option><option value="plan1">Plan 1</option><option value="plan2">Plan 2</option><option value="plan4">Plan 4 (Scotland)</option><option value="plan5">Plan 5</option><option value="postgrad">Postgraduate</option></select>
+      </div>
     </div>
   </div>
-  <button class="btn" onclick="calculate()">Calculate PAYE →</button>
+  <button class="btn" onclick="calculate()">Compare Take-Home Pay →</button>
   <div class="results" id="results">
-    <div class="result-hero"><div class="value" id="r-takehome">—</div><div class="label">Annual Take-Home Pay</div></div>
-    <div class="band-breakdown">
-      <div><span>Income Tax</span><span id="r-it">—</span></div>
-      <div><span>National Insurance</span><span id="r-ni">—</span></div>
-      <div><span>Take-Home Pay</span><span id="r-total">—</span></div>
+    <div class="result-hero"><div class="value" id="r-diff">—</div><div class="label">Take-Home Pay Difference, Per Year</div></div>
+    <div class="compare-grid">
+      <div class="offer-card">
+        <div class="compare-result-row"><span>Gross</span><span id="a-gross">—</span></div>
+        <div class="compare-result-row"><span>Income Tax</span><span id="a-it">—</span></div>
+        <div class="compare-result-row"><span>National Insurance</span><span id="a-ni">—</span></div>
+        <div class="compare-result-row"><span>Take-Home / Year <span id="a-badge"></span></span><span id="a-net">—</span></div>
+        <div class="compare-result-row"><span>Take-Home / Month</span><span id="a-netmonth">—</span></div>
+      </div>
+      <div class="offer-card">
+        <div class="compare-result-row"><span>Gross</span><span id="b-gross">—</span></div>
+        <div class="compare-result-row"><span>Income Tax</span><span id="b-it">—</span></div>
+        <div class="compare-result-row"><span>National Insurance</span><span id="b-ni">—</span></div>
+        <div class="compare-result-row"><span>Take-Home / Year <span id="b-badge"></span></span><span id="b-net">—</span></div>
+        <div class="compare-result-row"><span>Take-Home / Month</span><span id="b-netmonth">—</span></div>
+      </div>
     </div>
   </div>
 </div>
@@ -229,6 +257,7 @@
 <div class="content">
   <h2>Explore More Payroll Calculators</h2>
   <div class="sat-grid"><a class="sat-link" href="/"><div class="t">Take-Home Pay Calculator</div><div class="d">Full salary breakdown</div></a>
+<a class="sat-link" href="/paye-calculator/"><div class="t">PAYE Calculator</div><div class="d">Breakdown of PAYE deductions</div></a>
 <a class="sat-link" href="/national-insurance-calculator/"><div class="t">National Insurance Calculator</div><div class="d">NI contributions explained</div></a>
 <a class="sat-link" href="/dividend-tax-calculator/"><div class="t">Dividend Tax Calculator</div><div class="d">Salary + dividend combined</div></a>
 <a class="sat-link" href="/self-employed-tax-calculator/"><div class="t">Self-Employed Tax Calculator</div><div class="d">Self Assessment, Class 4 NI</div></a>
@@ -236,33 +265,30 @@
 <a class="sat-link" href="/redundancy-pay-calculator/"><div class="t">Redundancy Pay Calculator</div><div class="d">Statutory redundancy estimate</div></a>
 <a class="sat-link" href="/maternity-pay-calculator/"><div class="t">Maternity Pay Calculator</div><div class="d">SMP week-by-week estimate</div></a>
 <a class="sat-link" href="/pension-contribution-calculator/"><div class="t">Pension Contribution Calculator</div><div class="d">Auto-enrolment & salary sacrifice</div></a>
-<a class="sat-link" href="/required-salary-calculator/"><div class="t">Required Salary Calculator</div><div class="d">Gross salary needed for a target take-home</div></a>
-<a class="sat-link" href="/compare-two-salaries-calculator/"><div class="t">Compare Two Salaries</div><div class="d">Job offer take-home pay, side by side</div></a></div>
+<a class="sat-link" href="/required-salary-calculator/"><div class="t">Required Salary Calculator</div><div class="d">Gross salary needed for a target take-home</div></a></div>
 
   
-  <h2>What Is PAYE?</h2>
-  <p>Pay As You Earn (PAYE) is how HMRC collects Income Tax and National Insurance directly from your salary each pay period, before you receive it. Your employer calculates and deducts both based on your tax code.</p>
-  <h2>Common Tax Codes 2026/27</h2>
-  <div class="table-wrap"><table><tr><th>Tax Code</th><th>Meaning</th></tr>
-  <tr><td>1257L</td><td>Standard code — full £12,570 Personal Allowance</td></tr>
-  <tr><td>BR</td><td>All income taxed at basic rate (20%), no allowance — usually a second job</td></tr>
-  <tr><td>D0</td><td>All income taxed at higher rate (40%)</td></tr>
-  <tr><td>NT</td><td>No tax deducted</td></tr>
-  <tr><td>K-prefix</td><td>Negative allowance — extra income being taxed (e.g. company benefits)</td></tr>
-  </table></div>
+  <h2>Why Compare Take-Home Pay, Not Just Gross Salary</h2>
+  <p>A £5,000 gross pay rise rarely means £5,000 more in your pocket — moving into a higher tax band, losing Personal Allowance above £100,000, or a different region's Income Tax bands (Scotland vs the rest of the UK) can all shrink the real-world gain. Comparing two offers on take-home pay, not headline salary, shows what actually changes for your budget.</p>
+  <h2>What to Check Beyond the Numbers</h2>
+  <ul>
+    <li><strong>Pension match:</strong> a lower salary with a stronger employer pension match can still be worth more overall.</li>
+    <li><strong>Benefits in kind:</strong> private healthcare, company car or bonus schemes aren't captured here — factor them in separately.</li>
+    <li><strong>Location:</strong> if one offer is in Scotland, its Income Tax bands differ from the rest of the UK even at an identical salary.</li>
+  </ul>
 
   
 <div class="cta-box">
-  <h2>Running Payroll for Your Business?</h2>
-  <p>This calculator is built for individuals checking their own numbers. If you're running payroll for a team, a dedicated platform automates this calculation for every employee, every pay run.</p>
+  <h2>Get Independent Financial Advice</h2>
+  <p>The figure above is an estimate of what you're entitled to or what it costs you — deciding what to actually do with it (invest, overpay debt, top up a pension) is a bigger decision worth getting right.</p>
   <ul>
-    <li><strong>Small business, first hire:</strong> set up PAYE and auto-enrolment correctly from day one.</li>
-    <li><strong>Growing team:</strong> automate payslips, RTI submissions and pension contributions.</li>
-    <li><strong>Multiple pay rates or contractors:</strong> handle mixed PAYE/self-employed workforces in one place.</li>
-    <li><strong>Switching from spreadsheets:</strong> reduce manual errors on tax code changes and NI category switches.</li>
+    <li><strong>Received a redundancy payout:</strong> understand tax-free thresholds and how to make a lump sum work for you long-term.</li>
+    <li><strong>Planning parental leave:</strong> budget around the drop from full pay to statutory rate, and check what protections apply.</li>
+    <li><strong>Deciding whether to overpay a student loan:</strong> for many people investing the surplus outperforms early repayment — but it depends on your plan type and income trajectory.</li>
+    <li><strong>Reviewing pension contributions:</strong> small percentage changes compound significantly over a career.</li>
   </ul>
-  <p>Cloud payroll platforms like Xero, QuickBooks and BrightPay handle Income Tax, NI, student loan and pension deductions automatically.</p>
-  <a href="#" class="cta-btn" target="_blank" rel="noopener">Compare Payroll Software →</a>
+  <p>An FCA-regulated independent financial adviser can model your specific numbers — free directories like Unbiased.co.uk match you with a local IFA.</p>
+  <a href="#" class="cta-btn" target="_blank" rel="noopener">Find an Independent Financial Adviser →</a>
 </div>
 
   
@@ -273,9 +299,9 @@
     </h2>
     <div class="eeat-grid">
       <div class="eeat-author-card">
-        <div class="eeat-avatar">PY</div>
+        <div class="eeat-avatar">CM</div>
         <div class="eeat-author-info">
-          <h3>PAYE Calculator</h3>
+          <h3>Compare Two Salaries Calculator</h3>
           <div class="eeat-author-subtitle">Independent, Open-Source Estimator</div>
           <p>An independent calculator applying published HMRC/gov.scot/DWP rates deterministically — no AI estimate, no official affiliation.</p>
         </div>
@@ -297,10 +323,10 @@
     </div>
   </div>
 
-  <div class="faq"><h2>Frequently Asked Questions</h2><div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is PAYE?</div><div class="faq-a">Pay As You Earn is the system HMRC uses to collect Income Tax and National Insurance directly from your salary each pay period, calculated by your employer based on your tax code.</div></div>
-<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What does tax code 1257L mean?</div><div class="faq-a">1257L is the standard 2026/27 tax code, giving you the full £12,570 Personal Allowance spread evenly across the tax year.</div></div>
-<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Why did my PAYE deduction change this month?</div><div class="faq-a">Common causes: a bonus pushed you into a higher tax band temporarily, your tax code changed, or you crossed the National Insurance Upper Earnings Limit.</div></div>
-<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I check my PAYE deductions are correct?</div><div class="faq-a">Yes — compare your payslip figures against this calculator or HMRC's own estimator at gov.uk/estimate-income-tax using your gross pay and tax code.</div></div></div>
+  <div class="faq"><h2>Frequently Asked Questions</h2><div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Why is my pay rise not worth as much as I expected?</div><div class="faq-a">Because Income Tax and National Insurance are banded, part of a pay rise can be taxed at a higher marginal rate than your existing salary — and above £100,000 you also start losing Personal Allowance at 60% effective marginal rate. Comparing take-home pay (not gross) shows the real gain.</div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do I compare a Scotland-based job offer to an England-based one?</div><div class="faq-a">Enter each offer with its correct region — Scotland uses six Income Tax bands (19–48%) instead of the rest of the UK's three (20/40/45%), so identical gross salaries can produce different take-home pay depending on region.</div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does this include pension and student loan in the comparison?</div><div class="faq-a">Yes — both are optional per-offer inputs, since employer pension schemes and student loan status vary between jobs and materially affect the real take-home difference.</div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What should I check beyond take-home pay when comparing offers?</div><div class="faq-a">Employer pension contribution match, private healthcare or other benefits in kind, bonus structure, and cost of commuting or relocating — none of which are captured by a salary-only comparison.</div></div></div>
 </div>
 
 <footer>
@@ -318,22 +344,43 @@ function bandedTax(income, bands) {
 function toggleFaq(el) { el.classList.toggle('open'); el.nextElementSibling.classList.toggle('show'); }
 
 const PT=12570, UEL=50270;
+const LOAN_PLANS={none:null,plan1:{t:26900,r:0.09},plan2:{t:29385,r:0.09},plan4:{t:33795,r:0.09},plan5:{t:25000,r:0.09},postgrad:{t:21000,r:0.06}};
 function personalAllowance(income){ if(income<=100000) return 12570; return Math.max(0,12570-(income-100000)/2); }
 function incomeTax(taxable, region){
   const pa = personalAllowance(taxable);
   if (region==='scotland') return bandedTax(taxable,[[0,pa,0],[pa,16537,0.19],[16537,29526,0.20],[29526,43662,0.21],[43662,75000,0.42],[75000,125140,0.45],[125140,Infinity,0.48]]);
   return bandedTax(taxable,[[0,pa,0],[pa,50270,0.20],[50270,125140,0.40],[125140,Infinity,0.45]]);
 }
-function nationalInsurance(gross){ return bandedTax(gross,[[0,PT,0],[PT,UEL,0.08],[UEL,Infinity,0.02]]); }
-document.querySelectorAll('#regionSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#regionSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}));
+function studentLoan(gross, plan){ const p=LOAN_PLANS[plan]; if(!p) return 0; return Math.max(0,gross-p.t)*p.r; }
+function offerResult(prefix){
+  const gross=parseFloat(document.getElementById('salary'+prefix).value)||0;
+  const region=document.getElementById('region'+prefix).value;
+  const pensionPct=parseFloat(document.getElementById('pension'+prefix).value)||0;
+  const plan=document.getElementById('loan'+prefix).value;
+  const pensionAmt=gross*(pensionPct/100);
+  const taxable=Math.max(0,gross-pensionAmt);
+  const it=incomeTax(taxable,region);
+  const ni=bandedTax(gross,[[0,PT,0],[PT,UEL,0.08],[UEL,Infinity,0.02]]);
+  const sl=studentLoan(gross,plan);
+  const net=gross-it-ni-sl-pensionAmt;
+  return { gross, it, ni, net };
+}
 function calculate(){
-  const gross=parseFloat(document.getElementById('salary').value)||0;
-  const region=document.querySelector('#regionSeg .seg-btn.active').dataset.val==='scotland'?'scotland':'rest_uk';
-  const it=incomeTax(gross,region), ni=nationalInsurance(gross), takeHome=gross-it-ni;
-  document.getElementById('r-takehome').textContent=fmt(takeHome);
-  document.getElementById('r-it').textContent=fmt(it);
-  document.getElementById('r-ni').textContent=fmt(ni);
-  document.getElementById('r-total').textContent=fmt(takeHome);
+  const a=offerResult('A'), b=offerResult('B');
+  document.getElementById('a-gross').textContent=fmt(a.gross);
+  document.getElementById('a-it').textContent=fmt(a.it);
+  document.getElementById('a-ni').textContent=fmt(a.ni);
+  document.getElementById('a-net').textContent=fmt(a.net);
+  document.getElementById('a-netmonth').textContent=fmt(a.net/12);
+  document.getElementById('b-gross').textContent=fmt(b.gross);
+  document.getElementById('b-it').textContent=fmt(b.it);
+  document.getElementById('b-ni').textContent=fmt(b.ni);
+  document.getElementById('b-net').textContent=fmt(b.net);
+  document.getElementById('b-netmonth').textContent=fmt(b.net/12);
+  document.getElementById('a-badge').innerHTML = a.net>b.net ? '<span class=\"winner-badge\">HIGHER</span>' : '';
+  document.getElementById('b-badge').innerHTML = b.net>a.net ? '<span class=\"winner-badge\">HIGHER</span>' : '';
+  const diff=Math.abs(a.net-b.net);
+  document.getElementById('r-diff').textContent=fmt(diff);
   document.getElementById('results').classList.add('show');
 }
 </script>
