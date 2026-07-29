@@ -24,17 +24,24 @@ function nationalInsurance(gross) { return bandedTax(gross, [[0, PT, 0], [PT, UE
 
 function bandInfo(gross, region) {
   const pa = personalAllowance(gross);
+  // Between £100,000 and £125,140, Personal Allowance withdraws £1 per £2 earned, so the
+  // true marginal rate on the next £1 is 1.5x the nominal band rate (that extra 50p of
+  // allowance lost is itself taxed at the nominal rate).
+  const inTaper = gross >= 100000 && gross < 125140;
   if (region === 'scotland') {
     if (gross <= pa) return { name: 'Personal Allowance (tax-free)', marginal: 0 };
     if (gross <= 16537) return { name: 'Starter rate', marginal: 0.19 };
     if (gross <= 29526) return { name: 'Basic rate', marginal: 0.20 };
     if (gross <= 43662) return { name: 'Intermediate rate', marginal: 0.21 };
+    if (inTaper && gross <= 75000) return { name: 'Higher rate (Personal Allowance tapering)', marginal: 0.42 * 1.5 };
     if (gross <= 75000) return { name: 'Higher rate', marginal: 0.42 };
+    if (inTaper) return { name: 'Advanced rate (Personal Allowance tapering)', marginal: 0.45 * 1.5 };
     if (gross <= 125140) return { name: 'Advanced rate', marginal: 0.45 };
     return { name: 'Top rate', marginal: 0.48 };
   }
   if (gross <= pa) return { name: 'Personal Allowance (tax-free)', marginal: 0 };
   if (gross <= 50270) return { name: 'Basic rate', marginal: 0.20 };
+  if (inTaper) return { name: 'Higher rate (Personal Allowance tapering)', marginal: 0.40 * 1.5 };
   if (gross <= 125140) return { name: 'Higher rate', marginal: 0.40 };
   return { name: 'Additional rate', marginal: 0.45 };
 }
