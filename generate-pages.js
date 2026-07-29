@@ -118,7 +118,8 @@ const SATELLITES_NAV = [
   { slug: 'pension-contribution-calculator', title: 'Pension Contribution Calculator', desc: 'Auto-enrolment & salary sacrifice' },
   { slug: 'required-salary-calculator', title: 'Required Salary Calculator', desc: 'Gross salary needed for a target take-home' },
   { slug: 'compare-two-salaries-calculator', title: 'Compare Two Salaries', desc: 'Job offer take-home pay, side by side' },
-  { slug: 'salary-after-tax', title: 'Salary After Tax — Browse by Amount', desc: '£15,000 to £150,000, pick your salary' }
+  { slug: 'salary-after-tax', title: 'Salary After Tax — Browse by Amount', desc: '£15,000 to £150,000, pick your salary' },
+  { slug: 'uk-tax-calculator-2025-26', title: 'Historical Tax Years', desc: '2023/24, 2024/25, 2025/26 rates' }
 ];
 
 function satGridHtml(excludeSlug) {
