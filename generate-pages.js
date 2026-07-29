@@ -120,7 +120,8 @@ const SATELLITES_NAV = [
   { slug: 'compare-two-salaries-calculator', title: 'Compare Two Salaries', desc: 'Job offer take-home pay, side by side' },
   { slug: 'salary-after-tax', title: 'Salary After Tax — Browse by Amount', desc: '£15,000 to £150,000, pick your salary' },
   { slug: 'uk-tax-calculator-2025-26', title: 'Historical Tax Years', desc: '2023/24, 2024/25, 2025/26 rates' },
-  { slug: 'nhs-pay-bands', title: 'NHS Pay Bands', desc: 'Agenda for Change, Band 2 to Band 9' }
+  { slug: 'nhs-pay-bands', title: 'NHS Pay Bands', desc: 'Agenda for Change, Band 2 to Band 9' },
+  { slug: 'embed-calculator', title: 'Embed This Calculator', desc: 'Free widget for your blog or site' }
 ];
 
 function satGridHtml(excludeSlug) {
@@ -1009,7 +1010,7 @@ for (const p of PAGES) {
   console.log('Wrote', p.slug + '/index.html');
 }
 
-const urls = [`${SITE_URL}/`, ...PAGES.map(p => `${SITE_URL}/${p.slug}/`)];
+const urls = [`${SITE_URL}/`, ...PAGES.map(p => `${SITE_URL}/${p.slug}/`), `${SITE_URL}/embed-calculator/`];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
   urls.map(u => `  <url><loc>${u}</loc><changefreq>monthly</changefreq><priority>${u === SITE_URL + '/' ? '1.0' : '0.8'}</priority></url>`).join('\n') +
   `\n</urlset>\n`;

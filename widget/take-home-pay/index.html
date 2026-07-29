@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Take-Home Pay Widget</title>
+<meta name="robots" content="noindex, follow">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --brand: #1e5fae; --brand-dark: #123e73; --brand-light: #e7f0fb; --text: #1a1a2e; --muted: #64748b; --border: #e2e8f0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: white; padding: 16px; font-size: 14px; }
+  .w-title { font-weight: 800; font-size: 1rem; margin-bottom: 12px; color: var(--brand-dark); }
+  .input-group { margin-bottom: 12px; }
+  .input-group label { display: block; font-weight: 600; font-size: 0.8rem; margin-bottom: 4px; }
+  input[type="number"] { width: 100%; padding: 8px 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 0.95rem; }
+  .seg-row { display: flex; gap: 6px; }
+  .seg-btn { flex: 1; padding: 7px 8px; border: 1.5px solid var(--border); border-radius: 6px; background: white; font-size: 0.76rem; font-weight: 600; cursor: pointer; text-align: center; }
+  .seg-btn.active { background: var(--brand); color: white; border-color: var(--brand); }
+  .btn { background: var(--brand); color: white; border: none; border-radius: 6px; padding: 10px 16px; font-size: 0.9rem; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; }
+  .btn:hover { background: var(--brand-dark); }
+  .results { background: var(--brand-light); border-radius: 8px; padding: 14px; margin-top: 14px; display: none; }
+  .results.show { display: block; }
+  .result-hero { text-align: center; padding: 4px 0 10px; }
+  .result-hero .value { font-size: 1.6rem; font-weight: 800; color: var(--brand); }
+  .result-hero .label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+  .band-breakdown { background: white; border-radius: 6px; padding: 8px 12px; font-size: 0.78rem; }
+  .band-breakdown div { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid var(--border); }
+  .band-breakdown div:last-child { border-bottom: none; font-weight: 700; }
+  .attribution { text-align: center; margin-top: 12px; font-size: 0.7rem; color: var(--muted); }
+  .attribution a { color: var(--brand); text-decoration: none; font-weight: 600; }
+  .attribution a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="w-title">🇬🇧 UK Take-Home Pay Calculator</div>
+
+<div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salary" min="0" step="500" value="35000"></div>
+<div class="input-group"><label>Region</label>
+  <div class="seg-row" id="regionSeg">
+    <div class="seg-btn active" data-val="rest_uk">Eng/Wales/NI</div>
+    <div class="seg-btn" data-val="scotland">Scotland</div>
+  </div>
+</div>
+<button class="btn" onclick="calculate()">Calculate →</button>
+<div class="results" id="results">
+  <div class="result-hero"><div class="value" id="r-takehome">—</div><div class="label">Annual Take-Home</div></div>
+  <div class="band-breakdown">
+    <div><span>Monthly</span><span id="r-monthly">—</span></div>
+    <div><span>Income Tax</span><span id="r-it">—</span></div>
+    <div><span>National Insurance</span><span id="r-ni">—</span></div>
+  </div>
+</div>
+
+<div class="attribution">Calculator by <a href="https://mynetsalary.co.uk/" target="_blank" rel="noopener">mynetsalary.co.uk</a> — 2026/27 rates</div>
+
+<script>
+const PT=12570, UEL=50270;
+function fmt(n){ return '£'+Math.round(n).toLocaleString('en-GB'); }
+function bandedTax(income, bands){ let tax=0; for(const [lo,hi,rate] of bands){ if(income>lo) tax+=(Math.min(income,hi)-lo)*rate; } return tax; }
+function personalAllowance(income){ if(income<=100000) return 12570; return Math.max(0,12570-(income-100000)/2); }
+function incomeTax(taxable, region){
+  const pa = personalAllowance(taxable);
+  if (region==='scotland') return bandedTax(taxable,[[0,pa,0],[pa,16537,0.19],[16537,29526,0.20],[29526,43662,0.21],[43662,75000,0.42],[75000,125140,0.45],[125140,Infinity,0.48]]);
+  return bandedTax(taxable,[[0,pa,0],[pa,50270,0.20],[50270,125140,0.40],[125140,Infinity,0.45]]);
+}
+function nationalInsurance(gross){ return bandedTax(gross,[[0,PT,0],[PT,UEL,0.08],[UEL,Infinity,0.02]]); }
+document.querySelectorAll('#regionSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#regionSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}));
+function calculate(){
+  const gross=parseFloat(document.getElementById('salary').value)||0;
+  const region=document.querySelector('#regionSeg .seg-btn.active').dataset.val==='scotland'?'scotland':'rest_uk';
+  const it=incomeTax(gross,region), ni=nationalInsurance(gross), takeHome=gross-it-ni;
+  document.getElementById('r-takehome').textContent=fmt(takeHome);
+  document.getElementById('r-monthly').textContent=fmt(takeHome/12);
+  document.getElementById('r-it').textContent=fmt(it);
+  document.getElementById('r-ni').textContent=fmt(ni);
+  document.getElementById('results').classList.add('show');
+}
+</script>
+
+</body>
+</html>

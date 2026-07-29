@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Embeddable UK Take-Home Pay Calculator Widget | mynetsalary.co.uk</title>
+<meta name="description" content="Free embeddable UK take-home pay calculator widget for your blog or website. Copy one line of code — no sign-up, no API key, always up to date with current tax rates.">
+<link rel="canonical" href="https://mynetsalary.co.uk/embed-calculator/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta property="og:title" content="Free Embeddable UK Take-Home Pay Calculator Widget">
+<meta property="og:description" content="Copy one line of code to embed a live UK take-home pay calculator on your site. Free, no sign-up.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mynetsalary.co.uk/embed-calculator/">
+<meta name="google-site-verification" content="F0g9xdQ9RU5cTssBiWtkj41-7q2_kIwcKbJc_sMTthQ" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "WebPage", "name": "Free Embeddable UK Take-Home Pay Calculator Widget", "url": "https://mynetsalary.co.uk/embed-calculator/", "description": "Free embeddable UK take-home pay calculator widget for blogs and websites." },
+    { "@type": "FAQPage", "mainEntity": [
+      { "@type": "Question", "name": "Is the embed widget really free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — no sign-up, no API key, no usage limit. The only requirement is keeping the small attribution link at the bottom of the widget." } },
+      { "@type": "Question", "name": "Will the widget stay up to date with tax rates?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — the widget is hosted and maintained on mynetsalary.co.uk, so it updates automatically whenever Income Tax or National Insurance rates change. You never need to touch your embed code." } },
+      { "@type": "Question", "name": "Can I customise the widget's size or colours?", "acceptedAnswer": { "@type": "Answer", "text": "The iframe height and width can be adjusted freely in your embed code. Colour customisation isn't currently supported — get in touch if you need a branded version." } }
+    ] }
+  ]
+}
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --brand: #1e5fae; --brand-dark: #123e73; --brand-light: #e7f0fb; --text: #1a1a2e; --muted: #64748b; --border: #e2e8f0; --radius: 12px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: #f8fafc; line-height: 1.6; }
+  header { background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%); color: white; padding: 48px 20px; text-align: center; }
+  header p { color: rgba(255,255,255,0.88); font-size: 1.05rem; margin-top: 10px; max-width: 640px; margin-left: auto; margin-right: auto; }
+  h1 { font-size: clamp(1.5rem, 4vw, 2.3rem); font-weight: 800; letter-spacing: -0.5px; }
+  .content { max-width: 760px; margin: 0 auto; padding: 40px 20px 60px; }
+  h2 { font-size: 1.4rem; font-weight: 700; margin: 32px 0 14px; }
+  p { color: #374151; margin-bottom: 14px; font-size: 0.95rem; }
+  .preview-frame { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin: 20px 0; }
+  .code-box { background: #111827; color: #e5e7eb; border-radius: 8px; padding: 18px; font-family: 'SF Mono', Consolas, monospace; font-size: 0.82rem; overflow-x: auto; margin: 16px 0; position: relative; }
+  .copy-btn { background: var(--brand); color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 0.85rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
+  .copy-btn:hover { background: var(--brand-dark); }
+  ul { padding-left: 20px; margin-bottom: 14px; }
+  li { color: #374151; font-size: 0.95rem; margin-bottom: 6px; }
+  .faq { margin: 40px 0; }
+  .faq-item { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+  .faq-q { padding: 16px 20px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; background: white; }
+  .faq-q:hover { background: var(--brand-light); }
+  .faq-q::after { content: '+'; font-size: 1.2rem; color: var(--brand); flex-shrink: 0; }
+  .faq-q.open::after { content: '−'; }
+  .faq-a { display: none; padding: 0 20px 16px; font-size: 0.9rem; color: #374151; background: white; }
+  .faq-a.show { display: block; }
+  footer { background: var(--brand-dark); color: rgba(255,255,255,0.6); text-align: center; padding: 28px 20px; font-size: 0.8rem; }
+  footer a { color: rgba(255,255,255,0.7); }
+  iframe { border: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Free Embeddable Take-Home Pay Calculator</h1>
+  <p>Add a live UK salary calculator to your blog, forum or HR page — one line of code, always current with 2026/27 rates.</p>
+</header>
+
+<div class="content">
+  <h2>Live Preview</h2>
+  <div class="preview-frame">
+    <iframe src="/widget/take-home-pay/" width="100%" height="420" loading="lazy" title="UK Take-Home Pay Calculator Widget"></iframe>
+  </div>
+
+  <h2>Embed Code</h2>
+  <p>Copy and paste this into your page HTML — works on WordPress (HTML block), Squarespace (Code block), Webflow (Embed element), or any static site:</p>
+  <div class="code-box" id="codeBox">&lt;iframe src="https://mynetsalary.co.uk/widget/take-home-pay/" width="100%" height="420" style="border:none;max-width:400px;" loading="lazy" title="UK Take-Home Pay Calculator"&gt;&lt;/iframe&gt;</div>
+  <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+
+  <h2>Why Embed This Widget?</h2>
+  <ul>
+    <li><strong>Free forever</strong> — no sign-up, no API key, no rate limit.</li>
+    <li><strong>Always accurate</strong> — hosted centrally, so it updates the moment Income Tax or National Insurance rates change. You never touch the embed code again.</li>
+    <li><strong>Lightweight</strong> — a single iframe, no external scripts or tracking loaded into your page.</li>
+    <li><strong>Useful for</strong> recruitment sites, HR blogs, personal finance content, payroll software marketing pages, or any UK audience wanting a quick take-home pay check.</li>
+  </ul>
+  <p>The only requirement is keeping the small "Calculator by mynetsalary.co.uk" attribution link visible inside the widget — that's what keeps it free.</p>
+
+  <h2>Customising Size</h2>
+  <p>Adjust the <code>width</code> and <code>height</code> attributes to fit your layout. The widget is responsive up to a max-width of 400px; wider containers will just add whitespace around it.</p>
+
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is the embed widget really free?</div><div class="faq-a">Yes — no sign-up, no API key, no usage limit. The only requirement is keeping the small attribution link at the bottom of the widget.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Will the widget stay up to date with tax rates?</div><div class="faq-a">Yes — the widget is hosted and maintained on mynetsalary.co.uk, so it updates automatically whenever Income Tax or National Insurance rates change. You never need to touch your embed code.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I customise the widget's size or colours?</div><div class="faq-a">The iframe height and width can be adjusted freely in your embed code. Colour customisation isn't currently supported — get in touch if you need a branded version.</div></div>
+  </div>
+</div>
+
+<footer>
+  <p>Information only — not tax or legal advice. Data based on 2026/27 rates.</p>
+</footer>
+
+<script>
+function toggleFaq(el) { el.classList.toggle('open'); el.nextElementSibling.classList.toggle('show'); }
+function copyCode() {
+  const text = document.getElementById('codeBox').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = orig; }, 1500);
+  });
+}
+</script>
+
+</body>
+</html>
