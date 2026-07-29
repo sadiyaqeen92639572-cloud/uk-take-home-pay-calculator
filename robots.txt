@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://mynetsalary.co.uk/sitemap.xml
+Sitemap: https://mynetsalary.co.uk/sitemap-index.xml
