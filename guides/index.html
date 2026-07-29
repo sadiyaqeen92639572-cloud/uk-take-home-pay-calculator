@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Tax & Payroll Guides | mynetsalary.co.uk</title>
+<meta name="description" content="Plain-English guides to UK tax codes, salary sacrifice, redundancy pay, side income tax and student loans — updated for 2026/27.">
+<link rel="canonical" href="https://mynetsalary.co.uk/guides/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="google-site-verification" content="F0g9xdQ9RU5cTssBiWtkj41-7q2_kIwcKbJc_sMTthQ" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --brand: #1e5fae; --brand-dark: #123e73; --brand-light: #e7f0fb; --accent: #b91c1c; --text: #1a1a2e; --muted: #64748b; --border: #e2e8f0; --radius: 12px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: #f8fafc; line-height: 1.6; }
+  header { background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%); color: white; padding: 48px 20px; text-align: center; }
+  header p { color: rgba(255,255,255,0.88); font-size: 1.05rem; margin-top: 10px; max-width: 680px; margin-left: auto; margin-right: auto; }
+  .flag { font-size: 0.85rem; background: rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 14px; display: inline-block; margin-bottom: 16px; letter-spacing: 1px; }
+  h1 { font-size: clamp(1.5rem, 4vw, 2.3rem); font-weight: 800; letter-spacing: -0.5px; }
+  .content { max-width: 720px; margin: 0 auto; padding: 40px 20px 60px; }
+  h2 { font-size: 1.35rem; font-weight: 700; margin: 34px 0 12px; color: var(--brand-dark); }
+  h3 { font-size: 1.05rem; font-weight: 700; margin: 22px 0 8px; }
+  p { color: #374151; margin-bottom: 14px; font-size: 0.97rem; }
+  ul, ol { padding-left: 22px; margin-bottom: 14px; }
+  li { color: #374151; font-size: 0.97rem; margin-bottom: 6px; }
+  .table-wrap { overflow-x: auto; margin: 20px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: var(--brand); color: white; padding: 10px 12px; text-align: left; white-space: nowrap; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  tr:nth-child(even) td { background: #f8fafc; }
+  .callout { background: var(--brand-light); border-left: 4px solid var(--brand); border-radius: 6px; padding: 14px 18px; margin: 20px 0; font-size: 0.92rem; }
+  .warning { background: #fffbeb; border-left: 4px solid #d97706; border-radius: 6px; padding: 14px 18px; margin: 20px 0; font-size: 0.92rem; color: #78350f; }
+  .meta { color: var(--muted); font-size: 0.82rem; margin-bottom: 24px; }
+  .guide-card { display: block; background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 18px 20px; text-decoration: none; color: var(--text); margin-bottom: 14px; }
+  .guide-card:hover { border-color: var(--brand); }
+  .guide-card .t { font-weight: 700; font-size: 1rem; margin-bottom: 4px; color: var(--brand-dark); }
+  .guide-card .d { font-size: 0.85rem; color: var(--muted); }
+  .sat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0 40px; }
+  @media (max-width: 500px) { .sat-grid { grid-template-columns: 1fr; } }
+  .sat-link { display: block; background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px 18px; text-decoration: none; color: var(--text); }
+  .sat-link:hover { border-color: var(--brand); }
+  .sat-link .t { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
+  .sat-link .d { font-size: 0.8rem; color: var(--muted); }
+  .cta-box { background: #111827; color: white; border-radius: var(--radius); padding: 30px 28px; margin: 36px 0; }
+  .cta-box h2 { color: white; margin-top: 0; font-size: 1.2rem; }
+  .cta-box p { color: rgba(255,255,255,0.88); }
+  .cta-btn { display: inline-block; background: var(--accent); color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; margin-top: 8px; }
+  .faq { margin: 36px 0; }
+  .faq-item { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+  .faq-q { padding: 16px 20px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; background: white; }
+  .faq-q:hover { background: var(--brand-light); }
+  .faq-q::after { content: '+'; font-size: 1.2rem; color: var(--brand); flex-shrink: 0; }
+  .faq-q.open::after { content: '−'; }
+  .faq-a { display: none; padding: 0 20px 16px; font-size: 0.9rem; color: #374151; background: white; }
+  .faq-a.show { display: block; }
+  footer { background: var(--brand-dark); color: rgba(255,255,255,0.6); text-align: center; padding: 28px 20px; font-size: 0.8rem; }
+  footer a { color: rgba(255,255,255,0.7); }
+  .eeat-section { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin: 30px 0; font-size: 0.85rem; color: var(--muted); }
+  .eeat-section a { color: var(--brand); }
+</style>
+</head>
+<body>
+<header>
+  <div class="flag">📖 Guides</div>
+  <h1>UK Tax &amp; Payroll Guides</h1>
+  <p>Plain-English explainers on tax codes, salary sacrifice, redundancy pay and more — updated for 2026/27.</p>
+</header>
+<div class="content">
+  <a class="guide-card" href="/br-tax-code-explained/"><div class="t">BR Tax Code Explained — What It Means and How to Fix It</div><div class="d">BR tax code explained: it means all your income from that job is taxed at 20% with no tax-free Personal Allowance. Why it happens and how to fix it.</div></a>
+<a class="guide-card" href="/emergency-tax-code-explained/"><div class="t">Emergency Tax Code Explained — Why It Happens and How to Get It Fixed</div><div class="d">Emergency tax code explained: what W1, M1 and X mean, why new employees get put on one, and the steps to get overpaid tax refunded.</div></a>
+<a class="guide-card" href="/k-tax-code-explained/"><div class="t">K Tax Code Explained — When You Owe Tax on More Than You Earn</div><div class="d">K tax code explained: why some tax codes start with K instead of ending in L, what it means for company benefits, and how the deduction is capped.</div></a>
+<a class="guide-card" href="/1257l-tax-code-explained/"><div class="t">1257L Tax Code Explained — The Standard UK Tax Code</div><div class="d">1257L tax code explained: what it means, why it's the standard code for most employees, and when it might change.</div></a>
+<a class="guide-card" href="/salary-sacrifice-explained/"><div class="t">Salary Sacrifice Explained — How It Works and When It's Worth It</div><div class="d">Salary sacrifice explained: how giving up salary for pension, cycle to work or EV schemes can reduce Income Tax and National Insurance, and when to be cautious.</div></a>
+<a class="guide-card" href="/is-redundancy-pay-taxable/"><div class="t">Is Redundancy Pay Taxable? The £30,000 Rule Explained</div><div class="d">Is redundancy pay taxable in the UK? The first £30,000 is usually tax-free — here's exactly what counts, what doesn't, and how National Insurance applies.</div></a>
+<a class="guide-card" href="/do-i-need-to-pay-tax-on-side-income/"><div class="t">Do I Need to Pay Tax on Side Income? The £1,000 Trading Allowance Explained</div><div class="d">Do you need to pay tax on side income in the UK? The £1,000 trading allowance means small amounts are tax-free — here's when you need to register for Self Assessment.</div></a>
+<a class="guide-card" href="/should-i-overpay-my-student-loan/"><div class="t">Should I Overpay My Student Loan? What to Consider First</div><div class="d">Should you overpay your UK student loan? For most Plan 2 and Plan 5 borrowers, the maths favours not overpaying — here's how to work out your own case.</div></a>
+</div>
+<footer><p>Information only — not tax or legal advice.</p></footer>
+</body>
+</html>
