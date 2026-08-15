@@ -248,7 +248,23 @@
 <div class="content">
 
   <h2>Explore More Payroll Calculators</h2>
-  <div class="sat-grid" id="satGrid"></div>
+  <div class="sat-grid" id="satGrid">
+    <a class="sat-link" href="/paye-calculator/"><div class="t">PAYE Calculator</div><div class="d">Breakdown of PAYE deductions</div></a>
+    <a class="sat-link" href="/national-insurance-calculator/"><div class="t">National Insurance Calculator</div><div class="d">NI contributions explained</div></a>
+    <a class="sat-link" href="/dividend-tax-calculator/"><div class="t">Dividend Tax Calculator</div><div class="d">Salary + dividend combined</div></a>
+    <a class="sat-link" href="/self-employed-tax-calculator/"><div class="t">Self-Employed Tax Calculator</div><div class="d">Self Assessment, Class 2/4 NI</div></a>
+    <a class="sat-link" href="/student-loan-repayment-calculator/"><div class="t">Student Loan Repayment Calculator</div><div class="d">Plan 1/2/4/5/Postgrad</div></a>
+    <a class="sat-link" href="/redundancy-pay-calculator/"><div class="t">Redundancy Pay Calculator</div><div class="d">Statutory redundancy estimate</div></a>
+    <a class="sat-link" href="/maternity-pay-calculator/"><div class="t">Maternity Pay Calculator</div><div class="d">SMP week-by-week estimate</div></a>
+    <a class="sat-link" href="/pension-contribution-calculator/"><div class="t">Pension Contribution Calculator</div><div class="d">Auto-enrolment &amp; salary sacrifice</div></a>
+    <a class="sat-link" href="/required-salary-calculator/"><div class="t">Required Salary Calculator</div><div class="d">Gross salary needed for a target take-home</div></a>
+    <a class="sat-link" href="/compare-two-salaries-calculator/"><div class="t">Compare Two Salaries</div><div class="d">Job offer take-home pay, side by side</div></a>
+    <a class="sat-link" href="/salary-after-tax/"><div class="t">Salary After Tax — Browse by Amount</div><div class="d">£15,000 to £150,000, pick your salary</div></a>
+    <a class="sat-link" href="/uk-tax-calculator-2025-26/"><div class="t">Historical Tax Years</div><div class="d">2023/24, 2024/25, 2025/26 rates</div></a>
+    <a class="sat-link" href="/nhs-pay-bands/"><div class="t">NHS Pay Bands</div><div class="d">Agenda for Change, Band 2 to Band 9</div></a>
+    <a class="sat-link" href="/embed-calculator/"><div class="t">Embed This Calculator</div><div class="d">Free widget for your blog or site</div></a>
+    <a class="sat-link" href="/guides/"><div class="t">UK Tax &amp; Payroll Guides</div><div class="d">Tax codes, salary sacrifice, redundancy pay</div></a>
+  </div>
 
   <h2>Income Tax Bands 2026/27</h2>
   <div class="table-wrap">
@@ -457,31 +473,6 @@ function toggleFaq(el) {
   ans.classList.toggle('show');
 }
 
-const SATELLITES = [
-  { slug: 'paye-calculator', title: 'PAYE Calculator', desc: 'Breakdown of PAYE deductions' },
-  { slug: 'national-insurance-calculator', title: 'National Insurance Calculator', desc: 'NI contributions explained' },
-  { slug: 'dividend-tax-calculator', title: 'Dividend Tax Calculator', desc: 'Salary + dividend combined' },
-  { slug: 'self-employed-tax-calculator', title: 'Self-Employed Tax Calculator', desc: 'Self Assessment, Class 2/4 NI' },
-  { slug: 'student-loan-repayment-calculator', title: 'Student Loan Repayment Calculator', desc: 'Plan 1/2/4/5/Postgrad' },
-  { slug: 'redundancy-pay-calculator', title: 'Redundancy Pay Calculator', desc: 'Statutory redundancy estimate' },
-  { slug: 'maternity-pay-calculator', title: 'Maternity Pay Calculator', desc: 'SMP week-by-week estimate' },
-  { slug: 'pension-contribution-calculator', title: 'Pension Contribution Calculator', desc: 'Auto-enrolment & salary sacrifice' },
-  { slug: 'required-salary-calculator', title: 'Required Salary Calculator', desc: 'Gross salary needed for a target take-home' },
-  { slug: 'compare-two-salaries-calculator', title: 'Compare Two Salaries', desc: 'Job offer take-home pay, side by side' },
-  { slug: 'salary-after-tax', title: 'Salary After Tax — Browse by Amount', desc: '£15,000 to £150,000, pick your salary' },
-  { slug: 'uk-tax-calculator-2025-26', title: 'Historical Tax Years', desc: '2023/24, 2024/25, 2025/26 rates' },
-  { slug: 'nhs-pay-bands', title: 'NHS Pay Bands', desc: 'Agenda for Change, Band 2 to Band 9' },
-  { slug: 'embed-calculator', title: 'Embed This Calculator', desc: 'Free widget for your blog or site' },
-  { slug: 'guides', title: 'UK Tax & Payroll Guides', desc: 'Tax codes, salary sacrifice, redundancy pay' }
-];
-const satGrid = document.getElementById('satGrid');
-SATELLITES.forEach(s => {
-  const a = document.createElement('a');
-  a.className = 'sat-link';
-  a.href = '/' + s.slug + '/';
-  a.innerHTML = '<div class="t">' + s.title + '</div><div class="d">' + s.desc + '</div>';
-  satGrid.appendChild(a);
-});
 </script>
 
 </body>
