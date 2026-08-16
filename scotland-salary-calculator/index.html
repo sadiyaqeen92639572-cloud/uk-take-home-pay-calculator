@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Required Salary Calculator UK 2026/27 — Gross Needed for Target Take-Home</title>
-<meta name="description" content="Free required salary calculator. Enter the take-home pay you want → instant gross salary needed after tax, NI, student loan and pension. 2026/27 rates.">
-<link rel="canonical" href="https://mynetsalary.co.uk/required-salary-calculator/">
+<title>Scotland Salary Calculator 2026/27 — Scottish Income Tax & NI</title>
+<meta name="description" content="Free Scotland salary calculator. Enter salary → instant take-home pay using the six Scottish Income Tax bands (19-48%). 2026/27 rates.">
+<link rel="canonical" href="https://mynetsalary.co.uk/scotland-salary-calculator/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" href="/favicon.png">
-<meta property="og:title" content="Required Salary Calculator UK 2026/27 — Gross Needed for Target Take-Home">
-<meta property="og:description" content="Free required salary calculator. Enter the take-home pay you want → instant gross salary needed after tax, NI, student loan and pension. 2026/27 rates.">
+<meta property="og:title" content="Scotland Salary Calculator 2026/27 — Scottish Income Tax & NI">
+<meta property="og:description" content="Free Scotland salary calculator. Enter salary → instant take-home pay using the six Scottish Income Tax bands (19-48%). 2026/27 rates.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://mynetsalary.co.uk/required-salary-calculator/">
+<meta property="og:url" content="https://mynetsalary.co.uk/scotland-salary-calculator/">
 <meta property="og:image" content="https://mynetsalary.co.uk/og-image.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://mynetsalary.co.uk/og-image.svg">
@@ -23,9 +23,9 @@
   "@graph": [
     {
       "@type": "WebApplication",
-      "name": "Required Salary Calculator",
-      "url": "https://mynetsalary.co.uk/required-salary-calculator/",
-      "description": "Free required salary calculator. Enter the take-home pay you want → instant gross salary needed after tax, NI, student loan and pension. 2026/27 rates.",
+      "name": "Scotland Salary Calculator",
+      "url": "https://mynetsalary.co.uk/scotland-salary-calculator/",
+      "description": "Free Scotland salary calculator. Enter salary → instant take-home pay using the six Scottish Income Tax bands (19-48%). 2026/27 rates.",
       "applicationCategory": "FinanceApplication",
       "operatingSystem": "Any",
       "inLanguage": "en-GB",
@@ -44,34 +44,34 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "How does a required salary calculator work?",
+          "name": "Why does Scotland have different Income Tax bands?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "It works backwards from your desired net (take-home) pay to find the gross salary that produces it, accounting for Income Tax, National Insurance, pension and student loan deductions — the reverse of a normal take-home pay calculation."
+            "text": "Income Tax on non-savings, non-dividend income is a devolved power under the Scotland Act 2016 — the Scottish Parliament sets its own bands and rates, while National Insurance and everything else stays UK-wide."
           }
         },
         {
           "@type": "Question",
-          "name": "Why can't required salary be calculated with a simple formula?",
+          "name": "Do Scottish taxpayers pay more or less than the rest of the UK?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "UK Income Tax and National Insurance are charged in bands at different rates, and the Personal Allowance itself shrinks above £100,000 income — so the relationship between gross and net pay isn't a straight line, and reversing it needs iterative calculation rather than one formula."
+            "text": "It depends on income. Lower earners pay slightly less (a 19% starter rate below the basic rate), but from roughly £30,000+ Scottish taxpayers generally pay more due to the intermediate, higher, and top-rate bands kicking in earlier and at higher percentages than England/Wales/NI."
           }
         },
         {
           "@type": "Question",
-          "name": "Should I use monthly or annual take-home pay to negotiate?",
+          "name": "How do I know if I pay Scottish Income Tax?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Either works — this calculator accepts both and converts internally. Many people find it easier to think in monthly take-home pay since that matches how bills and budgets are usually planned."
+            "text": "HMRC uses your main residence, not your employer's location — if you live in Scotland for most of the tax year, your tax code starts with an \"S\" and Scottish rates apply regardless of where your employer is based."
           }
         },
         {
           "@type": "Question",
-          "name": "Does this account for pension and student loan?",
+          "name": "Does National Insurance differ in Scotland?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes — both are optional inputs. Pension contributions reduce your taxable income (net pay arrangement) and increase the gross salary needed; student loan repayments come directly off gross pay above your plan's threshold."
+            "text": "No — National Insurance is reserved (UK-wide), not devolved, so NI thresholds and rates are identical whether you live in Scotland or the rest of the UK."
           }
         }
       ]
@@ -88,8 +88,8 @@
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Required Salary Calculator",
-          "item": "https://mynetsalary.co.uk/required-salary-calculator/"
+          "name": "Scotland Salary Calculator",
+          "item": "https://mynetsalary.co.uk/scotland-salary-calculator/"
         }
       ]
     }
@@ -202,47 +202,20 @@
 
 <header>
   <div class="flag">🇬🇧 UK Payroll · 2026/27 Rates</div>
-  <h1>Required Salary Calculator</h1>
-  <p>Work backwards from the take-home pay you want to the gross salary you need to ask for.</p>
+  <h1>Scotland Salary Calculator</h1>
+  <p>Take-home pay for Scotland, using the six Scottish Income Tax bands — different from the rest of the UK at the same salary.</p>
 </header>
 
 <div class="tool-card">
 
-  <div class="input-group period-seg"><label>Target Take-Home Pay Is</label>
-    <div class="seg-row" id="periodSeg">
-      <div class="seg-btn active" data-val="annual">Per Year</div>
-      <div class="seg-btn" data-val="monthly">Per Month</div>
-    </div>
-  </div>
-  <div class="input-group"><label id="targetLabel">Target Annual Take-Home Pay (£)</label><input type="number" id="target" min="0" step="100" value="30000"></div>
-  <div class="input-group"><label>Region</label>
-    <div class="seg-row" id="regionSeg">
-      <div class="seg-btn active" data-val="rest_uk">England / Wales / NI</div>
-      <div class="seg-btn" data-val="scotland">Scotland</div>
-    </div>
-  </div>
-  <div class="two-col">
-    <div class="input-group"><label>Pension Contribution (%)</label><input type="number" id="pension" min="0" max="100" step="0.5" value="0"></div>
-    <div class="input-group"><label>Student Loan Plan</label>
-      <select id="loanPlan">
-        <option value="none" selected>None</option>
-        <option value="plan1">Plan 1</option>
-        <option value="plan2">Plan 2</option>
-        <option value="plan4">Plan 4 (Scotland)</option>
-        <option value="plan5">Plan 5</option>
-        <option value="postgrad">Postgraduate Loan</option>
-      </select>
-    </div>
-  </div>
-  <button class="btn" onclick="calculate()">Calculate Required Salary →</button>
+  <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salary" min="0" step="500" value="35000"></div>
+  <button class="btn" onclick="calculate()">Calculate Scottish Take-Home →</button>
   <div class="results" id="results">
-    <div class="result-hero"><div class="value" id="r-gross">—</div><div class="label">Gross Annual Salary Needed</div></div>
+    <div class="result-hero"><div class="value" id="r-takehome">—</div><div class="label">Annual Take-Home Pay</div></div>
     <div class="band-breakdown">
-      <div><span>Income Tax</span><span id="r-it">—</span></div>
+      <div><span>Income Tax (Scotland)</span><span id="r-it">—</span></div>
       <div><span>National Insurance</span><span id="r-ni">—</span></div>
-      <div><span>Student Loan</span><span id="r-sl">—</span></div>
-      <div><span>Pension</span><span id="r-pen">—</span></div>
-      <div><span>Take-Home Pay (check)</span><span id="r-check">—</span></div>
+      <div><span>Take-Home Pay</span><span id="r-total">—</span></div>
     </div>
   </div>
 </div>
@@ -258,34 +231,40 @@
 <a class="sat-link" href="/redundancy-pay-calculator/"><div class="t">Redundancy Pay Calculator</div><div class="d">Statutory redundancy estimate</div></a>
 <a class="sat-link" href="/maternity-pay-calculator/"><div class="t">Maternity Pay Calculator</div><div class="d">SMP week-by-week estimate</div></a>
 <a class="sat-link" href="/pension-contribution-calculator/"><div class="t">Pension Contribution Calculator</div><div class="d">Auto-enrolment & salary sacrifice</div></a>
+<a class="sat-link" href="/required-salary-calculator/"><div class="t">Required Salary Calculator</div><div class="d">Gross salary needed for a target take-home</div></a>
 <a class="sat-link" href="/compare-two-salaries-calculator/"><div class="t">Compare Two Salaries</div><div class="d">Job offer take-home pay, side by side</div></a>
 <a class="sat-link" href="/salary-after-tax/"><div class="t">Salary After Tax — Browse by Amount</div><div class="d">£15,000 to £150,000, pick your salary</div></a>
 <a class="sat-link" href="/uk-tax-calculator-2025-26/"><div class="t">Historical Tax Years</div><div class="d">2023/24, 2024/25, 2025/26 rates</div></a>
 <a class="sat-link" href="/nhs-pay-bands/"><div class="t">NHS Pay Bands</div><div class="d">Agenda for Change, Band 2 to Band 9</div></a>
-<a class="sat-link" href="/scotland-salary-calculator/"><div class="t">Scotland Salary Calculator</div><div class="d">Scottish Income Tax bands, 19-48%</div></a>
 <a class="sat-link" href="/scotland-vs-rest-of-uk-salary-calculator/"><div class="t">Scotland vs Rest of UK</div><div class="d">Same salary, side-by-side take-home</div></a>
 <a class="sat-link" href="/embed-calculator/"><div class="t">Embed This Calculator</div><div class="d">Free widget for your blog or site</div></a>
 <a class="sat-link" href="/guides/"><div class="t">UK Tax & Payroll Guides</div><div class="d">Tax codes, salary sacrifice, redundancy pay</div></a></div>
 
   
-  <h2>Why Work Backwards From Take-Home Pay?</h2>
-  <p>Job adverts and salary negotiations are almost always framed in gross salary, but what actually matters to your budget is what lands in your bank account. This calculator inverts the usual maths — tell it the monthly or annual take-home you need, and it works out the gross salary to ask for, accounting for Income Tax, National Insurance, your region, pension contributions and any student loan.</p>
-  <h2>How the Calculation Works</h2>
-  <p>Because Income Tax and National Insurance are banded (not a single flat rate), there's no simple formula to reverse — this tool searches for the exact gross salary whose take-home pay matches your target, using the same deterministic bands as the main <a href="/">take-home pay calculator</a>.</p>
-  <p>Useful for salary negotiations, evaluating a job offer against your current take-home, or setting a minimum acceptable rate when freelancing or contracting.</p>
+  <h2>Scottish Income Tax Bands 2026/27</h2>
+  <div class="table-wrap"><table><tr><th>Band</th><th>Taxable income</th><th>Rate</th></tr>
+  <tr><td>Personal Allowance</td><td>Up to £12,570</td><td>0%</td></tr>
+  <tr><td>Starter rate</td><td>£12,571 – £16,537</td><td>19%</td></tr>
+  <tr><td>Basic rate</td><td>£16,538 – £29,526</td><td>20%</td></tr>
+  <tr><td>Intermediate rate</td><td>£29,527 – £43,662</td><td>21%</td></tr>
+  <tr><td>Higher rate</td><td>£43,663 – £75,000</td><td>42%</td></tr>
+  <tr><td>Advanced rate</td><td>£75,001 – £125,140</td><td>45%</td></tr>
+  <tr><td>Top rate</td><td>Above £125,140</td><td>48%</td></tr>
+  </table></div>
+  <p>Source: gov.scot Income Tax bands + HMRC. National Insurance is set UK-wide and doesn't differ for Scotland.</p>
 
   
 <div class="cta-box">
-  <h2>Get Independent Financial Advice</h2>
-  <p>The figure above is an estimate of what you're entitled to or what it costs you — deciding what to actually do with it (invest, overpay debt, top up a pension) is a bigger decision worth getting right.</p>
+  <h2>Running Payroll for Your Business?</h2>
+  <p>This calculator is built for individuals checking their own numbers. If you're running payroll for a team, a dedicated platform automates this calculation for every employee, every pay run.</p>
   <ul>
-    <li><strong>Received a redundancy payout:</strong> understand tax-free thresholds and how to make a lump sum work for you long-term.</li>
-    <li><strong>Planning parental leave:</strong> budget around the drop from full pay to statutory rate, and check what protections apply.</li>
-    <li><strong>Deciding whether to overpay a student loan:</strong> for many people investing the surplus outperforms early repayment — but it depends on your plan type and income trajectory.</li>
-    <li><strong>Reviewing pension contributions:</strong> small percentage changes compound significantly over a career.</li>
+    <li><strong>Small business, first hire:</strong> set up PAYE and auto-enrolment correctly from day one.</li>
+    <li><strong>Growing team:</strong> automate payslips, RTI submissions and pension contributions.</li>
+    <li><strong>Multiple pay rates or contractors:</strong> handle mixed PAYE/self-employed workforces in one place.</li>
+    <li><strong>Switching from spreadsheets:</strong> reduce manual errors on tax code changes and NI category switches.</li>
   </ul>
-  <p>An FCA-regulated independent financial adviser can model your specific numbers — free directories like Unbiased.co.uk match you with a local IFA.</p>
-  <a href="#" class="cta-btn" target="_blank" rel="noopener">Find an Independent Financial Adviser →</a>
+  <p>Cloud payroll platforms like Xero, QuickBooks and BrightPay handle Income Tax, NI, student loan and pension deductions automatically.</p>
+  <a href="#" class="cta-btn" target="_blank" rel="noopener">Compare Payroll Software →</a>
 </div>
 
   
@@ -296,9 +275,9 @@
     </h2>
     <div class="eeat-grid">
       <div class="eeat-author-card">
-        <div class="eeat-avatar">RS</div>
+        <div class="eeat-avatar">SC</div>
         <div class="eeat-author-info">
-          <h3>Required Salary Calculator</h3>
+          <h3>Scotland Salary Calculator</h3>
           <div class="eeat-author-subtitle">Independent, Open-Source Estimator</div>
           <p>An independent calculator applying published HMRC/gov.scot/DWP rates deterministically — no AI estimate, no official affiliation.</p>
         </div>
@@ -320,10 +299,10 @@
     </div>
   </div>
 
-  <div class="faq"><h2>Frequently Asked Questions</h2><div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does a required salary calculator work?</div><div class="faq-a">It works backwards from your desired net (take-home) pay to find the gross salary that produces it, accounting for Income Tax, National Insurance, pension and student loan deductions — the reverse of a normal take-home pay calculation.</div></div>
-<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Why can't required salary be calculated with a simple formula?</div><div class="faq-a">UK Income Tax and National Insurance are charged in bands at different rates, and the Personal Allowance itself shrinks above £100,000 income — so the relationship between gross and net pay isn't a straight line, and reversing it needs iterative calculation rather than one formula.</div></div>
-<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Should I use monthly or annual take-home pay to negotiate?</div><div class="faq-a">Either works — this calculator accepts both and converts internally. Many people find it easier to think in monthly take-home pay since that matches how bills and budgets are usually planned.</div></div>
-<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does this account for pension and student loan?</div><div class="faq-a">Yes — both are optional inputs. Pension contributions reduce your taxable income (net pay arrangement) and increase the gross salary needed; student loan repayments come directly off gross pay above your plan's threshold.</div></div></div>
+  <div class="faq"><h2>Frequently Asked Questions</h2><div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Why does Scotland have different Income Tax bands?</div><div class="faq-a">Income Tax on non-savings, non-dividend income is a devolved power under the Scotland Act 2016 — the Scottish Parliament sets its own bands and rates, while National Insurance and everything else stays UK-wide.</div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Do Scottish taxpayers pay more or less than the rest of the UK?</div><div class="faq-a">It depends on income. Lower earners pay slightly less (a 19% starter rate below the basic rate), but from roughly £30,000+ Scottish taxpayers generally pay more due to the intermediate, higher, and top-rate bands kicking in earlier and at higher percentages than England/Wales/NI.</div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do I know if I pay Scottish Income Tax?</div><div class="faq-a">HMRC uses your main residence, not your employer's location — if you live in Scotland for most of the tax year, your tax code starts with an "S" and Scottish rates apply regardless of where your employer is based.</div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does National Insurance differ in Scotland?</div><div class="faq-a">No — National Insurance is reserved (UK-wide), not devolved, so NI thresholds and rates are identical whether you live in Scotland or the rest of the UK.</div></div></div>
 </div>
 
 <footer>
@@ -341,48 +320,19 @@ function bandedTax(income, bands) {
 function toggleFaq(el) { el.classList.toggle('open'); el.nextElementSibling.classList.toggle('show'); }
 
 const PT=12570, UEL=50270;
-const LOAN_PLANS={none:null,plan1:{t:26900,r:0.09},plan2:{t:29385,r:0.09},plan4:{t:33795,r:0.09},plan5:{t:25000,r:0.09},postgrad:{t:21000,r:0.06}};
 function personalAllowance(income){ if(income<=100000) return 12570; return Math.max(0,12570-(income-100000)/2); }
-function incomeTax(taxable, region){
+function incomeTaxScotland(taxable){
   const pa = personalAllowance(taxable);
-  if (region==='scotland') return bandedTax(taxable,[[0,pa,0],[pa,16537,0.19],[16537,29526,0.20],[29526,43662,0.21],[43662,75000,0.42],[75000,125140,0.45],[125140,Infinity,0.48]]);
-  return bandedTax(taxable,[[0,pa,0],[pa,50270,0.20],[50270,125140,0.40],[125140,Infinity,0.45]]);
+  return bandedTax(taxable,[[0,pa,0],[pa,16537,0.19],[16537,29526,0.20],[29526,43662,0.21],[43662,75000,0.42],[75000,125140,0.45],[125140,Infinity,0.48]]);
 }
 function nationalInsurance(gross){ return bandedTax(gross,[[0,PT,0],[PT,UEL,0.08],[UEL,Infinity,0.02]]); }
-function studentLoan(gross, plan){ const p=LOAN_PLANS[plan]; if(!p) return 0; return Math.max(0,gross-p.t)*p.r; }
-function netFromGross(gross, region, pensionPct, plan){
-  const pensionAmt = gross*(pensionPct/100);
-  const taxable = Math.max(0, gross-pensionAmt);
-  const it = incomeTax(taxable, region);
-  const ni = nationalInsurance(gross);
-  const sl = studentLoan(gross, plan);
-  return { net: gross-it-ni-sl-pensionAmt, it, ni, sl, pensionAmt };
-}
-document.querySelectorAll('#regionSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#regionSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}));
-document.querySelectorAll('#periodSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('#periodSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');
-  document.getElementById('targetLabel').textContent = b.dataset.val==='monthly' ? 'Target Monthly Take-Home Pay (£)' : 'Target Annual Take-Home Pay (£)';
-}));
 function calculate(){
-  const period=document.querySelector('#periodSeg .seg-btn.active').dataset.val;
-  const targetInput=parseFloat(document.getElementById('target').value)||0;
-  const targetAnnual = period==='monthly' ? targetInput*12 : targetInput;
-  const region=document.querySelector('#regionSeg .seg-btn.active').dataset.val==='scotland'?'scotland':'rest_uk';
-  const pensionPct=parseFloat(document.getElementById('pension').value)||0;
-  const plan=document.getElementById('loanPlan').value;
-  let lo=targetAnnual, hi=Math.max(targetAnnual*3,50000), mid=targetAnnual;
-  for(let i=0;i<60;i++){
-    mid=(lo+hi)/2;
-    const net=netFromGross(mid,region,pensionPct,plan).net;
-    if (net<targetAnnual) lo=mid; else hi=mid;
-  }
-  const result=netFromGross(mid,region,pensionPct,plan);
-  document.getElementById('r-gross').textContent=fmt(mid);
-  document.getElementById('r-it').textContent=fmt(result.it);
-  document.getElementById('r-ni').textContent=fmt(result.ni);
-  document.getElementById('r-sl').textContent=fmt(result.sl);
-  document.getElementById('r-pen').textContent=fmt(result.pensionAmt);
-  document.getElementById('r-check').textContent=fmt(result.net);
+  const gross=parseFloat(document.getElementById('salary').value)||0;
+  const it=incomeTaxScotland(gross), ni=nationalInsurance(gross), takeHome=gross-it-ni;
+  document.getElementById('r-takehome').textContent=fmt(takeHome);
+  document.getElementById('r-it').textContent=fmt(it);
+  document.getElementById('r-ni').textContent=fmt(ni);
+  document.getElementById('r-total').textContent=fmt(takeHome);
   document.getElementById('results').classList.add('show');
 }
 </script>

@@ -121,6 +121,8 @@ const SATELLITES_NAV = [
   { slug: 'salary-after-tax', title: 'Salary After Tax — Browse by Amount', desc: '£15,000 to £150,000, pick your salary' },
   { slug: 'uk-tax-calculator-2025-26', title: 'Historical Tax Years', desc: '2023/24, 2024/25, 2025/26 rates' },
   { slug: 'nhs-pay-bands', title: 'NHS Pay Bands', desc: 'Agenda for Change, Band 2 to Band 9' },
+  { slug: 'scotland-salary-calculator', title: 'Scotland Salary Calculator', desc: 'Scottish Income Tax bands, 19-48%' },
+  { slug: 'scotland-vs-rest-of-uk-salary-calculator', title: 'Scotland vs Rest of UK', desc: 'Same salary, side-by-side take-home' },
   { slug: 'embed-calculator', title: 'Embed This Calculator', desc: 'Free widget for your blog or site' },
   { slug: 'guides', title: 'UK Tax & Payroll Guides', desc: 'Tax codes, salary sacrifice, redundancy pay' }
 ];
@@ -999,6 +1001,127 @@ function calculate(){
     { q: 'How do I compare a Scotland-based job offer to an England-based one?', a: 'Enter each offer with its correct region — Scotland uses six Income Tax bands (19–48%) instead of the rest of the UK\'s three (20/40/45%), so identical gross salaries can produce different take-home pay depending on region.' },
     { q: 'Does this include pension and student loan in the comparison?', a: 'Yes — both are optional per-offer inputs, since employer pension schemes and student loan status vary between jobs and materially affect the real take-home difference.' },
     { q: 'What should I check beyond take-home pay when comparing offers?', a: 'Employer pension contribution match, private healthcare or other benefits in kind, bonus structure, and cost of commuting or relocating — none of which are captured by a salary-only comparison.' }
+  ]
+});
+
+// Scotland-specific and Scotland-vs-rest-of-UK comparison pages — real Scottish Income Tax bands
+// already existed in the paye-calculator toggle (see incomeTax() above), just never had their own
+// indexable URL. Two pages, not four: England/Wales/NI share identical bands, so a separate page
+// per non-Scotland nation would just be the same formula under three different URLs.
+PAGES.push({
+  slug: 'scotland-salary-calculator',
+  title: 'Scotland Salary Calculator',
+  metaTitle: 'Scotland Salary Calculator 2026/27 — Scottish Income Tax & NI',
+  metaDesc: 'Free Scotland salary calculator. Enter salary → instant take-home pay using the six Scottish Income Tax bands (19-48%). 2026/27 rates.',
+  h1: 'Scotland Salary Calculator',
+  intro: 'Take-home pay for Scotland, using the six Scottish Income Tax bands — different from the rest of the UK at the same salary.',
+  avatarInitials: 'SC',
+  ctaSnippet: CTA_PAYROLL_SOFTWARE,
+  toolHtml: `
+  <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salary" min="0" step="500" value="35000"></div>
+  <button class="btn" onclick="calculate()">Calculate Scottish Take-Home →</button>
+  <div class="results" id="results">
+    <div class="result-hero"><div class="value" id="r-takehome">—</div><div class="label">Annual Take-Home Pay</div></div>
+    <div class="band-breakdown">
+      <div><span>Income Tax (Scotland)</span><span id="r-it">—</span></div>
+      <div><span>National Insurance</span><span id="r-ni">—</span></div>
+      <div><span>Take-Home Pay</span><span id="r-total">—</span></div>
+    </div>
+  </div>`,
+  toolJs: `
+const PT=12570, UEL=50270;
+function personalAllowance(income){ if(income<=100000) return 12570; return Math.max(0,12570-(income-100000)/2); }
+function incomeTaxScotland(taxable){
+  const pa = personalAllowance(taxable);
+  return bandedTax(taxable,[[0,pa,0],[pa,16537,0.19],[16537,29526,0.20],[29526,43662,0.21],[43662,75000,0.42],[75000,125140,0.45],[125140,Infinity,0.48]]);
+}
+function nationalInsurance(gross){ return bandedTax(gross,[[0,PT,0],[PT,UEL,0.08],[UEL,Infinity,0.02]]); }
+function calculate(){
+  const gross=parseFloat(document.getElementById('salary').value)||0;
+  const it=incomeTaxScotland(gross), ni=nationalInsurance(gross), takeHome=gross-it-ni;
+  document.getElementById('r-takehome').textContent=fmt(takeHome);
+  document.getElementById('r-it').textContent=fmt(it);
+  document.getElementById('r-ni').textContent=fmt(ni);
+  document.getElementById('r-total').textContent=fmt(takeHome);
+  document.getElementById('results').classList.add('show');
+}`,
+  extraContent: `
+  <h2>Scottish Income Tax Bands 2026/27</h2>
+  <div class="table-wrap"><table><tr><th>Band</th><th>Taxable income</th><th>Rate</th></tr>
+  <tr><td>Personal Allowance</td><td>Up to £12,570</td><td>0%</td></tr>
+  <tr><td>Starter rate</td><td>£12,571 – £16,537</td><td>19%</td></tr>
+  <tr><td>Basic rate</td><td>£16,538 – £29,526</td><td>20%</td></tr>
+  <tr><td>Intermediate rate</td><td>£29,527 – £43,662</td><td>21%</td></tr>
+  <tr><td>Higher rate</td><td>£43,663 – £75,000</td><td>42%</td></tr>
+  <tr><td>Advanced rate</td><td>£75,001 – £125,140</td><td>45%</td></tr>
+  <tr><td>Top rate</td><td>Above £125,140</td><td>48%</td></tr>
+  </table></div>
+  <p>Source: gov.scot Income Tax bands + HMRC. National Insurance is set UK-wide and doesn't differ for Scotland.</p>`,
+  faqs: [
+    { q: 'Why does Scotland have different Income Tax bands?', a: 'Income Tax on non-savings, non-dividend income is a devolved power under the Scotland Act 2016 — the Scottish Parliament sets its own bands and rates, while National Insurance and everything else stays UK-wide.' },
+    { q: 'Do Scottish taxpayers pay more or less than the rest of the UK?', a: 'It depends on income. Lower earners pay slightly less (a 19% starter rate below the basic rate), but from roughly £30,000+ Scottish taxpayers generally pay more due to the intermediate, higher, and top-rate bands kicking in earlier and at higher percentages than England/Wales/NI.' },
+    { q: 'How do I know if I pay Scottish Income Tax?', a: 'HMRC uses your main residence, not your employer\'s location — if you live in Scotland for most of the tax year, your tax code starts with an "S" and Scottish rates apply regardless of where your employer is based.' },
+    { q: 'Does National Insurance differ in Scotland?', a: 'No — National Insurance is reserved (UK-wide), not devolved, so NI thresholds and rates are identical whether you live in Scotland or the rest of the UK.' }
+  ]
+});
+
+PAGES.push({
+  slug: 'scotland-vs-rest-of-uk-salary-calculator',
+  title: 'Scotland vs Rest of UK Salary Calculator',
+  metaTitle: 'Scotland vs Rest of UK Salary Calculator 2026/27 — Compare Take-Home Pay',
+  metaDesc: 'Compare take-home pay for the same salary in Scotland vs England/Wales/NI, side by side, using each region\'s real 2026/27 Income Tax bands.',
+  h1: 'Scotland vs Rest of UK Salary Calculator',
+  intro: 'Enter one salary, see both take-home figures side by side — Scotland uses six Income Tax bands, the rest of the UK uses three.',
+  avatarInitials: 'VS',
+  ctaSnippet: CTA_FINANCIAL_ADVICE,
+  toolHtml: `
+  <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salary" min="0" step="500" value="35000"></div>
+  <button class="btn" onclick="calculate()">Compare Both Regions →</button>
+  <div class="results" id="results">
+    <div class="two-col">
+      <div>
+        <div class="result-hero"><div class="value" id="r-scot-takehome">—</div><div class="label">Scotland Take-Home</div></div>
+        <div class="band-breakdown"><div><span>Income Tax</span><span id="r-scot-it">—</span></div><div><span>National Insurance</span><span id="r-scot-ni">—</span></div></div>
+      </div>
+      <div>
+        <div class="result-hero"><div class="value" id="r-rest-takehome">—</div><div class="label">England / Wales / NI Take-Home</div></div>
+        <div class="band-breakdown"><div><span>Income Tax</span><span id="r-rest-it">—</span></div><div><span>National Insurance</span><span id="r-rest-ni">—</span></div></div>
+      </div>
+    </div>
+    <div class="band-breakdown"><div><span>Difference</span><span id="r-diff">—</span></div></div>
+  </div>`,
+  toolJs: `
+const PT=12570, UEL=50270;
+function personalAllowance(income){ if(income<=100000) return 12570; return Math.max(0,12570-(income-100000)/2); }
+function incomeTax(taxable, region){
+  const pa = personalAllowance(taxable);
+  if (region==='scotland') return bandedTax(taxable,[[0,pa,0],[pa,16537,0.19],[16537,29526,0.20],[29526,43662,0.21],[43662,75000,0.42],[75000,125140,0.45],[125140,Infinity,0.48]]);
+  return bandedTax(taxable,[[0,pa,0],[pa,50270,0.20],[50270,125140,0.40],[125140,Infinity,0.45]]);
+}
+function nationalInsurance(gross){ return bandedTax(gross,[[0,PT,0],[PT,UEL,0.08],[UEL,Infinity,0.02]]); }
+function calculate(){
+  const gross=parseFloat(document.getElementById('salary').value)||0;
+  const scotIt=incomeTax(gross,'scotland'), scotNi=nationalInsurance(gross), scotTakeHome=gross-scotIt-scotNi;
+  const restIt=incomeTax(gross,'rest_uk'), restNi=nationalInsurance(gross), restTakeHome=gross-restIt-restNi;
+  document.getElementById('r-scot-takehome').textContent=fmt(scotTakeHome);
+  document.getElementById('r-scot-it').textContent=fmt(scotIt);
+  document.getElementById('r-scot-ni').textContent=fmt(scotNi);
+  document.getElementById('r-rest-takehome').textContent=fmt(restTakeHome);
+  document.getElementById('r-rest-it').textContent=fmt(restIt);
+  document.getElementById('r-rest-ni').textContent=fmt(restNi);
+  const diff = restTakeHome - scotTakeHome;
+  document.getElementById('r-diff').textContent = (diff >= 0 ? 'Rest of UK is ' + fmt(diff) + ' higher' : 'Scotland is ' + fmt(-diff) + ' higher');
+  document.getElementById('results').classList.add('show');
+}`,
+  extraContent: `
+  <h2>Why the Same Salary Pays Differently</h2>
+  <p>Scotland uses six Income Tax bands (19% starter through 48% top rate); the rest of the UK uses three (20% basic, 40% higher, 45% additional). National Insurance is identical everywhere — it's reserved, not devolved. Below roughly £30,000, Scotland's 19% starter rate can mean slightly higher take-home pay; above that, Scotland's earlier and higher upper bands generally mean lower take-home pay than an identical salary in England, Wales, or Northern Ireland.</p>
+  <p>Source: gov.scot Income Tax bands + HMRC rest-of-UK bands, 2026/27.</p>`,
+  faqs: [
+    { q: 'Is Scotland Income Tax higher than the rest of the UK?', a: 'For most earners above roughly £30,000, yes — Scotland\'s intermediate, higher, and top-rate bands apply at lower thresholds and higher percentages than the rest of the UK\'s basic/higher/additional bands. Below that, Scotland\'s 19% starter rate can mean marginally lower tax.' },
+    { q: 'Does this affect a job offer comparison?', a: 'Yes — if you\'re comparing a Scotland-based offer to an England/Wales/NI-based offer at the same gross salary, the net take-home pay will differ. Use this calculator with each offer\'s actual salary to see the real difference, not just the headline number.' },
+    { q: 'Is National Insurance different in Scotland too?', a: 'No — National Insurance is UK-wide (reserved, not devolved), so it\'s identical in this comparison regardless of region. Only Income Tax differs.' },
+    { q: 'Which region is used if I work remotely for a Scottish company but live in England?', a: 'HMRC taxes you based on where you live (your main residence for most of the tax year), not where your employer is based — living in England means rest-of-UK rates apply even if your employer is Scottish.' }
   ]
 });
 
