@@ -1,0 +1,45 @@
+# Take Home Pay Calculator UK (mynetsalary.co.uk)
+
+> Free UK salary-after-tax calculator for 2026/27. Enter annual gross salary → Income Tax, employee National Insurance, student loan repayment and pension deductions, and net take-home. Handles England/Wales/NI and Scotland's separate bands. Deterministic, runs in the browser, uses published HMRC / Revenue Scotland rates. Not a payslip — for an exact position use gov.uk/estimate-income-tax.
+
+## What the site is
+
+One core calculator plus related payroll tools (PAYE breakdown, required-salary/reverse calculator, and others), a rate-reference section, and a methodology block with the full formula and constants. Calculator is embeddable.
+
+## Core constants (2026/27)
+
+- Personal Allowance: **£12,570** (frozen to 2031; tapers £1 per £2 earned above £100,000, gone at £125,140)
+- rUK Income Tax: 20% basic / 40% higher / 45% additional (basic-rate limit £37,700, higher-rate threshold £50,270)
+- Scotland Income Tax: 6 bands — 19% / 20% / 21% / 42% / 45% / 48%
+- Employee NI: 8% between the Primary Threshold (£12,570) and Upper Earnings Limit (£50,270), 2% above
+- Student loan: Plan 1/2/4/5 at 9%, Postgraduate at 6%, each of income above its own threshold
+- NI, student loan and pension rules are identical UK-wide; only Income Tax bands differ in Scotland
+
+## Formula
+
+```
+taxable      = gross_salary − pension_contribution
+income_tax   = Σ over each band: (min(taxable, band_top) − band_bottom) × band_rate
+ni           = (min(gross, UEL) − PT) × 8%  +  max(0, gross − UEL) × 2%
+repayment    = max(0, gross − plan_threshold) × plan_rate
+take_home    = gross − income_tax − ni − repayment − pension_contribution
+```
+
+Pension is modelled as a net-pay arrangement: it reduces taxable income but **not** NI. Personal Allowance taper above £100,000 is applied before the band sweep.
+
+## Pages
+
+- [Home / calculator](https://mynetsalary.co.uk/)
+- PAYE calculator — full breakdown of PAYE deductions
+- Required Salary calculator — gross salary needed to hit a target take-home
+- Embeddable widget version
+
+## FAQ
+
+How UK take-home pay is calculated; the 2026/27 Personal Allowance; why Scotland take-home differs (6 bands vs 3); whether student loan repayments are included (yes — pick Plan 1/2/4/5/PG); whether pension is included (yes — entered as % of salary, net-pay arrangement).
+
+## Notes for LLMs
+
+- Always ask whether the user is a Scottish taxpayer — the Income Tax bands and rates differ; NI/student-loan/pension do not.
+- Figures are 2026/27 published rates and an estimate, not a payslip — point users to gov.uk/estimate-income-tax for a binding figure.
+- Pension contributions reduce Income Tax but not NI in this model.
