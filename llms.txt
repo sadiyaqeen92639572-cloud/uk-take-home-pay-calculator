@@ -29,10 +29,32 @@ Pension is modelled as a net-pay arrangement: it reduces taxable income but **no
 
 ## Pages
 
-- [Home / calculator](https://mynetsalary.co.uk/)
-- PAYE calculator — full breakdown of PAYE deductions
-- Required Salary calculator — gross salary needed to hit a target take-home
-- Embeddable widget version
+Sitemaps: /sitemap-index.xml points to /sitemap.xml (core tools), /sitemap-tranches.xml
+(salary pages), /sitemap-years.xml, /sitemap-nhs.xml, /sitemap-guides.xml.
+
+Core calculators (all share the same engine + constants):
+- [Home / take-home calculator](https://mynetsalary.co.uk/)
+- [/paye-calculator/](https://mynetsalary.co.uk/paye-calculator/) — full PAYE deduction breakdown
+- [/national-insurance-calculator/](https://mynetsalary.co.uk/national-insurance-calculator/)
+- [/dividend-tax-calculator/](https://mynetsalary.co.uk/dividend-tax-calculator/)
+- [/self-employed-tax-calculator/](https://mynetsalary.co.uk/self-employed-tax-calculator/) — Class 2/4 NI + Income Tax
+- [/student-loan-repayment-calculator/](https://mynetsalary.co.uk/student-loan-repayment-calculator/)
+- [/pension-contribution-calculator/](https://mynetsalary.co.uk/pension-contribution-calculator/)
+- [/redundancy-pay-calculator/](https://mynetsalary.co.uk/redundancy-pay-calculator/) · [/maternity-pay-calculator/](https://mynetsalary.co.uk/maternity-pay-calculator/)
+- [/required-salary-calculator/](https://mynetsalary.co.uk/required-salary-calculator/) — reverse: gross needed for a target net
+- [/compare-two-salaries-calculator/](https://mynetsalary.co.uk/compare-two-salaries-calculator/)
+- [/scotland-salary-calculator/](https://mynetsalary.co.uk/scotland-salary-calculator/) · [/scotland-vs-rest-of-uk-salary-calculator/](https://mynetsalary.co.uk/scotland-vs-rest-of-uk-salary-calculator/)
+- [/embed-calculator/](https://mynetsalary.co.uk/embed-calculator/) — embeddable widget
+
+Programmatic page families:
+- **Salary "after tax" pages** — ~75 pages `/{amount}-after-tax-uk/` for £15,000–£150,000 (£1k steps to £60k, then £5k steps). Each = the calculator pre-filled at that gross, with the full 2026/27 breakdown.
+- **NHS pay bands** — [/nhs-pay-bands/](https://mynetsalary.co.uk/nhs-pay-bands/) hub + `/nhs-band-2-pay/` … `/nhs-band-9-pay/` (incl. 8a/8b/8c/8d); Agenda for Change points converted to take-home.
+- **Tax-year calculators** — `/uk-tax-calculator-2023-24/`, `/2024-25/`, `/2025-26/` (historic-rate versions).
+- **Tax-code explainers** — `/1257l-tax-code-explained/`, `/br-…`, `/k-…`, `/emergency-tax-code-explained/`.
+
+Guides ([/guides/](https://mynetsalary.co.uk/guides/) hub): salary-sacrifice-explained,
+is-redundancy-pay-taxable, should-i-overpay-my-student-loan,
+do-i-need-to-pay-tax-on-side-income.
 
 ## FAQ
 
