@@ -374,34 +374,63 @@ PAGES.push({
   slug: 'national-insurance-calculator',
   title: 'National Insurance Calculator',
   metaTitle: 'National Insurance Calculator UK 2026/27 — Employee NI',
-  metaDesc: 'Free National Insurance calculator. Enter salary → instant employee Class 1 NI breakdown by band. 2026/27 thresholds and rates.',
+  metaDesc: 'Free National Insurance calculator. Enter salary for an instant employee Class 1 NI breakdown by band, or switch to employer NI (ENIC) — 2026/27 thresholds, UK-wide.',
   h1: 'National Insurance Calculator',
-  intro: 'See exactly how much employee National Insurance you pay, broken down by band.',
+  intro: 'See exactly how much employee National Insurance you pay, broken down by band — or switch to employer NI (ENIC).',
   avatarInitials: 'NI',
   ctaSnippet: CTA_PAYROLL_SOFTWARE,
   toolHtml: `
+  <div class="input-group"><label>Calculate</label>
+    <div class="seg-row" id="niModeSeg">
+      <div class="seg-btn active" data-val="employee">Employee NI</div>
+      <div class="seg-btn" data-val="employer">Employer NI (ENIC)</div>
+    </div>
+  </div>
   <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salary" min="0" step="500" value="35000"></div>
   <button class="btn" onclick="calculate()">Calculate NI →</button>
   <div class="results" id="results">
-    <div class="result-hero"><div class="value" id="r-ni">—</div><div class="label">Annual Employee NI</div></div>
-    <div class="band-breakdown">
+    <div class="result-hero"><div class="value" id="r-ni">—</div><div class="label" id="r-ni-label">Annual Employee NI</div></div>
+    <div class="band-breakdown" id="bd-employee">
       <div><span>0% — up to £12,570</span><span>£0</span></div>
       <div><span>8% — £12,570 to £50,270</span><span id="r-band2">—</span></div>
       <div><span>2% — above £50,270</span><span id="r-band3">—</span></div>
       <div><span>Total NI</span><span id="r-total">—</span></div>
     </div>
+    <div class="band-breakdown" id="bd-employer" style="display:none;">
+      <div><span>0% — up to £5,000 (Secondary Threshold)</span><span>£0</span></div>
+      <div><span>15% — above £5,000</span><span id="r-er-band">—</span></div>
+      <div><span>Employer NI (ENIC), before Employment Allowance</span><span id="r-er-total">—</span></div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-top:10px;" id="r-ea-note"></p>
   </div>`,
   toolJs: `
-const PT=12570, UEL=50270;
+const PT=12570, UEL=50270, ST=5000, ER_RATE=0.15;
+document.querySelectorAll('#niModeSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#niModeSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');calculate();}));
 function calculate(){
   const gross=parseFloat(document.getElementById('salary').value)||0;
-  const band2=Math.max(0,Math.min(gross,UEL)-PT)*0.08;
-  const band3=Math.max(0,gross-UEL)*0.02;
-  const total=band2+band3;
-  document.getElementById('r-ni').textContent=fmt(total);
-  document.getElementById('r-band2').textContent=fmt(band2);
-  document.getElementById('r-band3').textContent=fmt(band3);
-  document.getElementById('r-total').textContent=fmt(total);
+  const mode=document.querySelector('#niModeSeg .seg-btn.active').dataset.val;
+  if (mode==='employer'){
+    const er=Math.max(0,gross-ST)*ER_RATE;
+    document.getElementById('r-ni').textContent=fmt(er);
+    document.getElementById('r-ni-label').textContent='Annual Employer NI (ENIC)';
+    document.getElementById('r-er-band').textContent=fmt(er);
+    document.getElementById('r-er-total').textContent=fmt(er);
+    document.getElementById('r-ea-note').textContent='Eligible employers can offset up to £10,500 of employer NI a year with the Employment Allowance.';
+    document.getElementById('bd-employee').style.display='none';
+    document.getElementById('bd-employer').style.display='block';
+  } else {
+    const band2=Math.max(0,Math.min(gross,UEL)-PT)*0.08;
+    const band3=Math.max(0,gross-UEL)*0.02;
+    const total=band2+band3;
+    document.getElementById('r-ni').textContent=fmt(total);
+    document.getElementById('r-ni-label').textContent='Annual Employee NI';
+    document.getElementById('r-band2').textContent=fmt(band2);
+    document.getElementById('r-band3').textContent=fmt(band3);
+    document.getElementById('r-total').textContent=fmt(total);
+    document.getElementById('r-ea-note').textContent='';
+    document.getElementById('bd-employee').style.display='block';
+    document.getElementById('bd-employer').style.display='none';
+  }
   document.getElementById('results').classList.add('show');
 }`,
   extraContent: `
@@ -411,12 +440,20 @@ function calculate(){
   <tr><td>£12,571 – £50,270 (Upper Earnings Limit)</td><td>8%</td></tr>
   <tr><td>Above £50,270</td><td>2%</td></tr>
   </table></div>
-  <p>National Insurance is the same across England, Scotland, Wales and Northern Ireland — unlike Income Tax, it is not devolved.</p>`,
+  <p>National Insurance is the same across England, Scotland, Wales and Northern Ireland — unlike Income Tax, it is not devolved.</p>
+  <h2>Employer National Insurance (ENIC) 2026/27</h2>
+  <p>On top of the employee NI above, employers pay Class 1 <strong>secondary</strong> National Insurance — often called ENIC (Employer's National Insurance Contributions). For 2026/27 the secondary rate is 15% on earnings above the Secondary Threshold of £5,000 a year, and eligible employers can offset up to £10,500 of it with the Employment Allowance. ENIC is a cost to the employer, not a deduction from your pay, but it is the figure a class 1 or employer National Insurance calculator is looking for, and it is why a pay rise costs an employer noticeably more than its headline amount.</p>
+  <div class="table-wrap"><table><tr><th>Contribution</th><th>2026/27 rate</th><th>Threshold</th></tr>
+  <tr><td>Employee (primary) Class 1</td><td>8%, then 2% above the UEL</td><td>£12,570 / £50,270</td></tr>
+  <tr><td>Employer (secondary) Class 1 — ENIC</td><td>15%</td><td>£5,000</td></tr>
+  </table></div>`,
   faqs: [
     { q: 'What is the National Insurance Primary Threshold for 2026/27?', a: '£12,570 per year (£242/week) — you start paying employee NI once your earnings exceed this, matching the Income Tax Personal Allowance.' },
     { q: 'What is the National Insurance rate above £50,270?', a: '2% on all earnings above the Upper Earnings Limit of £50,270, down from 8% below that threshold.' },
     { q: 'Is National Insurance different in Scotland?', a: 'No — National Insurance rates and thresholds are set UK-wide by Westminster and are identical in Scotland, England, Wales and Northern Ireland. Only Income Tax bands differ by nation.' },
-    { q: 'Does NI stop at State Pension age?', a: 'Yes — once you reach State Pension age, you stop paying employee National Insurance even if you continue working, though Income Tax still applies.' }
+    { q: 'Does NI stop at State Pension age?', a: 'Yes — once you reach State Pension age, you stop paying employee National Insurance even if you continue working, though Income Tax still applies.' },
+    { q: 'What is the employer National Insurance rate for 2026/27?', a: 'Employers pay Class 1 secondary NI at 15% on earnings above the £5,000 Secondary Threshold, with eligible employers able to offset up to £10,500 through the Employment Allowance. This is separate from, and on top of, the 8%/2% employee NI.' },
+    { q: 'What does ENIC mean?', a: 'ENIC stands for Employer\'s National Insurance Contributions — the Class 1 secondary contribution an employer pays on your salary. It does not reduce your take-home pay, but employers count it in the total cost of employing you.' }
   ]
 });
 
@@ -424,10 +461,10 @@ function calculate(){
 PAGES.push({
   slug: 'dividend-tax-calculator',
   title: 'Dividend Tax Calculator',
-  metaTitle: 'Dividend Tax Calculator UK 2026/27 — Salary + Dividends',
-  metaDesc: 'Free dividend tax calculator. Enter salary and dividend income → instant dividend tax at basic/higher/additional rates. 2026/27 £500 allowance.',
-  h1: 'Dividend Tax Calculator',
-  intro: 'Combine salary and dividend income to see exactly how much dividend tax you owe — common for company directors.',
+  metaTitle: 'Dividend Tax Calculator UK 2026/27 — Salary and Dividends Combined',
+  metaDesc: 'Free salary and dividend tax calculator. Enter salary and dividend income → instant dividend tax at 2026/27 rates. £500 allowance, combined salary + dividends.',
+  h1: 'Salary and Dividend Tax Calculator',
+  intro: 'Combine salary and dividend income in one calculator to see exactly how much dividend tax you owe — the common setup for limited company directors paying themselves a low salary plus dividends.',
   avatarInitials: 'DT',
   ctaSnippet: CTA_ACCOUNTANCY,
   toolHtml: `
@@ -483,12 +520,15 @@ function calculate(){
   <tr><td>Higher rate</td><td>35.75%</td></tr>
   <tr><td>Additional rate</td><td>39.35%</td></tr>
   </table></div>
-  <p>Dividends are taxed after salary/other income fills your Personal Allowance and lower bands — so your salary level determines which dividend band you start in. Common for limited company directors who pay themselves a low salary plus dividends.</p>`,
+  <p>Dividends are taxed after salary/other income fills your Personal Allowance and lower bands — so your salary level determines which dividend band you start in. Common for limited company directors who pay themselves a low salary plus dividends.</p>
+  <h2>Dividend Tax in Scotland</h2>
+  <p>Dividend tax is <strong>not devolved</strong> — Scottish taxpayers pay the same dividend rates and use the same £500 dividend allowance as the rest of the UK. Only your non-dividend income (salary) is taxed at Scottish Income Tax rates, and that changes how much of your Personal Allowance and basic-rate band is left for dividends to sit in. So a Scottish director and an English director on an identical salary-plus-dividend split can still land on a slightly different total bill.</p>`,
   faqs: [
     { q: 'What is the dividend allowance for 2026/27?', a: 'The first £500 of dividend income each tax year is tax-free, regardless of your other income.' },
     { q: 'How are dividends taxed if I also have a salary?', a: 'Dividends are treated as the top slice of your income — your salary and other income use up the Personal Allowance and lower tax bands first, and dividends are taxed at whichever band they fall into above that.' },
     { q: 'Why do company directors take a low salary plus dividends?', a: 'Dividends aren\'t subject to National Insurance, so a low salary (often around the Personal Allowance) plus dividends is typically more tax-efficient than an equivalent full salary — subject to Corporation Tax already paid on company profits.' },
-    { q: 'What are the dividend tax rates for 2026/27?', a: '10.75% basic rate, 35.75% higher rate, 39.35% additional rate — each roughly 8.75 percentage points above the equivalent Income Tax band.' }
+    { q: 'What are the dividend tax rates for 2026/27?', a: 'Above the £500 dividend allowance: 10.75% basic rate, 35.75% higher rate, 39.35% additional rate. The ordinary and upper rates each rose by 2 percentage points from 6 April 2026, announced in the 2025 Autumn Budget; the additional rate was unchanged.' },
+    { q: 'Is dividend tax different in Scotland?', a: 'No — dividend tax rates and the £500 dividend allowance are set UK-wide and are identical in Scotland. Only your salary is taxed at Scottish Income Tax rates, which can slightly change which band your dividends fall into.' }
   ]
 });
 
@@ -548,10 +588,10 @@ function calculate(){
 PAGES.push({
   slug: 'student-loan-repayment-calculator',
   title: 'Student Loan Repayment Calculator',
-  metaTitle: 'Student Loan Repayment Calculator UK 2026/27 — All Plans',
+  metaTitle: 'Student Loan Repayment Calculator UK 2026/27 — Plan 1, 2, 4, 5 & Postgrad',
   metaDesc: 'Free student loan repayment calculator. Enter salary and plan (1/2/4/5/Postgrad) → instant annual and monthly repayment. 2026/27 thresholds.',
-  h1: 'Student Loan Repayment Calculator',
-  intro: 'See exactly how much you repay on your student loan based on salary and plan type.',
+  h1: 'Student Loan Repayment Calculator UK',
+  intro: 'See how much student loan comes out of your pay each year and month, based on your salary and plan — Plan 1, 2, 4, 5 or Postgraduate. Find out how much of your student debt you are actually repaying.',
   avatarInitials: 'SL',
   ctaSnippet: CTA_FINANCIAL_ADVICE,
   toolHtml: `
@@ -597,12 +637,18 @@ function calculate(){
   <tr><td>Plan 5</td><td>£25,000/year</td><td>9%</td></tr>
   <tr><td>Postgraduate Loan</td><td>£21,000/year</td><td>6%</td></tr>
   </table></div>
-  <p>If you have both an undergraduate plan and a Postgraduate Loan, you repay both simultaneously — 9% above the undergraduate threshold plus 6% above the postgraduate threshold.</p>`,
+  <p>If you have both an undergraduate plan and a Postgraduate Loan, you repay both simultaneously — 9% above the undergraduate threshold plus 6% above the postgraduate threshold.</p>
+  <h2>Postgraduate Loan Repayments</h2>
+  <p>A Postgraduate Loan (Master's or Doctoral) is repaid at 6% of income above £21,000 a year — a lower threshold and a lower rate than the undergraduate plans. It has its own separate threshold, so if you also hold a Plan 1, 2, 4 or 5 undergraduate loan the two run at the same time: 9% above the undergraduate threshold plus 6% above £21,000, which can add up to a combined 15% on the slice of salary above the higher threshold.</p>
+  <h2>Should You Pay Off Your Student Loan Early?</h2>
+  <p>For most graduates a UK student loan behaves more like a graduate tax than an ordinary debt. Repayments are a fixed percentage of income above a threshold, they pause automatically whenever income drops below it, and any balance still outstanding is written off after a set period — 25 years on Plan 5, up to 40 years on Plan 2 depending on when you started. Voluntary overpayment only helps if you are genuinely on track to clear the entire balance before that write-off date; otherwise the surplus usually does more in a pension or against higher-interest debt. Because the sums depend on your plan type, balance and expected earnings, take independent financial advice before overpaying a large amount.</p>`,
   faqs: [
     { q: 'Which student loan plan am I on?', a: 'It depends on when and where you started your course: Plan 1 (pre-2012 England/Wales, or Northern Ireland), Plan 2 (2012–2023 England/Wales), Plan 5 (from August 2023 England), Plan 4 (Scotland), Postgraduate Loan (Masters/PhD). Check your account at gov.uk/sign-in-to-manage-your-student-loan-balance.' },
     { q: 'How much do I repay on a student loan?', a: 'You repay 9% of income above your plan\'s threshold (6% for Postgraduate Loans) — deducted automatically via PAYE if employed, or via Self Assessment if self-employed.' },
-    { q: 'Should I overpay my student loan?', a: 'For many graduates, especially on Plan 2 or 5 with large balances that write off after 30-40 years, voluntary overpayment is not always the best use of surplus cash — compare against pension contributions or high-interest debt first, or seek independent financial advice.' },
-    { q: 'Can I have two student loan repayments at once?', a: 'Yes — if you have an undergraduate plan and a Postgraduate Loan, both are repaid simultaneously from separate thresholds, so a higher earner could pay 9%+6%=15% combined above the higher of the two thresholds.' }
+    { q: 'Should I overpay my student loan?', a: 'For many graduates, especially on Plan 2 or 5 with large balances that write off after 25-40 years, voluntary overpayment is not always the best use of surplus cash — compare against pension contributions or high-interest debt first, or seek independent financial advice.' },
+    { q: 'Can I have two student loan repayments at once?', a: 'Yes — if you have an undergraduate plan and a Postgraduate Loan, both are repaid simultaneously from separate thresholds, so a higher earner could pay 9%+6%=15% combined above the higher of the two thresholds.' },
+    { q: 'How much student loan am I paying each month?', a: 'Your repayment is 9% of everything you earn above your plan threshold (6% for a Postgraduate Loan), spread across the year. On Plan 2 with a £35,000 salary that is 9% of £5,615 above the £29,385 threshold — about £505 a year, or roughly £42 a month.' },
+    { q: 'Is there a calculator for Plan 1 student loan deductions?', a: 'Yes — select Plan 1 above. Plan 1 deductions are 9% of income above £26,900 a year for 2026/27, covering pre-2012 undergraduate loans in England and Wales and most Northern Ireland loans.' }
   ]
 });
 
@@ -774,12 +820,19 @@ function calculate(){
   <tr><td>Minimum total contribution</td><td>8% of qualifying earnings</td></tr>
   <tr><td>Typical split</td><td>5% employee / 3% employer</td></tr>
   </table></div>
-  <p>Under a "net pay arrangement" (the most common workplace pension setup), your contribution is deducted before tax, so you automatically get tax relief at your marginal rate — a higher-rate taxpayer effectively pays less out of pocket for the same pension contribution.</p>`,
+  <p>Under a "net pay arrangement" (the most common workplace pension setup), your contribution is deducted before tax, so you automatically get tax relief at your marginal rate — a higher-rate taxpayer effectively pays less out of pocket for the same pension contribution.</p>
+  <h2>Employer Pension Contributions</h2>
+  <p>Your employer's contribution is paid on top of your salary, not taken out of it. Under auto-enrolment the legal minimum employer contribution is 3% of qualifying earnings (£6,240–£50,270 for 2026/27), though many employers pay more or match higher employee contributions. Enter your employer's percentage above to see the full amount going into your pension — an employer pension contribution calculator or workplace pension contribution calculator is asking for exactly this employee % plus employer % split.</p>
+  <h2>Relief at Source vs Net Pay</h2>
+  <p>Workplace pension tax relief is applied in one of two ways. Under <strong>net pay</strong>, your contribution leaves gross salary before Income Tax is calculated, so you get full relief at your marginal rate straight away. Under <strong>relief at source</strong>, your contribution comes out of take-home pay and the provider reclaims 20% from HMRC on your behalf — higher and additional-rate taxpayers then have to claim the extra 20–25% through Self Assessment or by contacting HMRC. This calculator models the net pay method.</p>
+  <p><strong>Salary sacrifice</strong> goes further: you formally give up part of your gross salary in exchange for an equal employer pension contribution, which cuts both Income Tax and National Insurance (employers often pass on part of their own NI saving too). It is usually the most tax-efficient route for higher earners, but it lowers your headline salary, which can affect mortgage affordability, life cover and statutory pay such as maternity pay.</p>`,
   faqs: [
     { q: 'What is the minimum pension contribution under auto-enrolment?', a: '8% of qualifying earnings (between £6,240 and £50,270) in total, typically split as 5% from the employee and 3% from the employer, though the split can vary as long as the employer pays at least 3%.' },
     { q: 'How does pension tax relief work?', a: 'Under a net pay arrangement, your contribution is deducted from salary before Income Tax is calculated, so you automatically get relief at your marginal rate (20%, 40% or 45%) — a £100 contribution costs a higher-rate taxpayer only £60 out of take-home pay.' },
     { q: 'Can I contribute more than the auto-enrolment minimum?', a: 'Yes — many people increase contributions, especially higher earners using salary sacrifice to also reduce National Insurance, or to make use of the higher-rate tax relief before hitting the £60,000 annual allowance.' },
-    { q: 'What is salary sacrifice?', a: 'An arrangement where you give up part of your salary in exchange for an equivalent employer pension contribution — this can also reduce your National Insurance bill, not just Income Tax, making it more tax-efficient than a standard net pay contribution.' }
+    { q: 'What is salary sacrifice?', a: 'An arrangement where you give up part of your salary in exchange for an equivalent employer pension contribution — this can also reduce your National Insurance bill, not just Income Tax, making it more tax-efficient than a standard net pay contribution.' },
+    { q: 'How much do employers have to pay into my pension?', a: 'The auto-enrolment minimum employer contribution is 3% of qualifying earnings (£6,240–£50,270 for 2026/27), with the employee paying 5% to reach the 8% total. Many employers pay more than 3% or offer matching above the minimum.' },
+    { q: 'What is the difference between relief at source and net pay?', a: 'Net pay takes your contribution from gross salary before tax, giving full marginal-rate relief automatically. Relief at source takes it from your take-home pay and adds 20% back, so higher-rate taxpayers must claim the remaining relief from HMRC. Salary sacrifice additionally saves National Insurance.' }
   ]
 });
 
@@ -895,10 +948,10 @@ function calculate(){
 PAGES.push({
   slug: 'compare-two-salaries-calculator',
   title: 'Compare Two Salaries Calculator',
-  metaTitle: 'Compare Two Salaries UK 2026/27 — Job Offer Take-Home Pay',
-  metaDesc: 'Free tool to compare two salaries or job offers side by side. Instant take-home pay difference after tax, NI, student loan and pension. 2026/27 rates.',
-  h1: 'Compare Two Salaries',
-  intro: 'Comparing two job offers or a pay rise? See the real take-home pay difference, side by side.',
+  metaTitle: 'Compare Two Salaries UK 2026/27 — Salary Comparison Calculator',
+  metaDesc: 'Free salary comparison calculator. Compare two salaries or job offers side by side — take-home pay difference after tax, NI, student loan and pension. 2026/27 rates.',
+  h1: 'Compare Two Salaries UK',
+  intro: 'Comparing two job offers, a pay rise, or wages at two employers? This salary comparison calculator shows the real take-home pay difference between two salaries, side by side, after tax, National Insurance, student loan and pension.',
   avatarInitials: 'CM',
   ctaSnippet: CTA_FINANCIAL_ADVICE,
   toolHtml: `
@@ -988,6 +1041,8 @@ function calculate(){
   document.getElementById('results').classList.add('show');
 }`,
   extraContent: `
+  <h2>Salary Comparison: Gross vs Take-Home</h2>
+  <p>A pay comparison on gross salary alone can mislead. Two jobs advertising the same headline number can leave different amounts in the bank once pension scheme, student loan plan, region and marginal tax rate are counted. Entering both salaries above gives a like-for-like take-home comparison instead of a gross-pay one.</p>
   <h2>Why Compare Take-Home Pay, Not Just Gross Salary</h2>
   <p>A £5,000 gross pay rise rarely means £5,000 more in your pocket — moving into a higher tax band, losing Personal Allowance above £100,000, or a different region's Income Tax bands (Scotland vs the rest of the UK) can all shrink the real-world gain. Comparing two offers on take-home pay, not headline salary, shows what actually changes for your budget.</p>
   <h2>What to Check Beyond the Numbers</h2>
@@ -1000,7 +1055,8 @@ function calculate(){
     { q: 'Why is my pay rise not worth as much as I expected?', a: 'Because Income Tax and National Insurance are banded, part of a pay rise can be taxed at a higher marginal rate than your existing salary — and above £100,000 you also start losing Personal Allowance at 60% effective marginal rate. Comparing take-home pay (not gross) shows the real gain.' },
     { q: 'How do I compare a Scotland-based job offer to an England-based one?', a: 'Enter each offer with its correct region — Scotland uses six Income Tax bands (19–48%) instead of the rest of the UK\'s three (20/40/45%), so identical gross salaries can produce different take-home pay depending on region.' },
     { q: 'Does this include pension and student loan in the comparison?', a: 'Yes — both are optional per-offer inputs, since employer pension schemes and student loan status vary between jobs and materially affect the real take-home difference.' },
-    { q: 'What should I check beyond take-home pay when comparing offers?', a: 'Employer pension contribution match, private healthcare or other benefits in kind, bonus structure, and cost of commuting or relocating — none of which are captured by a salary-only comparison.' }
+    { q: 'What should I check beyond take-home pay when comparing offers?', a: 'Employer pension contribution match, private healthcare or other benefits in kind, bonus structure, and cost of commuting or relocating — none of which are captured by a salary-only comparison.' },
+    { q: 'How do I compare two salaries or wages in the UK?', a: 'Enter each salary with its region, pension percentage and student loan plan above. The calculator returns take-home pay per year and per month for both, plus the difference, so you compare wages on a net basis rather than gross.' }
   ]
 });
 

@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>National Insurance Calculator UK 2026/27 — Employee NI</title>
-<meta name="description" content="Free National Insurance calculator. Enter salary → instant employee Class 1 NI breakdown by band. 2026/27 thresholds and rates.">
+<meta name="description" content="Free National Insurance calculator. Enter salary for an instant employee Class 1 NI breakdown by band, or switch to employer NI (ENIC) — 2026/27 thresholds, UK-wide.">
 <link rel="canonical" href="https://mynetsalary.co.uk/national-insurance-calculator/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" href="/favicon.png">
 <meta property="og:title" content="National Insurance Calculator UK 2026/27 — Employee NI">
-<meta property="og:description" content="Free National Insurance calculator. Enter salary → instant employee Class 1 NI breakdown by band. 2026/27 thresholds and rates.">
+<meta property="og:description" content="Free National Insurance calculator. Enter salary for an instant employee Class 1 NI breakdown by band, or switch to employer NI (ENIC) — 2026/27 thresholds, UK-wide.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mynetsalary.co.uk/national-insurance-calculator/">
 <meta property="og:image" content="https://mynetsalary.co.uk/og-image.svg">
@@ -25,7 +25,7 @@
       "@type": "WebApplication",
       "name": "National Insurance Calculator",
       "url": "https://mynetsalary.co.uk/national-insurance-calculator/",
-      "description": "Free National Insurance calculator. Enter salary → instant employee Class 1 NI breakdown by band. 2026/27 thresholds and rates.",
+      "description": "Free National Insurance calculator. Enter salary for an instant employee Class 1 NI breakdown by band, or switch to employer NI (ENIC) — 2026/27 thresholds, UK-wide.",
       "applicationCategory": "FinanceApplication",
       "operatingSystem": "Any",
       "inLanguage": "en-GB",
@@ -72,6 +72,22 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Yes — once you reach State Pension age, you stop paying employee National Insurance even if you continue working, though Income Tax still applies."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the employer National Insurance rate for 2026/27?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Employers pay Class 1 secondary NI at 15% on earnings above the £5,000 Secondary Threshold, with eligible employers able to offset up to £10,500 through the Employment Allowance. This is separate from, and on top of, the 8%/2% employee NI."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does ENIC mean?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ENIC stands for Employer's National Insurance Contributions — the Class 1 secondary contribution an employer pays on your salary. It does not reduce your take-home pay, but employers count it in the total cost of employing you."
           }
         }
       ]
@@ -203,21 +219,33 @@
 <header>
   <div class="flag">🇬🇧 UK Payroll · 2026/27 Rates</div>
   <h1>National Insurance Calculator</h1>
-  <p>See exactly how much employee National Insurance you pay, broken down by band.</p>
+  <p>See exactly how much employee National Insurance you pay, broken down by band — or switch to employer NI (ENIC).</p>
 </header>
 
 <div class="tool-card">
 
+  <div class="input-group"><label>Calculate</label>
+    <div class="seg-row" id="niModeSeg">
+      <div class="seg-btn active" data-val="employee">Employee NI</div>
+      <div class="seg-btn" data-val="employer">Employer NI (ENIC)</div>
+    </div>
+  </div>
   <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salary" min="0" step="500" value="35000"></div>
   <button class="btn" onclick="calculate()">Calculate NI →</button>
   <div class="results" id="results">
-    <div class="result-hero"><div class="value" id="r-ni">—</div><div class="label">Annual Employee NI</div></div>
-    <div class="band-breakdown">
+    <div class="result-hero"><div class="value" id="r-ni">—</div><div class="label" id="r-ni-label">Annual Employee NI</div></div>
+    <div class="band-breakdown" id="bd-employee">
       <div><span>0% — up to £12,570</span><span>£0</span></div>
       <div><span>8% — £12,570 to £50,270</span><span id="r-band2">—</span></div>
       <div><span>2% — above £50,270</span><span id="r-band3">—</span></div>
       <div><span>Total NI</span><span id="r-total">—</span></div>
     </div>
+    <div class="band-breakdown" id="bd-employer" style="display:none;">
+      <div><span>0% — up to £5,000 (Secondary Threshold)</span><span>£0</span></div>
+      <div><span>15% — above £5,000</span><span id="r-er-band">—</span></div>
+      <div><span>Employer NI (ENIC), before Employment Allowance</span><span id="r-er-total">—</span></div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-top:10px;" id="r-ea-note"></p>
   </div>
 </div>
 
@@ -249,6 +277,12 @@
   <tr><td>Above £50,270</td><td>2%</td></tr>
   </table></div>
   <p>National Insurance is the same across England, Scotland, Wales and Northern Ireland — unlike Income Tax, it is not devolved.</p>
+  <h2>Employer National Insurance (ENIC) 2026/27</h2>
+  <p>On top of the employee NI above, employers pay Class 1 <strong>secondary</strong> National Insurance — often called ENIC (Employer's National Insurance Contributions). For 2026/27 the secondary rate is 15% on earnings above the Secondary Threshold of £5,000 a year, and eligible employers can offset up to £10,500 of it with the Employment Allowance. ENIC is a cost to the employer, not a deduction from your pay, but it is the figure a class 1 or employer National Insurance calculator is looking for, and it is why a pay rise costs an employer noticeably more than its headline amount.</p>
+  <div class="table-wrap"><table><tr><th>Contribution</th><th>2026/27 rate</th><th>Threshold</th></tr>
+  <tr><td>Employee (primary) Class 1</td><td>8%, then 2% above the UEL</td><td>£12,570 / £50,270</td></tr>
+  <tr><td>Employer (secondary) Class 1 — ENIC</td><td>15%</td><td>£5,000</td></tr>
+  </table></div>
 
   
 <div class="cta-box">
@@ -299,7 +333,9 @@
   <div class="faq"><h2>Frequently Asked Questions</h2><div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the National Insurance Primary Threshold for 2026/27?</div><div class="faq-a">£12,570 per year (£242/week) — you start paying employee NI once your earnings exceed this, matching the Income Tax Personal Allowance.</div></div>
 <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the National Insurance rate above £50,270?</div><div class="faq-a">2% on all earnings above the Upper Earnings Limit of £50,270, down from 8% below that threshold.</div></div>
 <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is National Insurance different in Scotland?</div><div class="faq-a">No — National Insurance rates and thresholds are set UK-wide by Westminster and are identical in Scotland, England, Wales and Northern Ireland. Only Income Tax bands differ by nation.</div></div>
-<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does NI stop at State Pension age?</div><div class="faq-a">Yes — once you reach State Pension age, you stop paying employee National Insurance even if you continue working, though Income Tax still applies.</div></div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does NI stop at State Pension age?</div><div class="faq-a">Yes — once you reach State Pension age, you stop paying employee National Insurance even if you continue working, though Income Tax still applies.</div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the employer National Insurance rate for 2026/27?</div><div class="faq-a">Employers pay Class 1 secondary NI at 15% on earnings above the £5,000 Secondary Threshold, with eligible employers able to offset up to £10,500 through the Employment Allowance. This is separate from, and on top of, the 8%/2% employee NI.</div></div>
+<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What does ENIC mean?</div><div class="faq-a">ENIC stands for Employer's National Insurance Contributions — the Class 1 secondary contribution an employer pays on your salary. It does not reduce your take-home pay, but employers count it in the total cost of employing you.</div></div></div>
 </div>
 
 <footer>
@@ -316,16 +352,33 @@ function bandedTax(income, bands) {
 }
 function toggleFaq(el) { el.classList.toggle('open'); el.nextElementSibling.classList.toggle('show'); }
 
-const PT=12570, UEL=50270;
+const PT=12570, UEL=50270, ST=5000, ER_RATE=0.15;
+document.querySelectorAll('#niModeSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#niModeSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');calculate();}));
 function calculate(){
   const gross=parseFloat(document.getElementById('salary').value)||0;
-  const band2=Math.max(0,Math.min(gross,UEL)-PT)*0.08;
-  const band3=Math.max(0,gross-UEL)*0.02;
-  const total=band2+band3;
-  document.getElementById('r-ni').textContent=fmt(total);
-  document.getElementById('r-band2').textContent=fmt(band2);
-  document.getElementById('r-band3').textContent=fmt(band3);
-  document.getElementById('r-total').textContent=fmt(total);
+  const mode=document.querySelector('#niModeSeg .seg-btn.active').dataset.val;
+  if (mode==='employer'){
+    const er=Math.max(0,gross-ST)*ER_RATE;
+    document.getElementById('r-ni').textContent=fmt(er);
+    document.getElementById('r-ni-label').textContent='Annual Employer NI (ENIC)';
+    document.getElementById('r-er-band').textContent=fmt(er);
+    document.getElementById('r-er-total').textContent=fmt(er);
+    document.getElementById('r-ea-note').textContent='Eligible employers can offset up to £10,500 of employer NI a year with the Employment Allowance.';
+    document.getElementById('bd-employee').style.display='none';
+    document.getElementById('bd-employer').style.display='block';
+  } else {
+    const band2=Math.max(0,Math.min(gross,UEL)-PT)*0.08;
+    const band3=Math.max(0,gross-UEL)*0.02;
+    const total=band2+band3;
+    document.getElementById('r-ni').textContent=fmt(total);
+    document.getElementById('r-ni-label').textContent='Annual Employee NI';
+    document.getElementById('r-band2').textContent=fmt(band2);
+    document.getElementById('r-band3').textContent=fmt(band3);
+    document.getElementById('r-total').textContent=fmt(total);
+    document.getElementById('r-ea-note').textContent='';
+    document.getElementById('bd-employee').style.display='block';
+    document.getElementById('bd-employer').style.display='none';
+  }
   document.getElementById('results').classList.add('show');
 }
 </script>
