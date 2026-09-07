@@ -54,6 +54,55 @@ function ni(gross, rate) {
   return bandedTax(gross, [[0, 12570, 0], [12570, 50270, rate], [50270, Infinity, 0.02]]);
 }
 
+// ---- Current tax year (2026/27) — rates mirrored from index.html / generate-pages.js. Keep in sync if rates change. ----
+const CURRENT_2026 = {
+  slug: '',
+  label: '2026/27',
+  niRate: 0.08,
+  niNote: 'The employee NI main rate is 8% for 2026/27, unchanged from the April 2024 cut.',
+  scotland: [[0, 12570, 0], [12570, 16537, 0.19], [16537, 29526, 0.20], [29526, 43662, 0.21], [43662, 75000, 0.42], [75000, 125140, 0.45], [125140, Infinity, 0.48]],
+  source: 'gov.uk / gov.scot 2026/27 rates and bands'
+};
+// Newest first — drives the hub year selector.
+const HUB_YEARS = [CURRENT_2026, ...YEARS];
+
+// Single rate-data map consumed by the shared computeTakeHome() (server render + client JS + test harness).
+// Derived from HUB_YEARS so there is exactly one source of per-year rates.
+const RATES_BY_YEAR = {};
+for (const y of HUB_YEARS) {
+  RATES_BY_YEAR[y.label] = {
+    niRate: y.niRate,
+    scotland: y.scotland.map(b => [b[0], b[1] === Infinity ? null : b[1], b[2]])
+  };
+}
+
+// Self-contained: references only RATES_BY_YEAR + Math, so it can be emitted verbatim into client JS
+// via computeTakeHome.toString(). Both buildPage() and buildHubPage() use it — no forked tax maths.
+function computeTakeHome(salary, yearLabel, region) {
+  var y = RATES_BY_YEAR[yearLabel];
+  if (!y) throw new Error('unknown tax year: ' + yearLabel);
+  function banded(income, bands) {
+    var tax = 0;
+    for (var i = 0; i < bands.length; i++) {
+      var lo = bands[i][0];
+      var hi = bands[i][1] === null ? Infinity : bands[i][1];
+      var rate = bands[i][2];
+      if (income > lo) tax += (Math.min(income, hi) - lo) * rate;
+    }
+    return tax;
+  }
+  var pa = salary <= 100000 ? 12570 : Math.max(0, 12570 - (salary - 100000) / 2);
+  var it;
+  if (region === 'scotland') {
+    var sb = y.scotland.map(function (b, i) { return i === 1 ? [pa, b[1], b[2]] : b; });
+    it = banded(salary, sb);
+  } else {
+    it = banded(salary, [[0, pa, 0], [pa, 50270, 0.20], [50270, 125140, 0.40], [125140, null, 0.45]]);
+  }
+  var niAmt = banded(salary, [[0, 12570, 0], [12570, 50270, y.niRate], [50270, null, 0.02]]);
+  return { it: it, ni: niAmt, takeHome: salary - it - niAmt };
+}
+
 const CSS = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -133,16 +182,16 @@ function yearNavHtml(current) {
   return YEARS.map(y => y.slug === current
     ? `<span class="year-link current">${y.label}</span>`
     : `<a class="year-link" href="/${y.slug}/">${y.label}</a>`).join('\n') +
-    `<a class="year-link" href="/">2026/27 (current)</a>`;
+    `<a class="year-link" href="/">2026/27 (current)</a>` +
+    (current === 'hub' ? '' : `<a class="year-link" href="/historical-take-home-pay-calculator/">Compare all years</a>`);
 }
 
 function buildPage(y) {
   const exampleGross = 35000;
-  const restUkIt = restUkTax(exampleGross);
-  const scotIt = scotlandTax(exampleGross, y.scotland);
-  const niAmt = ni(exampleGross, y.niRate);
-  const netRestUk = exampleGross - restUkIt - niAmt;
-  const netScot = exampleGross - scotIt - niAmt;
+  const ruk = computeTakeHome(exampleGross, y.label, 'rest_uk');
+  const scot = computeTakeHome(exampleGross, y.label, 'scotland');
+  const restUkIt = ruk.it, scotIt = scot.it, niAmt = ruk.ni;
+  const netRestUk = ruk.takeHome, netScot = scot.takeHome;
 
   const canonical = `${SITE_URL}/${y.slug}/`;
   const title = `UK Tax Calculator ${y.label}`;
@@ -174,32 +223,25 @@ function buildPage(y) {
     </div>
   </div>`;
 
-  const scotBandsJs = JSON.stringify(y.scotland.map(b => [b[0], b[1] === Infinity ? null : b[1], b[2]]));
   const toolJs = `
-const NI_RATE=${y.niRate};
-const SCOT_BANDS=${scotBandsJs}.map(b=>[b[0], b[1]===null?Infinity:b[1], b[2]]);
-function bandedTax(income, bands){let tax=0;for(const [lo,hi,rate] of bands){if(income>lo) tax+=(Math.min(income,hi)-lo)*rate;} return tax;}
-function personalAllowance(income){ if(income<=100000) return 12570; return Math.max(0,12570-(income-100000)/2); }
-function restUkTax(taxable){ const pa=personalAllowance(taxable); return bandedTax(taxable,[[0,pa,0],[pa,50270,0.20],[50270,125140,0.40],[125140,Infinity,0.45]]); }
-function scotlandTax(taxable){ const pa=personalAllowance(taxable); const adjusted=SCOT_BANDS.map((b,i)=>i===1?[pa,b[1],b[2]]:b); return bandedTax(taxable,adjusted); }
-function nationalInsurance(gross){ return bandedTax(gross,[[0,12570,0],[12570,50270,NI_RATE],[50270,Infinity,0.02]]); }
+const RATES_BY_YEAR=${JSON.stringify(RATES_BY_YEAR)};
+${computeTakeHome.toString()}
 document.querySelectorAll('#regionSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#regionSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}));
 function calculate(){
   const gross=parseFloat(document.getElementById('salary').value)||0;
   const region=document.querySelector('#regionSeg .seg-btn.active').dataset.val==='scotland'?'scotland':'rest_uk';
-  const it = region==='scotland' ? scotlandTax(gross) : restUkTax(gross);
-  const ni = nationalInsurance(gross);
-  const takeHome = gross-it-ni;
-  document.getElementById('r-takehome').textContent=fmt(takeHome);
-  document.getElementById('r-it').textContent=fmt(it);
-  document.getElementById('r-ni').textContent=fmt(ni);
-  document.getElementById('r-total').textContent=fmt(takeHome);
+  const r=computeTakeHome(gross, ${JSON.stringify(y.label)}, region);
+  document.getElementById('r-takehome').textContent=fmt(r.takeHome);
+  document.getElementById('r-it').textContent=fmt(r.it);
+  document.getElementById('r-ni').textContent=fmt(r.ni);
+  document.getElementById('r-total').textContent=fmt(r.takeHome);
   document.getElementById('results').classList.add('show');
 }`;
 
   const scotTableRows = y.scotland.map(([lo, hi, rate]) => `<tr><td>${hi === Infinity ? `Above £${lo.toLocaleString('en-GB')}` : `£${lo.toLocaleString('en-GB')} – £${hi.toLocaleString('en-GB')}`}</td><td>${(rate * 100).toFixed(0)}%</td></tr>`).join('\n');
 
   const extraContent = `
+  <p>This is the dedicated <strong>${y.label}</strong> calculator. To compare several tax years side by side in one place, use the <a href="/historical-take-home-pay-calculator/">historical take-home pay calculator</a>.</p>
   <h2>${y.label} Income Tax Bands</h2>
   <h3>England, Wales &amp; Northern Ireland</h3>
   <div class="table-wrap"><table><tr><th>Band</th><th>Rate</th></tr>
@@ -295,16 +337,175 @@ ${toolJs}
 </html>`;
 }
 
-for (const y of YEARS) {
-  const dir = path.join(__dirname, y.slug);
-  fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, 'index.html'), buildPage(y));
-  console.log('Wrote', y.slug + '/index.html');
+function buildHubPage() {
+  const slug = 'historical-take-home-pay-calculator';
+  const canonical = `${SITE_URL}/${slug}/`;
+  const title = 'Historical Take-Home Pay Calculator';
+  const metaTitle = 'Historical Take-Home Pay Calculator — UK Tax Years 2023/24 to 2026/27';
+  const metaDesc = 'Work out take-home pay for a past UK tax year, or compare old vs new tax-year Income Tax and National Insurance rates side by side — 2023/24, 2024/25, 2025/26 and current 2026/27.';
+
+  const faqs = [
+    { q: 'Which UK tax years can I calculate here?', a: 'This hub switches between 2023/24, 2024/25, 2025/26 and the current 2026/27 rates in one calculator. Each year uses its own Income Tax bands and National Insurance rate. The dedicated single-year pages give a fuller breakdown for one year.' },
+    { q: 'What changed between the 2023/24 and 2026/27 tax rates?', a: 'The Personal Allowance (£12,570) and higher-rate threshold (£50,270) have been frozen across all four years. The main change is National Insurance: the employee main rate was 12%, cut to 10% part-way through 2023/24 (a blended 11.5% for that year), then cut again to 8% from April 2024, where it has stayed for 2024/25, 2025/26 and 2026/27. Scotland also adjusted its band thresholds each year.' },
+    { q: 'How do I compare take-home pay across two tax years?', a: 'Enter one salary and switch the tax-year selector — the calculator shows take-home for that year and the difference against 2026/27. The gap is almost entirely the National Insurance change, plus small Scottish band movements if you select Scotland.' },
+    { q: 'Are these historical rates official?', a: 'They are the published HMRC and gov.scot rates for each year — Scottish bands from the gov.scot Scottish Income Tax pages, rest-of-UK bands and NI thresholds from HMRC and House of Commons Library briefings. This is an independent calculator, not an HMRC tool.' }
+  ];
+
+  const yearOptions = HUB_YEARS.map((y, i) => `<option value="${y.label}"${i === 0 ? ' selected' : ''}>${y.label}${i === 0 ? ' (current)' : ''}</option>`).join('\n');
+
+  const toolHtml = `
+  <div class="input-group"><label>Annual Gross Salary (£)</label><input type="number" id="salary" min="0" step="500" value="35000"></div>
+  <div class="input-group"><label>Tax Year</label>
+    <select id="taxYear">${yearOptions}</select>
+  </div>
+  <div class="input-group"><label>Region</label>
+    <div class="seg-row" id="regionSeg">
+      <div class="seg-btn active" data-val="rest_uk">England / Wales / NI</div>
+      <div class="seg-btn" data-val="scotland">Scotland</div>
+    </div>
+  </div>
+  <button class="btn" onclick="calculate()">Calculate Take-Home Pay →</button>
+  <div class="results" id="results">
+    <div class="result-hero"><div class="value" id="r-takehome">—</div><div class="label">Take-Home Pay, <span id="r-year">2026/27</span></div></div>
+    <div class="band-breakdown">
+      <div><span>Income Tax</span><span id="r-it">—</span></div>
+      <div><span>National Insurance</span><span id="r-ni">—</span></div>
+      <div><span>vs 2026/27</span><span id="r-delta">—</span></div>
+    </div>
+  </div>
+  <p style="font-size:0.85rem;color:var(--muted);margin-top:14px;">For a full breakdown of one specific year, use the dedicated <a href="/uk-tax-calculator-2025-26/">2025/26</a>, <a href="/uk-tax-calculator-2024-25/">2024/25</a> or <a href="/uk-tax-calculator-2023-24/">2023/24</a> calculator.</p>`;
+
+  const toolJs = `
+const RATES_BY_YEAR=${JSON.stringify(RATES_BY_YEAR)};
+${computeTakeHome.toString()}
+document.querySelectorAll('#regionSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#regionSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}));
+function calculate(){
+  const gross=parseFloat(document.getElementById('salary').value)||0;
+  const yearKey=document.getElementById('taxYear').value;
+  const region=document.querySelector('#regionSeg .seg-btn.active').dataset.val==='scotland'?'scotland':'rest_uk';
+  const r=computeTakeHome(gross, yearKey, region);
+  const cur=computeTakeHome(gross, '2026/27', region);
+  const delta=r.takeHome-cur.takeHome;
+  document.getElementById('r-takehome').textContent=fmt(r.takeHome);
+  document.getElementById('r-it').textContent=fmt(r.it);
+  document.getElementById('r-ni').textContent=fmt(r.ni);
+  document.getElementById('r-year').textContent=yearKey;
+  document.getElementById('r-delta').textContent = yearKey==='2026/27' ? '—' : (Math.round(delta)===0 ? 'about the same' : (delta>0 ? fmt(delta)+' more' : fmt(-delta)+' less'));
+  document.getElementById('results').classList.add('show');
+}`;
+
+  const extraContent = `
+  <h2>Which Tax Year Do You Need?</h2>
+  <div class="year-nav">${yearNavHtml('hub')}</div>
+
+  <h2>Old vs New: What Changed Between Tax Years</h2>
+  <div class="table-wrap"><table>
+  <tr><th>Tax year</th><th>Personal Allowance</th><th>Higher-rate threshold</th><th>Employee NI main rate</th><th>Notable change</th></tr>
+  <tr><td>2023/24</td><td>£12,570</td><td>£50,270</td><td>11.5% (blended)</td><td>NI cut 12% &rarr; 10% from 6 January 2024</td></tr>
+  <tr><td>2024/25</td><td>£12,570</td><td>£50,270</td><td>8%</td><td>NI cut 10% &rarr; 8% from 6 April 2024</td></tr>
+  <tr><td>2025/26</td><td>£12,570</td><td>£50,270</td><td>8%</td><td>Rates held; Scottish thresholds uprated</td></tr>
+  <tr><td>2026/27 (current)</td><td>£12,570</td><td>£50,270</td><td>8%</td><td>Allowance freeze continues</td></tr>
+  </table></div>
+  <p>Because the Personal Allowance and higher-rate threshold have been frozen throughout, the take-home difference between these years at the same salary is driven almost entirely by the National Insurance rate — a salary of £35,000 kept noticeably less in 2023/24, when the blended employee NI rate was 11.5%, than it does now at 8%.</p>
+
+  <h2>Why Check a Past Tax Year?</h2>
+  <ul>
+    <li>Checking an old payslip or P60 for accuracy</li>
+    <li>Working out backdated pay, pay-award arrears or a tribunal settlement</li>
+    <li>Comparing your pay rise year-on-year in real take-home terms</li>
+    <li>Verifying HMRC correspondence about a previous tax year</li>
+    <li>Amending a prior-year Self Assessment return</li>
+  </ul>
+
+  <h2>How Historical Take-Home Pay Is Calculated</h2>
+  <p>Each year uses the same deterministic method as the current calculator — gross salary, minus Income Tax across that year's bands, minus National Insurance at that year's rate. Only the rate constants change between years; the formula does not. Figures are basic pay only and exclude pension, student loan and benefits in kind.</p>`;
+
+  return `<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${metaTitle}</title>
+<meta name="description" content="${metaDesc}">
+<link rel="canonical" href="${canonical}">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta property="og:title" content="${metaTitle}">
+<meta property="og:description" content="${metaDesc}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${canonical}">
+<meta name="google-site-verification" content="${GSC_TAG}" />
+<script type="application/ld+json">
+${JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "WebApplication", "name": title, "url": canonical, "description": metaDesc, "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "inLanguage": "en-GB", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" }, "areaServed": { "@type": "Country", "name": "United Kingdom" } },
+    { "@type": "FAQPage", "mainEntity": faqJsonLd(faqs) },
+    { "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/" }, { "@type": "ListItem", "position": 2, "name": title, "item": canonical } ] }
+  ]
+}, null, 2)}
+</script>
+<style>${CSS}</style>
+</head>
+<body>
+<header>
+  <div class="flag">🇬🇧 UK Payroll · Historical Rates</div>
+  <h1>${title}</h1>
+  <p>Check take-home pay for a previous UK tax year, or compare old vs new tax-year rates side by side — pick a year in the calculator to work out Income Tax and National Insurance on any salary.</p>
+</header>
+<div class="tool-card">${toolHtml}</div>
+<div class="content">
+  ${extraContent}
+  <h2>Explore More Payroll Calculators</h2>
+  <div class="sat-grid">
+    <a class="sat-link" href="/"><div class="t">Take-Home Pay Calculator (2026/27)</div><div class="d">Current rates, full breakdown</div></a>
+    <a class="sat-link" href="/salary-after-tax/"><div class="t">Salary After Tax — Browse by Amount</div><div class="d">£15,000 to £150,000</div></a>
+    <a class="sat-link" href="/uk-tax-calculator-2025-26/"><div class="t">UK Tax Calculator 2025/26</div><div class="d">Single-year deep dive</div></a>
+    <a class="sat-link" href="/compare-two-salaries-calculator/"><div class="t">Compare Two Salaries</div><div class="d">Job offer take-home pay, side by side</div></a>
+  </div>
+  <div class="cta-box">
+    <h2>Need a Past Year's Figures Verified?</h2>
+    <p>This calculator gives a reliable estimate using published rates — for a definitive check against your specific tax code, benefits-in-kind or multiple income sources, an accountant or HMRC's own tools are the authoritative source.</p>
+    <a href="https://www.gov.uk/estimate-income-tax" class="cta-btn" target="_blank" rel="noopener">Check on gov.uk →</a>
+  </div>
+  <div class="eeat-section">
+    <h2 class="eeat-title">Transparency &amp; Sources</h2>
+    <div class="eeat-compliance-item">Scottish bands sourced from the gov.scot Scottish Income Tax pages for each year. Rest-of-UK bands and NI thresholds from HMRC / House of Commons Library rates and allowances briefings. <a href="https://www.gov.uk/estimate-income-tax" target="_blank" rel="noopener">Verify on gov.uk</a>.</div>
+    <div class="eeat-compliance-item">Every tax year on this page uses one shared calculation function — inspect it on <a href="https://github.com/sadiyaqeen92639572-cloud/uk-take-home-pay-calculator" target="_blank" rel="noopener">GitHub</a>.</div>
+  </div>
+  ${faqHtml(faqs)}
+</div>
+<footer>
+  <p>Information only — not tax or legal advice. For the current tax year, use the <a href="/">main calculator</a>.</p>
+</footer>
+<script>
+function fmt(n) { return '£' + Math.round(n).toLocaleString('en-GB'); }
+function toggleFaq(el) { el.classList.toggle('open'); el.nextElementSibling.classList.toggle('show'); }
+${toolJs}
+</script>
+</body>
+</html>`;
 }
 
-const urls = YEARS.map(y => `${SITE_URL}/${y.slug}/`);
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  urls.map(u => `  <url><loc>${u}</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>`).join('\n') +
-  `\n</urlset>\n`;
-fs.writeFileSync(path.join(__dirname, 'sitemap-years.xml'), sitemap);
-console.log('Wrote sitemap-years.xml with', urls.length, 'URLs');
+if (require.main === module) {
+  for (const y of YEARS) {
+    const dir = path.join(__dirname, y.slug);
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, 'index.html'), buildPage(y));
+    console.log('Wrote', y.slug + '/index.html');
+  }
+
+  const hubDir = path.join(__dirname, 'historical-take-home-pay-calculator');
+  fs.mkdirSync(hubDir, { recursive: true });
+  fs.writeFileSync(path.join(hubDir, 'index.html'), buildHubPage());
+  console.log('Wrote historical-take-home-pay-calculator/index.html');
+
+  const urls = [`${SITE_URL}/historical-take-home-pay-calculator/`, ...YEARS.map(y => `${SITE_URL}/${y.slug}/`)];
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    urls.map(u => `  <url><loc>${u}</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>`).join('\n') +
+    `\n</urlset>\n`;
+  fs.writeFileSync(path.join(__dirname, 'sitemap-years.xml'), sitemap);
+  console.log('Wrote sitemap-years.xml with', urls.length, 'URLs');
+}
+
+module.exports = { computeTakeHome, RATES_BY_YEAR, HUB_YEARS, YEARS, restUkTax, scotlandTax, ni };

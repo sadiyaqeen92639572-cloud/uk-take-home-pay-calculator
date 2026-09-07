@@ -119,7 +119,7 @@ const SATELLITES_NAV = [
   { slug: 'required-salary-calculator', title: 'Required Salary Calculator', desc: 'Gross salary needed for a target take-home' },
   { slug: 'compare-two-salaries-calculator', title: 'Compare Two Salaries', desc: 'Job offer take-home pay, side by side' },
   { slug: 'salary-after-tax', title: 'Salary After Tax — Browse by Amount', desc: '£15,000 to £150,000, pick your salary' },
-  { slug: 'uk-tax-calculator-2025-26', title: 'Historical Tax Years', desc: '2023/24, 2024/25, 2025/26 rates' },
+  { slug: 'historical-take-home-pay-calculator', title: 'Historical Take-Home Pay Calculator', desc: 'Past UK tax years: 2023/24 to 2026/27' },
   { slug: 'nhs-pay-bands', title: 'NHS Pay Bands', desc: 'Agenda for Change, Band 2 to Band 9' },
   { slug: 'scotland-salary-calculator', title: 'Scotland Salary Calculator', desc: 'Scottish Income Tax bands, 19-48%' },
   { slug: 'scotland-vs-rest-of-uk-salary-calculator', title: 'Scotland vs Rest of UK', desc: 'Same salary, side-by-side take-home' },

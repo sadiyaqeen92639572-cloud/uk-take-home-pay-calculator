@@ -21,6 +21,24 @@ const BANDS = [
   { slug: 'nhs-band-9-pay', band: '9', points: [{ label: 'Entry', pay: 112782 }, { label: 'Intermediate', pay: 119583 }, { label: 'Top', pay: 129783 }], desc: 'Directors and the most senior NHS leadership roles' }
 ];
 
+// 2025/26 Agenda for Change annual pay scale (England), entry–top per band.
+// Source: NHS Employers "Pay scales for 2025/26". The 2026/27 figures in BANDS are these + the 3.3% uplift (1 April 2026).
+const PREV_2025 = {
+  '2': [24465, 24465],
+  '3': [24937, 26598],
+  '4': [27485, 30162],
+  '5': [31049, 37796],
+  '6': [38682, 46580],
+  '7': [47810, 54710],
+  '8a': [55690, 62682],
+  '8b': [64455, 74896],
+  '8c': [76965, 88682],
+  '8d': [91342, 105337],
+  '9': [109179, 125637]
+};
+// NHS standard full-time working year for hourly-rate conversion (37.5h week). NHS Employers publishes exact hourly rates.
+const NHS_ANNUAL_HOURS = 1955.5;
+
 function bandedTax(income, bands) { let tax = 0; for (const [lo, hi, rate] of bands) { if (income > lo) tax += (Math.min(income, hi) - lo) * rate; } return tax; }
 function personalAllowance(income) { if (income <= 100000) return 12570; return Math.max(0, 12570 - (income - 100000) / 2); }
 function incomeTax(taxable, region) {
@@ -116,11 +134,19 @@ function pageHtml(b) {
 
   const toolOptions = b.points.map((p, i) => `<option value="${i}"${i === b.points.length - 1 ? ' selected' : ''}>${p.label} — ${fmt(p.pay)}</option>`).join('\n');
 
+  const prev = PREV_2025[b.band];
+  const prev2025Text = prev
+    ? (prev[0] === prev[1]
+        ? `Band ${b.band} was paid at ${fmt(prev[0])} in 2025/26, rising to ${fmt(entry)} for 2026/27 after the 3.3% uplift.`
+        : `Under the 2025/26 Agenda for Change scale, Band ${b.band} ran from ${fmt(prev[0])} to ${fmt(prev[1])}, before the 3.3% uplift on 1 April 2026 raised it to ${fmt(entry)}–${fmt(top)} for 2026/27.`)
+    : '';
+
   const faqs = [
     { q: `How much does NHS Band ${b.band} pay in 2026/27?`, a: b.points.length > 1
         ? `NHS Band ${b.band} ranges from ${fmt(entry)} a year at the entry point to ${fmt(top)} at the top of the band, under the 2026/27 Agenda for Change pay scale (3.3% uplift from 1 April 2026).`
         : `NHS Band ${b.band} is a single-rate band, paid at ${fmt(entry)} a year under the 2026/27 Agenda for Change pay scale.` },
     { q: `What is the take-home pay for NHS Band ${b.band}?`, a: `At the top of Band ${b.band} (${fmt(top)} gross), take-home pay is ${fmt(topNet.net)} a year (${fmt(topNet.net / 12)} a month) in England, Wales and Northern Ireland, after ${fmt(topNet.it)} Income Tax and ${fmt(topNet.ni)} National Insurance. In Scotland, take-home is ${fmt(topNetScot.net)} due to different Income Tax bands.` },
+    { q: `What was NHS Band ${b.band} pay in 2025/26?`, a: prev2025Text || `See the NHS Employers 2025/26 Agenda for Change pay scale for the previous year's figures.` },
     { q: `What roles are in NHS Band ${b.band}?`, a: `${b.desc}. Exact job titles vary by trust and role profile — check your trust's job description against the NHS Job Evaluation Scheme for a definitive banding.` },
     { q: `Does NHS Band ${b.band} pay include unsocial hours or overtime?`, a: `No — these figures are basic Agenda for Change pay only. Unsocial hours enhancements, overtime, high-cost area supplements (London weighting) and on-call payments are calculated separately and added on top of basic pay.` }
   ];
@@ -179,6 +205,9 @@ calculate();`;
   ${pointsRows}
   </table></div>
   <p>Figures use England, Wales &amp; Northern Ireland Income Tax bands and 2026/27 rates, basic pay only — before any unsocial hours enhancement, overtime or High Cost Area Supplement (London weighting).</p>
+
+  <h2>NHS Band ${b.band} Pay in 2025/26</h2>
+  <p>${prev2025Text} An old payslip or P60 from the 2025/26 tax year will show the lower figure. For the full structure across every band and recent years, see the <a href="/nhs-pay-bands/">NHS pay bands overview</a>.</p>
 
   <h2>Browse Other NHS Bands</h2>
   <div class="band-nav">${bandNavHtml(b.slug)}</div>`;
@@ -246,12 +275,33 @@ ${toolJs}
 
 function hubHtml() {
   const canonical = `${SITE_URL}/nhs-pay-bands/`;
+  const title = `NHS Pay Bands 2026/27`;
   const metaTitle = `NHS Pay Bands 2026/27 — Agenda for Change, All Bands | mynetsalary.co.uk`;
-  const metaDesc = `NHS Agenda for Change pay bands 2026/27 — Band 2 to Band 9. Gross salary and take-home pay after tax for every band and pay point.`;
+  const metaDesc = `NHS Agenda for Change pay bands 2026/27 — Band 2 to Band 9. Gross salary, hourly rate and take-home pay after tax for every band, plus London weighting and how the bands work.`;
+
   const rows = BANDS.map(b => {
     const top = b.points[b.points.length - 1].pay, entry = b.points[0].pay;
-    return `<tr><td><a href="/${b.slug}/">Band ${b.band}</a></td><td>${b.points.length > 1 ? `${fmt(entry)} – ${fmt(top)}` : fmt(entry)}</td><td>${b.desc}</td></tr>`;
+    const hourly = '£' + (top / NHS_ANNUAL_HOURS).toFixed(2);
+    return `<tr><td><a href="/${b.slug}/">Band ${b.band}</a></td><td>${b.points.length > 1 ? `${fmt(entry)} – ${fmt(top)}` : fmt(entry)}</td><td>${hourly}</td><td>${b.desc}</td></tr>`;
   }).join('\n');
+
+  const hubFaqs = [
+    { q: `How many NHS pay bands are there?`, a: `Agenda for Change has nine numbered bands, Band 1 to Band 9. Band 1 is closed to new entrants, so in practice the structure runs Band 2 to Band 9, with Bands 8 and 9 split into sub-bands (8a, 8b, 8c, 8d) — 11 distinct pay ranges. Doctors, dentists and very senior managers are on separate national contracts, not Agenda for Change.` },
+    { q: `What years does this NHS pay data cover?`, a: `These are the 2026/27 Agenda for Change pay scales for England, effective 1 April 2026 after a 3.3% uplift. The 2025/26 scale and earlier scales used lower cash values, which is why an old payslip will not match. Scotland, Wales and Northern Ireland negotiate their own uplifts and can differ.` },
+    { q: `What is the NHS pay rise for 2026/27?`, a: `Agenda for Change staff in England received a 3.3% consolidated increase from 1 April 2026, following the 2025/26 award of 3.6%. The percentage is applied to every pay point in every band.` },
+    { q: `How does London weighting affect NHS pay?`, a: `Staff in and around London get a High Cost Area Supplement (HCAS) on top of basic pay — Inner London 20%, Outer London 15% and Fringe 5% of basic salary, each between a set minimum and maximum cash amount. HCAS is pensionable but separate from the basic band pay shown here, as are unsocial-hours enhancements and overtime.` },
+    { q: `What is NHS Band 5 pay in 2026/27?`, a: `Band 5, the entry band for newly qualified nurses and many allied health professionals, runs from £32,073 to £39,043 for 2026/27. See the Band 5 page for take-home pay at each pay point.` }
+  ];
+
+  const graph = {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebApplication", "name": title, "url": canonical, "description": metaDesc, "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "inLanguage": "en-GB", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" }, "areaServed": { "@type": "Country", "name": "United Kingdom" } },
+      { "@type": "FAQPage", "mainEntity": faqJsonLd(hubFaqs) },
+      { "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/" }, { "@type": "ListItem", "position": 2, "name": "NHS Pay Bands", "item": canonical } ] }
+    ]
+  };
+
   return `<!DOCTYPE html>
 <html lang="en-GB">
 <head>
@@ -262,20 +312,63 @@ function hubHtml() {
 <link rel="canonical" href="${canonical}">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" href="/favicon.png">
+<meta property="og:title" content="${metaTitle}">
+<meta property="og:description" content="${metaDesc}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${canonical}">
 <meta name="google-site-verification" content="${GSC_TAG}" />
+<script type="application/ld+json">
+${JSON.stringify(graph, null, 2)}
+</script>
 <style>${CSS}</style>
 </head>
 <body>
 <header>
   <div class="flag">🇬🇧 Agenda for Change · 2026/27</div>
   <h1>NHS Pay Bands 2026/27</h1>
-  <p>Every Agenda for Change band, Band 2 to Band 9, with gross pay ranges and links to full take-home pay breakdowns.</p>
+  <p>Every Agenda for Change band, Band 2 to Band 9, with gross pay ranges, hourly rates and links to full take-home pay breakdowns.</p>
 </header>
 <div class="content" style="margin-top:40px;">
-  <div class="table-wrap"><table><tr><th>Band</th><th>Gross Range (2026/27)</th><th>Typical Roles</th></tr>${rows}</table></div>
-  <p style="margin-top:20px;">Figures are basic Agenda for Change pay (3.3% uplift, effective 1 April 2026), sourced from NHS Employers. Excludes unsocial hours enhancements, overtime and High Cost Area Supplements. Doctors, dentists and very senior manager (VSM) roles are on separate contracts, not Agenda for Change.</p>
+  <div class="table-wrap"><table><tr><th>Band</th><th>Gross Range (2026/27)</th><th>Hourly (top of band)</th><th>Typical Roles</th></tr>${rows}</table></div>
+  <p style="margin-top:20px;">Figures are basic Agenda for Change pay (3.3% uplift, effective 1 April 2026), sourced from NHS Employers. Hourly rates use the NHS standard 37.5-hour week (${NHS_ANNUAL_HOURS} annual hours); NHS Employers publishes exact hourly rates. Excludes unsocial hours enhancements, overtime and High Cost Area Supplements. Doctors, dentists and very senior manager (VSM) roles are on separate contracts, not Agenda for Change.</p>
+
+  <h2>How Many NHS Bands Are There?</h2>
+  <p>Agenda for Change has nine numbered bands. Band 1 is closed to new staff, so in practice the structure runs Band 2 to Band 9, with Bands 8 and 9 split into sub-bands (8a, 8b, 8c, 8d) — 11 distinct pay ranges. Each band has two or three pay points; you move up a point roughly once a year until you reach the top of your band. Doctors, dentists and very senior managers sit outside Agenda for Change on their own national contracts.</p>
+
+  <h2>Agenda for Change Pay Awards — Recent Years</h2>
+  <p>Agenda for Change scales are re-set each 1 April by a national pay award, normally a percentage uplift applied to every pay point. The table above shows the current 2026/27 scale for England.</p>
+  <div class="table-wrap"><table><tr><th>Year</th><th>Consolidated uplift (England)</th></tr>
+  <tr><td>2026/27</td><td>3.3%</td></tr>
+  <tr><td>2025/26</td><td>3.6%</td></tr>
+  <tr><td>2024/25 and earlier</td><td>Lower cash values — an "Agenda for Change 2024" or "2023" table will not match the figures above</td></tr>
+  </table></div>
+  <p>Scotland, Wales and Northern Ireland negotiate separately and their scales can differ from England's.</p>
+
+  <h2>London Weighting &amp; High Cost Area Supplements (HCAS)</h2>
+  <p>Staff working in and around London receive a High Cost Area Supplement on top of basic pay:</p>
+  <div class="table-wrap"><table><tr><th>Zone</th><th>Supplement</th><th>Minimum</th><th>Maximum</th></tr>
+  <tr><td>Inner London</td><td>20% of basic salary</td><td>£5,794</td><td>£8,746</td></tr>
+  <tr><td>Outer London</td><td>15% of basic salary</td><td>£4,870</td><td>£6,137</td></tr>
+  <tr><td>Fringe</td><td>5% of basic salary</td><td>£1,346</td><td>£2,270</td></tr>
+  </table></div>
+  <p>HCAS is pensionable and paid monthly, but it is separate from the basic Agenda for Change band pay in the table above. Unsocial-hours enhancements (Section 2) and overtime are also additional. Figures are the 2026/27 rates published by NHS Employers.</p>
+
+  <h2>Explore More Payroll Calculators</h2>
+  <div class="sat-grid">
+    <a class="sat-link" href="/"><div class="t">Take-Home Pay Calculator</div><div class="d">Any salary, full breakdown</div></a>
+    <a class="sat-link" href="/nhs-band-5-pay/"><div class="t">NHS Band 5 Pay</div><div class="d">Take-home at every pay point</div></a>
+    <a class="sat-link" href="/pension-contribution-calculator/"><div class="t">Pension Contribution Calculator</div><div class="d">NHS Pension contributions vary by band</div></a>
+    <a class="sat-link" href="/compare-two-salaries-calculator/"><div class="t">Compare Two Salaries</div><div class="d">Comparing a promotion or trust move</div></a>
+  </div>
+
+  <div class="eeat-section">Pay scale sourced from the NHS Employers 2026/27 and 2025/26 Agenda for Change pay circulars. Tax and NI figures on the band pages use published 2026/27 HMRC rates — not an official NHS or HMRC tool. Verify at <a href="https://www.nhsemployers.org" target="_blank" rel="noopener">nhsemployers.org</a>.</div>
+
+  ${faqHtml(hubFaqs)}
 </div>
 <footer><p>Information only — not official NHS Employers guidance.</p></footer>
+<script>
+function toggleFaq(el) { el.classList.toggle('open'); el.nextElementSibling.classList.toggle('show'); }
+</script>
 </body>
 </html>`;
 }

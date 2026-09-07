@@ -185,6 +185,7 @@
   </div></div>
 <div class="content">
   
+  <p>This is the dedicated <strong>2023/24</strong> calculator. To compare several tax years side by side in one place, use the <a href="/historical-take-home-pay-calculator/">historical take-home pay calculator</a>.</p>
   <h2>2023/24 Income Tax Bands</h2>
   <h3>England, Wales &amp; Northern Ireland</h3>
   <div class="table-wrap"><table><tr><th>Band</th><th>Rate</th></tr>
@@ -218,7 +219,7 @@
   <h2>Browse Other Tax Years</h2>
   <div class="year-nav"><a class="year-link" href="/uk-tax-calculator-2025-26/">2025/26</a>
 <a class="year-link" href="/uk-tax-calculator-2024-25/">2024/25</a>
-<span class="year-link current">2023/24</span><a class="year-link" href="/">2026/27 (current)</a></div>
+<span class="year-link current">2023/24</span><a class="year-link" href="/">2026/27 (current)</a><a class="year-link" href="/historical-take-home-pay-calculator/">Compare all years</a></div>
   <h2>Explore More Payroll Calculators</h2>
   <div class="sat-grid">
     <a class="sat-link" href="/"><div class="t">Take-Home Pay Calculator (2026/27)</div><div class="d">Current rates, full breakdown</div></a>
@@ -248,24 +249,40 @@
 function fmt(n) { return '£' + Math.round(n).toLocaleString('en-GB'); }
 function toggleFaq(el) { el.classList.toggle('open'); el.nextElementSibling.classList.toggle('show'); }
 
-const NI_RATE=0.115;
-const SCOT_BANDS=[[0,12570,0],[12570,14732,0.19],[14732,25688,0.2],[25688,43662,0.21],[43662,125140,0.42],[125140,null,0.47]].map(b=>[b[0], b[1]===null?Infinity:b[1], b[2]]);
-function bandedTax(income, bands){let tax=0;for(const [lo,hi,rate] of bands){if(income>lo) tax+=(Math.min(income,hi)-lo)*rate;} return tax;}
-function personalAllowance(income){ if(income<=100000) return 12570; return Math.max(0,12570-(income-100000)/2); }
-function restUkTax(taxable){ const pa=personalAllowance(taxable); return bandedTax(taxable,[[0,pa,0],[pa,50270,0.20],[50270,125140,0.40],[125140,Infinity,0.45]]); }
-function scotlandTax(taxable){ const pa=personalAllowance(taxable); const adjusted=SCOT_BANDS.map((b,i)=>i===1?[pa,b[1],b[2]]:b); return bandedTax(taxable,adjusted); }
-function nationalInsurance(gross){ return bandedTax(gross,[[0,12570,0],[12570,50270,NI_RATE],[50270,Infinity,0.02]]); }
+const RATES_BY_YEAR={"2026/27":{"niRate":0.08,"scotland":[[0,12570,0],[12570,16537,0.19],[16537,29526,0.2],[29526,43662,0.21],[43662,75000,0.42],[75000,125140,0.45],[125140,null,0.48]]},"2025/26":{"niRate":0.08,"scotland":[[0,12570,0],[12570,15397,0.19],[15397,27491,0.2],[27491,43662,0.21],[43662,75000,0.42],[75000,125140,0.45],[125140,null,0.48]]},"2024/25":{"niRate":0.08,"scotland":[[0,12570,0],[12570,14876,0.19],[14876,26561,0.2],[26561,43662,0.21],[43662,75000,0.42],[75000,125140,0.45],[125140,null,0.48]]},"2023/24":{"niRate":0.115,"scotland":[[0,12570,0],[12570,14732,0.19],[14732,25688,0.2],[25688,43662,0.21],[43662,125140,0.42],[125140,null,0.47]]}};
+function computeTakeHome(salary, yearLabel, region) {
+  var y = RATES_BY_YEAR[yearLabel];
+  if (!y) throw new Error('unknown tax year: ' + yearLabel);
+  function banded(income, bands) {
+    var tax = 0;
+    for (var i = 0; i < bands.length; i++) {
+      var lo = bands[i][0];
+      var hi = bands[i][1] === null ? Infinity : bands[i][1];
+      var rate = bands[i][2];
+      if (income > lo) tax += (Math.min(income, hi) - lo) * rate;
+    }
+    return tax;
+  }
+  var pa = salary <= 100000 ? 12570 : Math.max(0, 12570 - (salary - 100000) / 2);
+  var it;
+  if (region === 'scotland') {
+    var sb = y.scotland.map(function (b, i) { return i === 1 ? [pa, b[1], b[2]] : b; });
+    it = banded(salary, sb);
+  } else {
+    it = banded(salary, [[0, pa, 0], [pa, 50270, 0.20], [50270, 125140, 0.40], [125140, null, 0.45]]);
+  }
+  var niAmt = banded(salary, [[0, 12570, 0], [12570, 50270, y.niRate], [50270, null, 0.02]]);
+  return { it: it, ni: niAmt, takeHome: salary - it - niAmt };
+}
 document.querySelectorAll('#regionSeg .seg-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#regionSeg .seg-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}));
 function calculate(){
   const gross=parseFloat(document.getElementById('salary').value)||0;
   const region=document.querySelector('#regionSeg .seg-btn.active').dataset.val==='scotland'?'scotland':'rest_uk';
-  const it = region==='scotland' ? scotlandTax(gross) : restUkTax(gross);
-  const ni = nationalInsurance(gross);
-  const takeHome = gross-it-ni;
-  document.getElementById('r-takehome').textContent=fmt(takeHome);
-  document.getElementById('r-it').textContent=fmt(it);
-  document.getElementById('r-ni').textContent=fmt(ni);
-  document.getElementById('r-total').textContent=fmt(takeHome);
+  const r=computeTakeHome(gross, "2023/24", region);
+  document.getElementById('r-takehome').textContent=fmt(r.takeHome);
+  document.getElementById('r-it').textContent=fmt(r.it);
+  document.getElementById('r-ni').textContent=fmt(r.ni);
+  document.getElementById('r-total').textContent=fmt(r.takeHome);
   document.getElementById('results').classList.add('show');
 }
 </script>
