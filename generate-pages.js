@@ -121,6 +121,7 @@ const SATELLITES_NAV = [
   { slug: 'salary-after-tax', title: 'Salary After Tax — Browse by Amount', desc: '£15,000 to £150,000, pick your salary' },
   { slug: 'historical-take-home-pay-calculator', title: 'Historical Take-Home Pay Calculator', desc: 'Past UK tax years: 2023/24 to 2026/27' },
   { slug: 'nhs-pay-bands', title: 'NHS Pay Bands', desc: 'Agenda for Change, Band 2 to Band 9' },
+  { slug: 'hourly-to-salary-calculator', title: 'Hourly to Salary & Pro-Rata Calculator', desc: 'Convert an hourly rate to annual salary, or pro-rata a part-time role' },
   { slug: 'scotland-salary-calculator', title: 'Scotland Salary Calculator', desc: 'Scottish Income Tax bands, 19-48%' },
   { slug: 'scotland-vs-rest-of-uk-salary-calculator', title: 'Scotland vs Rest of UK', desc: 'Same salary, side-by-side take-home' },
   { slug: 'embed-calculator', title: 'Embed This Calculator', desc: 'Free widget for your blog or site' },
